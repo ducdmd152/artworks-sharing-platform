@@ -38,6 +38,9 @@ CREATE TABLE ArtHub.dbo.account (
 	CONSTRAINT account_pk PRIMARY KEY (email)
 );
 
+ALTER TABLE ArtHub.dbo.account ADD CONSTRAINT account_role_FK FOREIGN KEY (role_id) REFERENCES ArtHub.dbo.[role](role_id);
+
+
 CREATE TABLE ArtHub.dbo.artist (
 	email varchar(256) NOT NULL,
 	artist_name nvarchar(256) NOT NULL,
@@ -165,7 +168,11 @@ CREATE TABLE ArtHub.dbo.post_category (
 );
 
 
+INSERT INTO ArtHub.dbo.[role] (role_id,role_name,created_date,updated_date) VALUES
+	 (0,N'audience','2023-05-05 00:00:00.0','2023-05-05 00:00:00.0');
+
+
 INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
-	 (N'thongne@gnail.com',N'12434',N'hehe',N'hehehe',N'nam',N'ok',0,N'avater new',8,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
+	 (N'thongne@gnail.com',N'12434',N'hehe',N'hehehe',N'nam',N'ok',0,N'avater new',0,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
 
-
+	

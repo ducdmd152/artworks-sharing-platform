@@ -75,6 +75,12 @@ namespace ArtHubBO.Entities
             {
                 entity.HasKey(e => e.Email)
                     .HasName("account_pk");
+                
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.Accounts)
+                    .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("account_role_FK");
             });
 
             modelBuilder.Entity<Artist>(entity =>

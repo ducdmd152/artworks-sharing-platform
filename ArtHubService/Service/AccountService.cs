@@ -61,7 +61,7 @@ namespace ArtHubService.Service
                         Gender = Gender.Female.ToString(),
                         Status = "ok",
                         Avatar = "dep gai",
-                        RoleId = 8,
+                        RoleId = 0,
                     },
                     new Account()
                     {
@@ -72,7 +72,7 @@ namespace ArtHubService.Service
                         Gender = Gender.Male.ToString(),
                         Status = "ok",
                         Avatar = "dep trai",
-                        RoleId = 8,
+                        RoleId = 0,
                     }
                 };
 
@@ -104,7 +104,7 @@ namespace ArtHubService.Service
                         Gender = Gender.Female.ToString(),
                         Status = "ok",
                         Avatar = "dep gai",
-                        RoleId = 8,
+                        RoleId = 0,
                     },
                     new Account()
                     {
@@ -115,7 +115,7 @@ namespace ArtHubService.Service
                         Gender = Gender.Male.ToString(),
                         Status = "ok",
                         Avatar = "dep trai",
-                        RoleId = 8,
+                        RoleId = 0,
                     }
                 };
                 
