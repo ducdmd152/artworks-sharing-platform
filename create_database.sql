@@ -168,8 +168,8 @@ CREATE TABLE ArtHub.dbo.post_category (
 );
 
 
-INSERT INTO ArtHub.dbo.[role] (role_id,role_name,created_date,updated_date) VALUES
-	 (0,N'audience','2023-05-05 00:00:00.0','2023-05-05 00:00:00.0');
+INSERT INTO ArtHub.dbo.[role] (role_name,created_date,updated_date) VALUES
+	 (N'audience','2023-05-05 00:00:00.0','2023-05-05 00:00:00.0');
 
 
 INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
