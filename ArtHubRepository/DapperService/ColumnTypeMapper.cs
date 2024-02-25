@@ -42,7 +42,6 @@ namespace ArtHubRepository.DapperService
                 }
                 catch (NotSupportedException)
                 {
-
                 }
             }
 
@@ -69,7 +68,6 @@ namespace ArtHubRepository.DapperService
                 }
                 catch (NotSupportedException)
                 {
-
                 }
             }
 
@@ -90,7 +88,6 @@ namespace ArtHubRepository.DapperService
                 }
                 catch (NotSupportedException)
                 {
-
                 }
             }
 
