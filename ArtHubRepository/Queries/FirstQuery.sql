@@ -1,0 +1,1 @@
+﻿SELECT email FROM ACCOUNT where email = 'thongne@gnail.com';
