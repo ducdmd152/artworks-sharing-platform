@@ -7,16 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="ClientApp\images\Login.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="ClientApp\images\Login.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Scrutor" Version="4.2.2" />
   </ItemGroup>
 
