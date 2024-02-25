@@ -15,8 +15,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\images\" />
     <Folder Include="ClientApp\js\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ClientApp\images\Login.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
