@@ -168,11 +168,20 @@ CREATE TABLE ArtHub.dbo.post_category (
 );
 
 
-INSERT INTO ArtHub.dbo.[role] (role_id,role_name,created_date,updated_date) VALUES
-	 (0,N'audience','2023-05-05 00:00:00.0','2023-05-05 00:00:00.0');
-
-
+INSERT INTO ArtHub.dbo.[role] (role_name,created_date,updated_date) VALUES
+	 (N'audience','2023-05-05 00:00:00.0','2023-05-05 00:00:00.0');
+INSERT INTO ArtHub.dbo.[role] (role_name,created_date,updated_date) VALUES
+	 (N'creator','2023-05-05 00:00:00.0','2023-05-05 00:00:00.0');
+INSERT INTO ArtHub.dbo.[role] (role_name,created_date,updated_date) VALUES
+	 (N'moderator','2023-05-05 00:00:00.0','2023-05-05 00:00:00.0');
+INSERT INTO ArtHub.dbo.[role] (role_name,created_date,updated_date) VALUES
+	 (N'admin','2023-05-05 00:00:00.0','2023-05-05 00:00:00.0');
+	 
 INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
-	 (N'thongne@gnail.com',N'12434',N'hehe',N'hehehe',N'nam',N'ok',0,N'avater new',0,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
-
-	
+	 (N'thongne@gmail.com',N'X2QVQdPr1nGflPIgDllfXqgL9lkQn9XqhQTxwDXUOpY=',N'hehe',N'hehehe',N'nam',N'ok',1,N'avater new',0,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
+INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
+	 (N'creator@gmail.com',N'X2QVQdPr1nGflPIgDllfXqgL9lkQn9XqhQTxwDXUOpY=',N'hehe',N'hehehe',N'nam',N'ok',1,N'avater new',1,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
+INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
+	 (N'moderator@gmail.com',N'X2QVQdPr1nGflPIgDllfXqgL9lkQn9XqhQTxwDXUOpY=',N'hehe',N'hehehe',N'nam',N'ok',1,N'avater new',2,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
+INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
+	 (N'admin@gmail.com',N'X2QVQdPr1nGflPIgDllfXqgL9lkQn9XqhQTxwDXUOpY=',N'hehe',N'hehehe',N'nam',N'ok',1,N'avater new',3,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');	

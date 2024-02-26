@@ -7,16 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="ClientApp\images\Login.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="ClientApp\images\Login.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Scrutor" Version="4.2.2" />
   </ItemGroup>
 
@@ -28,9 +18,13 @@
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\images\Login.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\images\" />
     <Folder Include="ClientApp\js\" />
   </ItemGroup>
 

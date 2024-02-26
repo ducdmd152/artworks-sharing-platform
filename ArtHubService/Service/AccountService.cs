@@ -3,6 +3,7 @@ using ArtHubBO.Enum;
 using ArtHubDAO.Interface;
 using ArtHubRepository.Interface;
 using ArtHubService.Interface;
+using ArtHubService.Utils;
 
 namespace ArtHubService.Service
 {
@@ -19,6 +20,12 @@ namespace ArtHubService.Service
         public IEnumerable<Account> GetAccounts()
         {
             return this.accountRepository.GetAccounts();
+        }
+
+        public Account? GetAccountByUsernameAndPassword(string email, string password)
+        {            
+            var decryptPassword = Encryption.Encrypt(password);
+            return this.accountRepository.GetAccountsIncludeRoleByEmailPassword(email, decryptPassword);
         }
 
         public async Task<Account> UpdateAsync()
