@@ -18,6 +18,9 @@
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\images\ArtHub.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\images\Login.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

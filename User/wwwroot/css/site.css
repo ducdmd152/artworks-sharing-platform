@@ -13,10 +13,6 @@ html {
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
-}
-
 :root {
     /*===== Text =====*/
     --text-primary: #804DD4;
@@ -42,4 +38,18 @@ body {
     --font-medium: 500;
     --font-bold: 600;
     --font-semi-bold: 700;
+}
+
+.header {
+    font-family: "Baloo 2";
+}
+
+.footer {
+    font-family: "Baloo 2";
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 0;
+    height: 0px;
+    width: 100vw;
+    background: yellow;
 }
