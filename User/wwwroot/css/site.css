@@ -42,6 +42,10 @@ html {
 
 .header {
     font-family: "Baloo 2";
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000; /* Ensure it's above other content */
 }
 
 .footer {
@@ -52,4 +56,123 @@ html {
     height: 0px;
     width: 100vw;
     background: yellow;
+}
+
+.btn {
+    border-color: #333;
+}
+
+    .btn:hover {
+        background-color: #333;
+        color: #fff;
+    }
+
+        .btn:hover i {
+            color: #fff;
+        }
+
+.btn-primary {
+    background-color: #fff;
+    color: rgb(85, 85, 85);
+    padding: 10px 28px;
+    border-radius: 25px;
+    border: 1px solid rgb(85, 85, 85);
+}
+
+    .btn-primary:hover {
+        background-color: #333;
+        color: #fff;
+    }
+
+/* Profile picture */
+.profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    overflow: hidden;
+    margin: 0 auto 20px auto;
+}
+
+    .profile-pic img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+/* Artwork grid */
+
+.artwork-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.artwork-item {
+    min-width: 430px;
+    min-height: 600px;
+    background: #333;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+    .artwork-item img {
+        width: 100%;
+        height: 90%;
+        object-fit: contain; /* This ensures the image fits both horizontally and vertically */
+    }
+
+.artwork-item-creator-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+    .artwork-item-creator-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+
+/* Filter */
+.filter-panel {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 5px;
+}
+
+.filter-btn {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+    .filter-btn:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+/* Label */
+.label {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ced4da;
+    border-radius: 2px;
+    padding: 0 5px;
+}
+
+/* Title */
+.title h2::before {
+    position: absolute;
+    content: "";
+    width: 4px;
+    height: 50px;
+    background-color: var(--purple-color-light);
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
 }
