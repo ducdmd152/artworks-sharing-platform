@@ -16,8 +16,12 @@
             </div>            
             <div class="form-row">
                 <div class="d-flex align-content-center mb-3">
-                    <label class="label">Category</label>
-                    <select class="custom-select custom-select-sm p-1 h-100" style="border-radius:2px;">
+                    <div class="label d-flex align-items-center me-3 p-1">
+                        <span>
+                            Category
+                        </span>
+                    </div>                    
+                    <select class="custom-select custom-select-sm p-2 h-100" style="border-radius:2px;">
                         <option selected>All Categories</option>
                         <option value="1">Category 1</option>
                         <option value="2">Category 2</option>
@@ -26,36 +30,48 @@
                 </div>
                 <div class="d-flex justify-content-start">
                     <div class="d-flex justify-content-start mb-3 me-5">
-                        <label class="label">React</label>
-                        <div>
-                            <input type="text" class="form-control form-control-sm" placeholder="From">
+                        <div class="label d-flex align-items-center me-3 p-1 px-3">
+                            <span>
+                                React
+                            </span>
+                        </div>
+                        <div class="me-3">
+                            <input type="text" class="form-control form-control-sm p-2" placeholder="From">
                         </div>
                         <div>
-                            <input type="text" class="form-control form-control-sm" placeholder="To">
+                            <input type="text" class="form-control form-control-sm p-2" placeholder="To">
                         </div>
                     </div>
                     <div class="d-flex justify-content-start mb-3 me-5">
-                        <label class="label">Bookmark</label>
-                        <div>
-                            <input type="text" class="form-control form-control-sm" placeholder="From">
+                        <div class="label d-flex align-items-center me-3 p-1 px-3">
+                            <span>
+                                Bookmark
+                            </span>
+                        </div>
+                        <div class="me-3">
+                            <input type="text" class="form-control form-control-sm p-2" placeholder="From">
                         </div>
                         <div>
-                            <input type="text" class="form-control form-control-sm" placeholder="To">
+                            <input type="text" class="form-control form-control-sm p-2" placeholder="To">
                         </div>
                     </div>
                     <div class="d-flex justify-content-start mb-3">
-                        <label class="label">View</label>
-                        <div>
-                            <input type="text" class="form-control form-control-sm" placeholder="From">
+                        <div class="label d-flex align-items-center me-3 p-1 px-3">
+                            <span>
+                                View
+                            </span>
+                        </div>
+                        <div class="me-3">
+                            <input type="text" class="form-control form-control-sm p-2" placeholder="From">
                         </div>
                         <div>
-                            <input type="text" class="form-control form-control-sm" placeholder="To">
+                            <input type="text" class="form-control form-control-sm p-2" placeholder="To">
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-3 mb-3">
-                    <select class="custom-select custom-select-sm p-1 h-100" style="border-radius:2px;">
+                    <select class="custom-select custom-select-sm p-2 h-100" style="border-radius:2px;">
                         <option selected>Sort by</option>
                         <option value="1">ASC</option>
                         <option value="2">DESC</option>
@@ -63,9 +79,9 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="col">
-                    <button type="reset" class="btn btn-sm btn-outline-secondary px-4 py-2">Clean</button>
-                    <button type="submit" class="btn filter-btn btn-sm px-4 py-2">Filter</button>
+                <div class="d-flex justify-content-end">
+                    <button type="reset" class="btn btn-sm btn-outline-secondary px-4 py-2 me-4">Clean</button>
+                    <button type="button" class="closeModalBtn btn btn-secondary">Filter</button>
                 </div>
             </div>
         </form>
