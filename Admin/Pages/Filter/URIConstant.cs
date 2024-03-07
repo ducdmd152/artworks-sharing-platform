@@ -3,7 +3,8 @@
 public static class URIConstant
 {
     public static readonly string[] WhiteListUris = {         
-        "/Login"
+        "/Login",
+        "/Logout"
     };
 
     public static readonly string[] ModeratorListUris = {

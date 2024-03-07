@@ -5,6 +5,7 @@ public static class URIConstant
     public static readonly string[] WhiteListUris = {         
         "/",
         "/Login",
+        "/Logout",
         "/Register"
     };
 
