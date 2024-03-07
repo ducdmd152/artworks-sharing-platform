@@ -7,15 +7,18 @@
     background-color: var(--yellow-color-dark);
 }
 
-.label {
+/* Label */
+.label-primary {
     color: var(--text-secondary);
     font-weight: bold;
     font-size: var(--normal-font-size);
 }
+
 /*BUTTONS*/
 .button {
     font-family: "Baloo 2";
     display: inline-block;
+    white-space: nowrap;
     background-color: var(--purple-color-bold);
     color: var(--white-color);
     border: none;

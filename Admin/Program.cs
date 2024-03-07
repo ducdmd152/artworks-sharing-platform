@@ -3,14 +3,11 @@ using ArtHubDAO.DAO;
 using ArtHubDAO.Data;
 using ArtHubDAO.Interface;
 using ArtHubRepository.DapperService;
-using ArtHubRepository.Interface;
-using ArtHubRepository.Repository;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using System.Data;
-using System.Reflection;
 using ArtHubService.Service;
+using User.Pages.Filter;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +51,7 @@ if (!app.Environment.IsDevelopment())
 app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseMiddleware<LoginMiddleware>();
 
 app.UseRouting();
 
