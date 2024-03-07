@@ -2,6 +2,7 @@ using ArtHubRepository.Interface;
 using ArtHubService.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 
 namespace User.Pages
 {
@@ -42,18 +43,26 @@ namespace User.Pages
                     return Page();
                 }
                 string role = account.Role.RoleName;
-                switch(role)
+
+                // Configure JsonSerializerSettings to handle reference loops
+                var settings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                };
+
+                var accountJson = JsonConvert.SerializeObject(account, settings);
+                switch (role)
                 {
                     case "audience":
-                        HttpContext.Session.SetString("role", "audience");
+                        HttpContext.Session.SetString("CREDENTIAL", accountJson);
                         HttpContext.Session.SetString("email", account.Email);
                         HttpContext.Session.SetString("firstname", account.FirstName);
                         return RedirectToPage("/Index");
                     case "creator":
-                        HttpContext.Session.SetString("role", "creator");
+                        HttpContext.Session.SetString("CREDENTIAL", accountJson);
                         HttpContext.Session.SetString("email", account.Email);
                         HttpContext.Session.SetString("firstname", account.FirstName);
-                        return RedirectToPage("/CreatorHomePage");
+                        return RedirectToPage("/CreatorProfile");
                     default:
                         ViewData["ErrorMessage"] = "Invalid username or password.";
                         return Page();

@@ -3,28 +3,28 @@
 @{
 }
 <link rel="stylesheet" href="~/css/login-register.css" asp-append-version="true" />
-<section class=" text-center text-lg-start">
+<section class="text-center text-lg-start" style="height: 100%;">
     <div class="card" style="border:none;">
         <div class="row g-0 d-flex align-items-center" style="background-color:var(--yellow-color-dark);">
             <div class="image col-lg-4 d-none d-lg-flex">
                 <img src="./images/Login.png"
                      class="w-100 rounded-t-5 rounded-tr-lg-0 rounded-bl-lg-5" />
             </div>
-            <div class="d-flex align-items-center form col-lg-8">
+            <div class="d-flex align-items-center form col-lg-8" style="margin-top: 76px; max-height: calc(100vh - 75px)">
                 <div class="card-body py-5 px-md-5">
-                    <div class=" text-center">
+                    <div class="text-center">
                         <span class="title">Sign in to ArtHub</span>
                     </div>
                     <form method="post">
                         <!-- Email input -->
                         <div class="form-outline mb-4">
-                            <label class="label form-label" for="form2Example1">Email address</label>
+                            <label class="label-primary form-label" for="form2Example1">Email address</label>
                             <input asp-for="@Model.Email" type="email" placeholder="Type here" class="form-control" />
                         </div>
 
                         <!-- Password input -->
                         <div class="form-outline mb-2">
-                            <label class="label form-label" for="form2Example2">Password</label>
+                            <label class="label-primary form-label" for="form2Example2">Password</label>
                             <input asp-for="@Model.Password" type="password" placeholder="Type here" class="form-control" />
                         </div>
 
@@ -33,7 +33,7 @@
                         </div>
 
                         <!-- Submit button -->
-                        <button type="submit" class="button mb-4">Sign in</button>
+                        <button type="submit" class="button my-4">Sign in</button>
 
                     </form>
                 </div>

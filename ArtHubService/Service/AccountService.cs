@@ -24,7 +24,7 @@ namespace ArtHubService.Service
 
         public Account? GetAccountByUsernameAndPassword(string email, string password)
         {            
-            var decryptPassword = Encryption.Encrypt(password);
+            var decryptPassword = Encryption.Encrypt(password);           
             return this.accountRepository.GetAccountsIncludeRoleByEmailPassword(email, decryptPassword);
         }
 

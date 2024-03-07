@@ -6,6 +6,7 @@ using ArtHubRepository.DapperService;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using ArtHubService.Service;
+using User.Pages.Filter;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +51,7 @@ if (!app.Environment.IsDevelopment())
 app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseMiddleware<LoginMiddleware>();
 
 app.UseRouting();
 

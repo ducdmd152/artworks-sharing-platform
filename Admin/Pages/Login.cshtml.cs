@@ -1,6 +1,7 @@
 using ArtHubService.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 
 namespace Admin.Pages
 {
@@ -41,15 +42,22 @@ namespace Admin.Pages
                     return Page();
                 }
                 string role = account.Role.RoleName;
+                // Configure JsonSerializerSettings to handle reference loops
+                var settings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                };
+
+                var accountJson = JsonConvert.SerializeObject(account, settings);
                 switch (role)
                 {                    
                     case "moderator":
-                        HttpContext.Session.SetString("role", "moderator");
+                        HttpContext.Session.SetString("CREDENTIAL", accountJson);                        
                         HttpContext.Session.SetString("email", account.Email);
                         HttpContext.Session.SetString("firstname", account.FirstName);
-                        return RedirectToPage("/Index");
+                        return RedirectToPage("/ModHomePage");
                     case "admin":
-                        HttpContext.Session.SetString("role", "admin");
+                        HttpContext.Session.SetString("CREDENTIAL", accountJson);
                         HttpContext.Session.SetString("email", account.Email);
                         HttpContext.Session.SetString("firstname", account.FirstName);
                         return RedirectToPage("/AdminHomePage");
