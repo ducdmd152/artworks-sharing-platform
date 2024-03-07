@@ -3,6 +3,7 @@ using ArtHubService.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using User.Pages.Resources;
 
 namespace User.Pages
 {
@@ -39,7 +40,7 @@ namespace User.Pages
             {
                 if (!account.Enabled)
                 {
-                    ViewData["ErrorMessage"] = "Your account has been banned.";
+                    ViewData["ErrorMessage"] = MessageResource.AccountBanned;
                     return Page();
                 }
                 string role = account.Role.RoleName;
@@ -55,21 +56,17 @@ namespace User.Pages
                 {
                     case "audience":
                         HttpContext.Session.SetString("CREDENTIAL", accountJson);
-                        HttpContext.Session.SetString("email", account.Email);
-                        HttpContext.Session.SetString("firstname", account.FirstName);
                         return RedirectToPage("/Index");
                     case "creator":
                         HttpContext.Session.SetString("CREDENTIAL", accountJson);
-                        HttpContext.Session.SetString("email", account.Email);
-                        HttpContext.Session.SetString("firstname", account.FirstName);
                         return RedirectToPage("/CreatorProfile");
                     default:
-                        ViewData["ErrorMessage"] = "Invalid username or password.";
+                        ViewData["ErrorMessage"] = MessageResource.AccountNotHavePermission;
                         return Page();
                 }                
             } else
             {
-                ViewData["ErrorMessage"] = "Invalid username or password.";
+                ViewData["ErrorMessage"] = MessageResource.InvalidUserNamePassword;
                 return Page();
             }
         }

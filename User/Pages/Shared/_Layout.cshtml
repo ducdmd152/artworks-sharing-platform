@@ -1,4 +1,19 @@
-﻿<!DOCTYPE html>
+﻿@using ArtHubBO.Entities;
+@using Newtonsoft.Json;
+@using Microsoft.AspNetCore.Http;
+@{
+    var httpContext = ViewContext.HttpContext;
+    var userString = httpContext.Session.GetString("CREDENTIAL");
+    var user = userString != null ? JsonConvert.DeserializeObject<Account>(userString) : null;
+    string role;
+    @if (user != null)
+    {
+        ViewData["Avatar"] = user.Avatar;
+        ViewData["FirstName"] = user.FirstName;
+        role = user.Role.RoleName.ToLower();
+    }
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -45,14 +60,66 @@
                         <div>
                             <button type="submit" class="btn position-relative mx-2">Search</button>
                         </div>
-                        <div>
-                            <button type="button" class="btn position-relative mx-2">
-                                <a asp-page="/Login" class="text-dark"><i class="fa-solid fa-user"></i></a>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-
+                        @if (user == null)
+                        {
+                            <div>
+                                <a asp-page="/Login" type="button" class="btn position-relative mx-2">
+                                    <i class="fa-solid fa-user"></i>
+                                </a>
+                            </div>
+                        }
+                        else
+                        {
+                            switch(user.Role.RoleName)
+                            {
+                                case "audience":
+                                    <div class="me-3 nav-user">
+                                        <img src="@ViewBag.Avatar" alt="" class="user-img m-2">
+                                        <span class="user-name my-1">@ViewBag.FirstName</span>
+                                        <ul class="user-menu list-unstyled me-3">
+                                            <li class="user-menu-item">
+                                                <a asp-page="/AudienceProfile" class="text-decoration-none text-dark">My Profile</a>
+                                            </li>
+                                            <li class="user-menu-item">
+                                                <a asp-page="/AudienceArtworkInteration" class="text-decoration-none text-dark">Interation</a>
+                                            </li>
+                                            
+                                            <li class="user-menu-item item-seperate">
+                                                <form method="get">
+                                                    <a asp-page="/Logout" class="text-decoration-none text-dark">Logout</a>
+                                                </form>                                                
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    break;
+                                case "creator":
+                                    <div class="me-3 nav-user">
+                                        <img src="@ViewBag.Avatar" alt="" class="user-img m-2">
+                                        <span class="user-name my-1">@ViewBag.FirstName</span>
+                                        <ul class="user-menu list-unstyled me-3">
+                                            <li class="user-menu-item">
+                                                <a asp-page="/CreatorProfile" class="text-decoration-none text-dark">My Profile</a>
+                                            </li>
+                                            <li class="user-menu-item">
+                                                <a asp-page="/CreatorArtworkList" class="text-decoration-none text-dark">My Artwork</a>
+                                            </li>
+                                            <li class="user-menu-item item-seperate">
+                                                <a asp-page="/Logout" class="text-decoration-none text-dark">Logout</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    break;
+                                default:
+                                    <div>
+                                        <a asp-page="/Login" type="button" class="btn position-relative mx-2">
+                                            <i class="fa-solid fa-user"></i>
+                                        </a>
+                                    </div>
+                                    break;
+                            }                            
+                        }
+                    </div>                   
+                </form>                        
             </div>
         </nav>
     </header>
