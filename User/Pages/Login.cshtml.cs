@@ -22,16 +22,6 @@ namespace User.Pages
             this.accountService = accountService;
         }
 
-        public IActionResult OnGet()
-        {
-            var role = HttpContext.Session.GetString("Role");
-            if (role != null && (role.Equals("audience") || role.Equals("creator")))
-            {
-                return RedirectToPage("/Index");
-            }
-            return Page();
-        }
-
 
         public IActionResult OnPost()
         {

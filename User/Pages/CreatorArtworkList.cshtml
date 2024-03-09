@@ -15,8 +15,42 @@
                 </div>
             </div>            
             <div class="form-row">
+                <div class="d-inline-flex mb-3 me-5">
+                    <div class="label d-flex align-items-center me-3 p-1 px-3">
+                        <span>
+                            Title
+                        </span>
+                    </div>
+                    <div style="width: 522px;">
+                        <input type="text" class="form-control form-control-sm py-2" placeholder="Title">
+                    </div>
+                </div>
                 <div class="d-flex align-content-center mb-3">
-                    <div class="label d-flex align-items-center me-3 p-1">
+                    <div class="label d-flex align-items-center me-3 p-1 px-3">
+                        <span>
+                            Status
+                        </span>
+                    </div>
+                    <select class="custom-select custom-select-sm p-2 h-100 me-3" style="border-radius:2px;">
+                        <option selected>Status</option>
+                        <option value="1">Pending</option>
+                        <option value="2">Approval</option>
+                        <option value="3">Reject</option>
+                    </select>
+
+                    <div class="label d-flex align-items-center me-3 p-1 px-3">
+                        <span>
+                            Scope
+                        </span>
+                    </div>
+                    <select class="custom-select custom-select-sm p-2 h-100 me-3" style="border-radius:2px;">
+                        <option selected>Scope</option>
+                        <option value="1">Private</option>
+                        <option value="2">Subscriber</option>
+                        <option value="3">Public</option>
+                    </select>
+
+                    <div class="label d-flex align-items-center me-3 p-1 px-3">
                         <span>
                             Category
                         </span>
@@ -27,7 +61,8 @@
                         <option value="2">Category 2</option>
                         <option value="3">Category 3</option>
                     </select>
-                </div>
+                   
+                </div>                
                 <div class="d-flex justify-content-start">
                     <div class="d-flex justify-content-start mb-3 me-5">
                         <div class="label d-flex align-items-center me-3 p-1 px-3">
@@ -36,10 +71,10 @@
                             </span>
                         </div>
                         <div class="me-3">
-                            <input type="text" class="form-control form-control-sm p-2" placeholder="From">
+                            <input type="number" class="form-control form-control-sm p-2" placeholder="From">
                         </div>
                         <div>
-                            <input type="text" class="form-control form-control-sm p-2" placeholder="To">
+                            <input type="number" class="form-control form-control-sm p-2" placeholder="To">
                         </div>
                     </div>
                     <div class="d-flex justify-content-start mb-3 me-5">
@@ -49,10 +84,10 @@
                             </span>
                         </div>
                         <div class="me-3">
-                            <input type="text" class="form-control form-control-sm p-2" placeholder="From">
+                            <input type="number" class="form-control form-control-sm p-2" placeholder="From">
                         </div>
                         <div>
-                            <input type="text" class="form-control form-control-sm p-2" placeholder="To">
+                            <input type="number" class="form-control form-control-sm p-2" placeholder="To">
                         </div>
                     </div>
                     <div class="d-flex justify-content-start mb-3">
@@ -62,15 +97,15 @@
                             </span>
                         </div>
                         <div class="me-3">
-                            <input type="text" class="form-control form-control-sm p-2" placeholder="From">
+                            <input type="number" class="form-control form-control-sm p-2" placeholder="From">
                         </div>
                         <div>
-                            <input type="text" class="form-control form-control-sm p-2" placeholder="To">
+                            <input type="number" class="form-control form-control-sm p-2" placeholder="To">
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-3 mb-3">
+                <div class="col-md-3 mb-3">                    
                     <select class="custom-select custom-select-sm p-2 h-100" style="border-radius:2px;">
                         <option selected>Sort by</option>
                         <option value="1">ASC</option>
@@ -86,7 +121,7 @@
             </div>
         </form>
     </div>
-    <div class="title text-center mt-4">
+    <div class="title text-center mt-4" style="font-family: " Baloo 2";">
         <h2 class="position-relative d-inline-block">My Artwork</h2>
     </div>
     <div class="artwork-grid">        

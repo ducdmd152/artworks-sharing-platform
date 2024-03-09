@@ -51,7 +51,7 @@ if (!app.Environment.IsDevelopment())
 app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseMiddleware<LoginMiddleware>();
+//app.UseMiddleware<LoginMiddleware>();
 
 app.UseRouting();
 

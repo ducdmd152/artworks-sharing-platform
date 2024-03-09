@@ -21,17 +21,6 @@ namespace Admin.Pages
             this.accountService = accountService;
         }
 
-        public IActionResult OnGet()
-        {
-            var role = HttpContext.Session.GetString("Role");
-            if (role != null && role.Equals("admin"))
-            {
-                return RedirectToPage("/Index");
-            }
-            return Page();
-        }
-
-
         public IActionResult OnPost()
         {
             var account = accountService.GetAccountByUsernameAndPassword(Email, Password);
