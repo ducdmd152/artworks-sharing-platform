@@ -1,5 +1,5 @@
 ﻿@page
-@model IndexModel
+@model User.Pages.Audience.IndexModel
 @{
     ViewData["Title"] = "ArtHub";
 }
@@ -8,79 +8,86 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ArtHub - Unleash Your Creativity</title>
-    <link
-        href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700"
-        rel="stylesheet"
-    />
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700"
+          rel="stylesheet" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <style>
         * {
-        box-sizing: border-box;
+            box-sizing: border-box;
         }
+
         body,
         h1,
         p {
-        margin: 0;
-        padding: 0;
+            margin: 0;
+            padding: 0;
         }
+
         body {
-        font-family: "Open Sans", sans-serif;
-        line-height: 1.6;
+            font-family: "Open Sans", sans-serif;
+            line-height: 1.6;
         }
+
         .container {
-        width: 80%;
-        margin: auto;
+            width: 80%;
+            margin: auto;
         }
+
         .banner {
-        background: linear-gradient(to right, #a18cd1 0%, #fbc2eb 100%);
-        text-align: center;
-        color: white;
-        padding: 4rem 0;
+            background: linear-gradient(to right, #a18cd1 0%, #fbc2eb 100%);
+            text-align: center;
+            color: white;
+            padding: 4rem 0;
         }
+
         nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 2rem;
         }
-        nav a {
-        color: white;
-        text-decoration: none;
-        padding: 0 1rem;
-        }
-        nav input {
-        padding: 0.5rem;
-        }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+                padding: 0 1rem;
+            }
+
+            nav input {
+                padding: 0.5rem;
+            }
+
         h1 {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
         }
+
         p {
-        margin-bottom: 1rem;
+            margin-bottom: 1rem;
         }
+
         .btn-local {
-        display: inline-block;
-        background: #6c5ce7;
-        color: white;
-        padding: 1rem 2rem;
-        border-radius: 2rem;
-        text-decoration: none;
-        font-weight: bold;
+            display: inline-block;
+            background: #6c5ce7;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            font-weight: bold;
         }
+
         .gallery {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 24px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
         }
 
         .gallery-item {
-        background: #ffffff;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .gallery-image {
@@ -92,37 +99,37 @@
         }
 
         .gallery-item-info {
-        padding: 4px;
-        text-align: center;
+            padding: 4px;
+            text-align: center;
         }
 
         .artist-name {
-        margin: 8px 0;
-        font-size: 18px;
-        color: #333;
+            margin: 8px 0;
+            font-size: 18px;
+            color: #333;
         }
 
         .gallery-item-stats {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
         }
 
-        .gallery-item-stats span {
-        margin: 0 8px;
-        }
+            .gallery-item-stats span {
+                margin: 0 8px;
+            }
 
         .likes,
         .comments {
-        display: flex;
-        align-items: center;
+            display: flex;
+            align-items: center;
         }
 
-        .likes i,
-        .comments i {
-        margin-right: 4px;
-        }
+            .likes i,
+            .comments i {
+                margin-right: 4px;
+            }
 
         .user-short-item {
             display: flex;
@@ -147,31 +154,19 @@
 
         /* Add responsiveness */
         @@media (max-width: 768px) {
-        .gallery {
-            grid-template-columns: repeat(2, 1fr);
-        }
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @@media (max-width: 480px) {
-        .gallery {
-            grid-template-columns: 1fr;
-        }
+            .gallery {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="banner">
-        <div class="container">
-            <h1>Unleash Your Creativity,<br />Explore the World of Art</h1>
-            <p style="max-width: 60rem; margin: auto; margin-bottom: 12px;">
-              Whether you're a seasoned artist or just starting out, ArtHub is your
-              platform to showcase your talent, connect with fellow creators, and
-              fuel your artistic journey. Join us and let your creativity flourish.
-            </p>
-            <a href="#" class="btn-local" style="margin: auto;">GET STARTED</a>
-        </div>
-    </div>
-
     <div class="gallery container mt-2 p-5 mb-2">
         <!-- Start of gallery item -->
         <div class="gallery-item">
@@ -187,7 +182,21 @@
                     <span class="comments"><i class="far fa-bookmark"></i> 12</span>
                 </div>
             </div>
-        </div>        
+        </div>
+        <div class="gallery-item">
+            <img src="https://placehold.co/300"
+                 class="gallery-image" />
+            <div class="gallery-item-info d-flex justify-content-between">
+                <div class="user-short-item" style="flex: 2">
+                    <img src="https://placehold.co/30" class="artist-profile-pic" />
+                    <span class="artist-name">Martin Deavin</span>
+                </div>
+                <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
+                    <span class="likes"><i class="far fa-heart"></i> 137</span>
+                    <span class="comments"><i class="far fa-bookmark"></i> 12</span>
+                </div>
+            </div>
+        </div>
         <div class="gallery-item">
             <img src="https://placehold.co/300"
                  class="gallery-image" />
@@ -216,20 +225,6 @@
                 </div>
             </div>
         </div>
-        <div class="gallery-item">
-                    <img src="https://placehold.co/300"
-                         class="gallery-image" />
-                    <div class="gallery-item-info d-flex justify-content-between">
-                        <div class="user-short-item" style="flex: 2">
-                            <img src="https://placehold.co/30" class="artist-profile-pic" />
-                            <span class="artist-name">Martin Deavin</span>
-                        </div>
-                        <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
-                            <span class="likes"><i class="far fa-heart"></i> 137</span>
-                            <span class="comments"><i class="far fa-bookmark"></i> 12</span>
-                        </div>
-                    </div>
-                </div> 
         <div class="gallery-item">
             <img src="https://placehold.co/300"
                  class="gallery-image" />
@@ -246,3 +241,4 @@
         </div>
     </div>
 </body>
+

@@ -6,7 +6,8 @@ public static class URIConstant
         "/",
         "/Login",
         "/Logout",
-        "/Register"
+        "/Register",
+        "/Artworks/"
     };
 
     public static readonly string[] CreatorListUris = {
