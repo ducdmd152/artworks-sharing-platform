@@ -14,4 +14,8 @@ public static class URIConstant
     public static readonly string[] AdminListUris = {
         "/AdminHomePage"
     };
+
+    public static readonly string HomePage = "/";
+
+    public static readonly string Login = "/Login";
 }

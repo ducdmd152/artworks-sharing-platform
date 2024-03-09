@@ -1,4 +1,5 @@
 ﻿using ArtHubBO.Entities;
+using ArtHubBO.Enum;
 using Microsoft.AspNetCore.Http.Extensions;
 using Newtonsoft.Json;
 
@@ -16,37 +17,41 @@ public class LoginMiddleware
     public async Task Invoke(HttpContext httpContext)
     {
         var path = httpContext.Request.Path.ToString().ToLower();
-        
+        var userString = httpContext.Session.GetString("CREDENTIAL");
         if (!URIConstant.WhiteListUris.Any(uri => uri.ToLower().Equals(path)))
         {
-            var userString = httpContext.Session.GetString("CREDENTIAL");
             if (userString != null)
             {
                 var userConvert = JsonConvert.DeserializeObject<Account>(userString);
                 if (userConvert != null)
                 {
-                    if (userConvert.Role.RoleName.Equals("audience") && URIConstant.AudienceListUris.Any(uri => uri.ToLower().Equals(path)))
+                    if (userConvert.Role.RoleName.Equals(RoleEnum.Audience.ToString().ToLower()) && URIConstant.AudienceListUris.Any(uri => uri.ToLower().Equals(path)))
                     {
                         await _next(httpContext);
                         return;
                     }
-                    else if (userConvert.Role.RoleName.Equals("creator") && URIConstant.CreatorListUris.Any(uri => uri.ToLower().Equals(path)))
+                    else if (userConvert.Role.RoleName.Equals(RoleEnum.Creator.ToString().ToLower()) && URIConstant.CreatorListUris.Any(uri => uri.ToLower().Equals(path)))
                     {
                         await _next(httpContext);
                         return;
                     }
                     else
                     {
-                        httpContext.Response.Redirect("/Login");
+                        httpContext.Response.Redirect(URIConstant.Login);
                         return;
                     }
                 }
-            }
+            }            
             else
             {
-                httpContext.Response.Redirect("/Login");
+                httpContext.Response.Redirect(URIConstant.Login);
                 return;
             }
+        }
+        else if (URIConstant.Login.Equals(path) && userString != null)
+        {
+            httpContext.Response.Redirect(URIConstant.HomePage);
+            return;
         }
         await _next(httpContext);
     }
