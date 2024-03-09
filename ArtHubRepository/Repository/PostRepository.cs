@@ -21,7 +21,7 @@ namespace ArtHubRepository.Repository
 
             if (searchCondition != null)
             {
-                var query = this.DbSet.Include(p => p.Bookmarks).AsQueryable();
+                var query = this.DbSet.AsQueryable();
 
                 if (searchCondition.CreatedDate != null)
                 {
