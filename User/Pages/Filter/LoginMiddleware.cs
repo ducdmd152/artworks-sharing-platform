@@ -25,12 +25,12 @@ public class LoginMiddleware
                 var userConvert = JsonConvert.DeserializeObject<Account>(userString);
                 if (userConvert != null)
                 {
-                    if (userConvert.Role.RoleName.Equals(RoleEnum.Audience.ToString()) && URIConstant.AudienceListUris.Any(uri => uri.ToLower().Equals(path)))
+                    if (userConvert.Role.RoleId.Equals(RoleEnum.Audience) && URIConstant.AudienceListUris.Any(uri => uri.ToLower().Equals(path)))
                     {
                         await _next(httpContext);
                         return;
                     }
-                    else if (userConvert.Role.RoleName.Equals(RoleEnum.Creator.ToString()) && URIConstant.CreatorListUris.Any(uri => uri.ToLower().Equals(path)))
+                    else if (userConvert.Role.RoleId.Equals(RoleEnum.Creator) && URIConstant.CreatorListUris.Any(uri => uri.ToLower().Equals(path)))
                     {
                         await _next(httpContext);
                         return;

@@ -20,6 +20,8 @@ namespace User.Pages.Creator
 
         public void OnGet()
         {
+            SearchPayload.SearchCondition.ArtistEmail = "creator@gmail.com";
+            SearchPayload.SearchCondition.CategoryId = new int[] { 1, 0 };
             var output = _postService.GetAllPostBySearchCondition(SearchPayload);
             return;
         }
