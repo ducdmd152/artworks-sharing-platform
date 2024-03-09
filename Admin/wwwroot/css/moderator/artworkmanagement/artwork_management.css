@@ -1,0 +1,40 @@
+﻿.text-purple{
+    color: var(--purple-color-bold);
+}
+
+td span.dot-primary {
+    display: inline-block;
+    width: 8px; /* Adjust the size of the dot as needed */
+    height: 8px;
+    background-color: #007bff; /* Use your desired color */
+    border-radius: 50%;
+    margin-right: 8px; /* Adjust the spacing between the dot and text */
+}
+
+td span.dot-purple {
+    display: inline-block;
+    width: 8px; /* Adjust the size of the dot as needed */
+    height: 8px;
+    background-color: var(--purple-color-bold); /* Use your desired color */
+    border-radius: 50%;
+    margin-right: 8px; /* Adjust the spacing between the dot and text */
+}
+
+td span.dot-danger {
+    display: inline-block;
+    width: 8px; /* Adjust the size of the dot as needed */
+    height: 8px;
+    background-color: #dc3545; /* Use your desired color */
+    border-radius: 50%;
+    margin-right: 8px; /* Adjust the spacing between the dot and text */
+}
+
+.filter-button{
+    border-right: none;
+}
+
+.btn-detail{
+    background-color: #6610f2;
+    color: #fff;
+    border-radius: 10px;
+}

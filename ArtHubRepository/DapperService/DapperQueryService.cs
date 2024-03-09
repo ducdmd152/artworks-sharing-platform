@@ -14,7 +14,6 @@ namespace ArtHubRepository.DapperService
     {
         private static readonly HashSet<QueryName> CachedQuery = new HashSet<QueryName>()
         {
-            QueryName.FirstQuery,
         };
 
         private static readonly TimeSpan CacheSpan = TimeSpan.FromMinutes(10);
@@ -304,7 +303,7 @@ namespace ArtHubRepository.DapperService
         {
             string result = null;
 
-            string sqlFile = queryName.GetType().FullName + ".sql";
+            string sqlFile = queryName.ToString() + ".sql";
             Stream stream = this.assembly.GetManifestResourceStream(this.assembly.GetName().Name + ".Queries." + sqlFile);
             StreamReader reader = new StreamReader(stream);
             result = await reader.ReadToEndAsync().ConfigureAwait(false);

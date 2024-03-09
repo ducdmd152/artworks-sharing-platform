@@ -34,9 +34,7 @@ namespace ArtHubBO.Entities
         [Unicode(false)]
         public string Gender { get; set; } = null!;
         [Column("status")]
-        [StringLength(100)]
-        [Unicode(false)]
-        public string Status { get; set; } = null!;
+        public int Status { get; set; }
         [Column("enabled")]
         public bool Enabled { get; set; }
         [Column("avatar")]
@@ -45,6 +43,7 @@ namespace ArtHubBO.Entities
         public string? Avatar { get; set; }
         [Column("role_id")]
         public int RoleId { get; set; }
+
         [ForeignKey("RoleId")]
         [InverseProperty("Accounts")]
         public virtual Role Role { get; set; } = null!;
