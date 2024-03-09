@@ -102,5 +102,10 @@ namespace ArtHubRepository.Repository
                 return new List<Post>();
             }
         }
+
+        public List<Post> GetAllPost()
+        {
+            return this.DbSet.Include(x => x.PostCategories).ToList();
+        }
     }
 }

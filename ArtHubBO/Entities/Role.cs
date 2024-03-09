@@ -17,7 +17,6 @@ namespace ArtHubBO.Entities
         [Column("role_name")]
         [StringLength(256)]
         public string RoleName { get; set; } = null!;
-
         [InverseProperty("Role")]
         public virtual ICollection<Account> Accounts { get; set; }
     }

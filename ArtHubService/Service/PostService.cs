@@ -29,4 +29,9 @@ public class PostService : IPostService
     {
         return _postRepository.GetAllPostBySearchCondition(searchPayload);       
     }
+
+    public List<Post> TestPostCategory()
+    {
+        return _postRepository.GetAllPost();
+    }
 }
