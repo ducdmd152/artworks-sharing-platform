@@ -1,0 +1,327 @@
+﻿@page
+@model User.Pages.Artworks.DetailsModel
+@{
+    ViewData["Title"] = "ArtHub | Artwork Details";
+}
+
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .artwork-exploration {
+            max-width: 768px;
+            margin: auto;
+            padding: 20px;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .title-local {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .main-artwork {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .artwork-details {
+            text-align: center;
+        }
+
+        .loves-saveds {
+            margin-bottom: 10px;
+        }
+
+        .loves, .saveds {
+            font-size: 16px;
+            margin-right: 15px;
+        }
+
+            .loves i, .saveds i {
+                margin-right: 5px;
+            }
+
+        .artist-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .artist-profile-pic {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .artist-name {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .artwork-description {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+            text-align: left;            
+        }
+
+        .more-artwork h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .thumbnails {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-between;
+        }
+
+        .thumbnail {
+            flex: 1;
+            max-width: 320px;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .thumbnail-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .love, .bookmark {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+            width: 40px;
+            border-radius: 100rem;
+            border: 1px #ddd solid;
+            color: gray;
+        }
+
+        .love:hover, .bookmark:hover {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        .love:hover i {
+            color: indianred;
+        }
+
+        .bookmark:hover i {
+            color: goldenrod;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .gallery-item {
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .gallery-image {
+            width: 100%;
+            display: block;
+            height: 100px;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .gallery-item-info {
+            padding: 4px;
+            text-align: center;
+        }
+
+        .artist-name-suggest {
+            margin: 8px 0;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .gallery-item-stats {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+        }
+
+            .gallery-item-stats span {
+                margin: 0 4px;
+            }
+
+        .likes,
+        .comments {
+            display: flex;
+            align-items: center;
+            font-size: 10px;
+        }
+
+            .likes i,
+            .comments i {
+                margin-right: 4px;
+                font-size: 10px;
+            }
+
+        .user-short-item {
+            display: flex;
+            align-items: center;
+            border-radius: 8px; /* Rounded corners for the container */
+        }
+
+        .artist-profile-pic-suggest {
+            width: 16px; /* Profile picture size */
+            height: 16px; /* Profile picture size */
+            border-radius: 50%; /* Make the image round */
+            margin-right: 4px; /* Space between the image and the name */
+            object-fit: cover; /* Ensures the image covers the area */
+        }
+
+        .artist-name-suggest {
+            font-size: 10px; /* Adjust as needed */
+            color: #333; /* Dark grey color for the text */
+            font-weight: 600; /* Bold font for the artist's name */
+        }
+
+        @@media (max-width: 768px) {
+            .thumbnails {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .thumbnail {
+                width: 100%;
+            }            
+        }
+    </style>
+</head>
+<body>
+  <div class="artwork-exploration">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h1 class="title-local">Artwork Title</h1>
+        <div class="gallery-item-stats">
+                <span class="love"><i class="fa-solid fa-heart"></i> </span>
+                <span class="bookmark ms-2"><i class="fa-solid fa-bookmark"></i></span>
+        </div>
+      </div>
+      <div class="main-artwork">
+        <img src="https://placehold.co/768x432" alt="Main Artwork Image" class="main-image">
+      </div>
+      <div class="artwork-details">
+        
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="artist-info">
+                  <img src="https://placehold.co/50" alt="Artist Profile Picture" class="artist-profile-pic">
+                  <span class="artist-name">Martin Deavin</span>
+            </div>
+            <div class="loves-saveds">
+                <span class="loves"><i class="fas fa-heart"></i> 187</span>
+                <span class="saveds"><i class="fas fa-bookmark"></i> 19.7k</span>
+            </div>
+        </div>
+        <p class="artwork-description m-2">
+          Collectors tend to appreciate works more if they know the "story" behind them, so be sure to write informative artwork descriptions.
+        </p>
+      </div>
+      <hr/>
+      <div class="more-artwork mt-4">
+        <h2 class="m-3 text-center">More from Martin Deavin</h2>
+        <div class="thumbnails">
+          <!-- Repeat this structure for each thumbnail -->
+          <div class="thumbnail">
+            <img src="https://placehold.co/200x200" alt="Artwork Thumbnail" class="thumbnail-image">
+          </div>
+           <div class="thumbnail">
+            <img src="https://placehold.co/200x200" alt="Artwork Thumbnail" class="thumbnail-image">
+          </div>
+           <div class="thumbnail">
+                  <img src="https://placehold.co/200x200" alt="Artwork Thumbnail" class="thumbnail-image">
+              </div>
+          <!-- ... -->
+        </div>
+      </div>
+      <hr/>
+        <div class="more-artwork mb-4" style="margin-left: -32px; margin-right: -32px;">
+            <h2 class="m-3 text-center">More by other creators</h2>
+            <div class="gallery mt-2 mb-2">
+                <!-- Start of gallery item -->
+                <div class="gallery-item">
+                    <img src="https://placehold.co/300"
+                         class="gallery-image" />
+                    <div class="gallery-item-info d-flex justify-content-between">
+                        <div class="user-short-item" style="flex: 2">
+                            <img src="https://placehold.co/30" class="artist-profile-pic-suggest" />
+                            <span class="artist-name-suggest">Martin Deavin</span>
+                        </div>
+                        <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
+                            <span class="likes"><i class="far fa-heart"></i> 137</span>
+                            <span class="comments"><i class="far fa-bookmark"></i> 12</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://placehold.co/300"
+                         class="gallery-image" />
+                    <div class="gallery-item-info d-flex justify-content-between">
+                        <div class="user-short-item" style="flex: 2">
+                            <img src="https://placehold.co/30" class="artist-profile-pic-suggest" />
+                            <span class="artist-name-suggest">Martin Deavin</span>
+                        </div>
+                        <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
+                            <span class="likes"><i class="far fa-heart"></i> 137</span>
+                            <span class="comments"><i class="far fa-bookmark"></i> 12</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://placehold.co/300"
+                         class="gallery-image" />
+                    <div class="gallery-item-info d-flex justify-content-between">
+                        <div class="user-short-item" style="flex: 2">
+                            <img src="https://placehold.co/30" class="artist-profile-pic-suggest" />
+                            <span class="artist-name-suggest">Martin Deavin</span>
+                        </div>
+                        <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
+                            <span class="likes"><i class="far fa-heart"></i> 137</span>
+                            <span class="comments"><i class="far fa-bookmark"></i> 12</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://placehold.co/300"
+                         class="gallery-image" />
+                    <div class="gallery-item-info d-flex justify-content-between">
+                        <div class="user-short-item" style="flex: 2">
+                            <img src="https://placehold.co/30" class="artist-profile-pic-suggest" />
+                            <span class="artist-name-suggest">Martin Deavin</span>
+                        </div>
+                        <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
+                            <span class="likes"><i class="far fa-heart"></i> 137</span>
+                            <span class="comments"><i class="far fa-bookmark"></i> 12</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
