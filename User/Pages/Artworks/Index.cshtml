@@ -93,7 +93,7 @@
         .gallery-image {
             width: 100%;
             display: block;
-            height: 200px;
+            height: 180px;
             object-fit: cover;
             object-position: center;
         }
@@ -167,7 +167,10 @@
     </style>
 </head>
 <body>
-    <div class="gallery container mt-2 p-5 mb-2">
+    <div class="container mt-4 p-5">
+        @await Component.InvokeAsync("ArtworkFiltering")
+    </div>
+    <div class="gallery container p-5 mb-2" style="margin-top: -60px;">
         <!-- Start of gallery item -->
         <div class="gallery-item">
             <img src="https://placehold.co/300"

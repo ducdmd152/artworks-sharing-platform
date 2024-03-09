@@ -1,0 +1,92 @@
+﻿<style>
+
+    /* Style for category buttons */
+    .category-buttons {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .category-button {
+        background-color: #f0f0f0;
+        color: #333;
+        border: none;
+        padding: 8px 16px;
+        cursor: pointer;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+
+        .category-button:hover {
+            background-color: #ddd;
+        }
+
+    /* Style for search box */
+    .search-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+            max-width: 70%;
+        }
+
+        .order-select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #category-list {
+            max-width: 80%;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+        }
+</style>
+@model List<CategoryModel>
+
+<div class="search-container">
+    <!-- Thanh tìm kiếm -->
+    <input type="text" class="search-input" placeholder="Search...">
+            
+    <!-- Select box sắp xếp -->
+    <select class="order-select">
+        <option value="date">Most favourite</option>
+        <option value="price">Most recent</option>        
+    </select>
+</div>
+
+<!-- Nơi hiển thị danh sách category -->
+<div id="category-list">
+    @foreach (var category in Model)
+    {
+        <button class="category-button"
+            onclick="filterByCategory('@category.Name')">
+            @category.Name
+        </button>
+    }
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        function filterByCategory(category) {
+            // Implement the logic to filter items by category
+            console.log("Filter by category: " + category);
+            // You might want to make an AJAX call here to update the content
+        }
+
+        function performSearch() {
+            var keyword = document.getElementById('searchInput').value;
+            // Implement the logic to perform search
+            console.log("Perform search with keyword: " + keyword);
+            // Similarly, an AJAX call can be made to search and update the content
+        }
+    </script>
+}
