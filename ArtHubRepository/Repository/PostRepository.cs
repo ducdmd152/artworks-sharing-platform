@@ -21,7 +21,7 @@ namespace ArtHubRepository.Repository
 
             if (searchCondition != null)
             {
-                var query = this.DbSet.AsQueryable();
+                var query = this.DbSet.AsQueryable().Where(p => p.ArtistEmail.Equals(searchCondition.ArtistEmail));
 
                 if (searchCondition.CreatedDate != null)
                 {
@@ -79,24 +79,23 @@ namespace ArtHubRepository.Repository
                     }
 
                 }
-
+                
                 if (searchCondition.SortDirection != null)
                 {
                     if (searchCondition.SortDirection.Equals(SortDirection.ASC))
                     {
-                        query.OrderBy(p => p.CreatedDate);
+                        query = query.OrderBy(p => p.CreatedDate);
                     } else
                     {
-                        query.OrderByDescending(p => p.CreatedDate);
+                        query = query.OrderByDescending(p => p.CreatedDate);
                     }
                 }
-                
-                var result = query
-                    .Where(p => p.ArtistEmail.Equals("creator@gmail.com"))
+
+                query = query
                     .Skip((searchPayload.PageInfo.PageNum - 1) * searchPayload.PageInfo.PageSize)
-                    .Take(searchPayload.PageInfo.PageSize)                    
-                    .ToList();
-                return result;
+                    .Take(searchPayload.PageInfo.PageSize);
+
+                return query.ToList();
             }
             else
             {                
