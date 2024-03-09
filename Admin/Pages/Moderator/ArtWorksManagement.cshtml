@@ -1,0 +1,150 @@
+﻿@page
+@model Admin.Pages.ArtWorksManagement
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Artwork management</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/moderator/artworkmanagement/artwork_management.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <!-- Fontawesome cdn -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+
+@await Component.InvokeAsync("Header")
+
+<!-- Header -->
+<div class="container m-4 text-center m-auto">
+    <h1 class="">Artwork Management</h1>
+</div>
+
+<div class="container text-center">
+    <hr style="padding: 1px; width: 80%; margin: auto"/>
+</div>
+
+<!-- Table -->
+<div class="container mt-5">
+    <div class="d-flex ">
+        <div class="d-flex mb-3 me-2 col-4">
+            <select class="form-select" style="width: fit-content; border-right: none;" aria-label="Default select example">
+                <option selected value="1">Title</option>
+                <option value="2">Artwork ID</option>
+                <option value="3">Date</option>
+                <option value="4">Creator</option>
+            </select>
+            <div class=" d-flex align-items-center">
+                <input type="text" class="form-control" placeholder="Search" aria-label="Search">
+                 <div class="input-group-prepend">
+                    <span class="input-group-text material-symbols-outlined">search</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="">
+            <!-- Dropdown for Status -->
+            <select class="form-select" aria-label="Default select example">
+                <option selected>Status</option>
+                <option value="1">Pending</option>
+                <option value="2">Approved</option>
+                <option value="3">Rejected</option>
+                <option value="4">Re-pending</option>
+                <!-- ...other statuses... -->
+            </select>
+        </div>
+    </div>
+    
+    <table class="table table-hover">
+        <thead>
+        <tr style="background-color: #f8f9fa; font-weight: 500;">
+            <td>Artwork ID</td>
+            <td>Title</td>
+            <td>Date</td>
+            <td>Status</td>
+            <td>Creator</td>
+            <td>Restrict</td>
+            <td></td> <!-- Details column -->
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Repeat for each artwork entry -->
+        <tr>
+            <td>5017</td>
+            <td>Artwork Title</td>
+            <td>2024-08-01</td>
+            <td><span class="badge bg-success">Approved</span></td>
+            <td>Cody Fisher</td>
+            <td><span class="dot-purple"></span>Subscribe Only</td>
+            <td><span type="button" class="btn btn-detail">Details</span></td>
+        </tr>
+        
+        <tr>
+            <td>5017</td>
+            <td>Artwork Title</td>
+            <td>2024-08-01</td>
+            <td><span class="badge bg-info">Pending</span></td>
+            <td>Cody Fisher</td>
+            <td><span class="dot-primary"></span>Public</td>
+            <td><span type="button" class="btn btn-detail">Details</span></td>
+        </tr>
+        
+        <tr>
+            <td>5017</td>
+            <td>Artwork Title</td>
+            <td>2024-08-01</td>
+            <td><span class="badge bg-warning text-dark">Re-pending</span></td>
+            <td>Cody Fisher</td>
+            <td><span class="dot-danger"></span>Private</td>
+            <td><span type="button" class="btn btn-detail">Details</span></td>
+        </tr>
+        
+        <tr>
+            <td>5017</td>
+            <td>Artwork Title</td>
+            <td>2024-08-01</td>
+            <td><span class="badge bg-danger">Reject</span></td>
+            <td>Cody Fisher</td>
+            <td><span class="dot-purple"></span>Subscribe Only</td>
+            <td><span type="button" class="btn btn-detail">Details</span></td>
+        </tr>
+        <!-- Additional rows -->
+        </tbody>
+    </table>
+    <div class="float-end mt-4">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item">
+              <a class="page-link text-dark" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item"><a class="page-link text-dark" href="#">1</a></li>
+            <li class="page-item"><a class="page-link text-dark" href="#">2</a></li>
+            <li class="page-item"><a class="page-link text-dark" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link text-dark" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+    </div>
+</div>
+
+<partial name="Shared/Footer"/>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+﻿@using ArtHubBO.Enum
+@model ArtHubBO.DTO.PostManagementItem
+
+@{
+    Layout = null;
+}
+
+<tr>
+    <td>@Model.PostId</td>
+    <td>@Model.Title</td>
+    <td>@Model.Date</td>
+    @if (@Model.Status == PostStatus.Reject.ToString())
+    {
+        <td><span class="badge bg-danger">Reject</span></td>
+    }
+    else if (@Model.Status == PostStatus.Approval.ToString())
+    {
+        <td><span class="badge bg-success">Approved</span></td>
+    }
+    else if (@Model.Status == PostStatus.Pending.ToString())
+    {
+        <td><span class="badge bg-info">Pending</span></td>
+    }
+    else if (@Model.Status == PostStatus.Repending.ToString())
+    {
+        <td><span class="badge bg-warning text-dark">Re-pending</span></td>
+    }
+
+    <td>@Model.ArtistName</td>
+    <td><span type="button" class="btn btn-detail">Details</span></td>
+</tr>

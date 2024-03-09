@@ -17,6 +17,7 @@
   <ItemGroup>
     <Folder Include="ClientApp\images\" />
     <Folder Include="ClientApp\js\" />
+    <Folder Include="Model\" />
   </ItemGroup>
 
   <ItemGroup>

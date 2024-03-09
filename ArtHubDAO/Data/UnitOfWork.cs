@@ -16,9 +16,9 @@ namespace ArtHubDAO.Data
         private bool isTransaction;
         private ArtHubDbContext context;
 
-        public UnitOfWork(ArtHubDbContext context)
+        public UnitOfWork()
         {
-            this.context = context;
+            this.context = new ArtHubDbContext();
         }
 
         public bool IsTransaction
