@@ -7,6 +7,7 @@ using Microsoft.Data.SqlClient;
 using System.Data;
 using ArtHubService.Service;
 using User.Pages.Filter;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,13 +22,26 @@ builder.Services.Scan(scan => scan
     .AsImplementedInterfaces()
     .WithScopedLifetime());
 
-//Add session
-builder.Services.AddSession(options =>
+// Configure Redis Based Distributed Session
+var redisConfigurationOptions = ConfigurationOptions.Parse("localhost:6379");
+
+builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+    redisCacheConfig.ConfigurationOptions = redisConfigurationOptions;
 });
+
+builder.Services.AddSession(options => {
+    options.Cookie.Name = "myapp_session";
+    options.IdleTimeout = TimeSpan.FromMinutes(60 * 24);
+});
+
+//Add session
+//builder.Services.AddSession(options =>
+//{
+//    options.IdleTimeout = TimeSpan.FromMinutes(30);
+//    options.Cookie.HttpOnly = true;
+//    options.Cookie.IsEssential = true;
+//});
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IBaseDAO<>), typeof(BaseDAO<>));
