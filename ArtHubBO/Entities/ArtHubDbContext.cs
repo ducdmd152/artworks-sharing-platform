@@ -61,9 +61,9 @@ namespace ArtHubBO.Entities
         private string GetConnectionString()
         {
             IConfiguration config = new ConfigurationBuilder()
-                 .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("appsettings.json", true, true)
-                        .Build();
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", true, true)
+                .Build();
             var strConn = config.GetConnectionString("DBDefault");
 
             return strConn;
@@ -75,7 +75,7 @@ namespace ArtHubBO.Entities
             {
                 entity.HasKey(e => e.Email)
                     .HasName("account_pk");
-                
+
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.Accounts)
                     .HasForeignKey(d => d.RoleId)
@@ -139,14 +139,17 @@ namespace ArtHubBO.Entities
 
             modelBuilder.Entity<PostCategory>(entity =>
             {
+                entity.HasKey(e => new { e.CategoryId, e.PostId })
+                    .HasName("post_category_pk");
+
                 entity.HasOne(d => d.Category)
-                    .WithMany()
+                    .WithMany(p => p.PostCategories)
                     .HasForeignKey(d => d.CategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("post_category_category_FK");
 
                 entity.HasOne(d => d.Post)
-                    .WithMany()
+                    .WithMany(p => p.PostCategories)
                     .HasForeignKey(d => d.PostId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("post_category_post_FK");
