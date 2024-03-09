@@ -22,6 +22,7 @@ builder.Services.Scan(scan => scan
             type.Name.EndsWith("Repository") || type.Name.EndsWith("Service")))
                 .AsImplementedInterfaces()
                 .WithScopedLifetime());
+
 // Configure Redis Based Distributed Session
 var redisConfigurationOptions = ConfigurationOptions.Parse("localhost:6379");
 
@@ -31,17 +32,10 @@ builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
 });
 
 builder.Services.AddSession(options => {
-    options.Cookie.Name = "myapp_session";
+    options.Cookie.Name = "ArtworksSharingPlatform_Session";
     options.IdleTimeout = TimeSpan.FromMinutes(60 * 24);
 });
 
-//Add session
-//builder.Services.AddSession(options =>
-//{
-//    options.IdleTimeout = TimeSpan.FromMinutes(30);
-//    options.Cookie.HttpOnly = true;
-//    options.Cookie.IsEssential = true;
-//});
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IBaseDAO<>), typeof(BaseDAO<>));

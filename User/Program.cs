@@ -1,4 +1,3 @@
-using ArtHubBO.Entities;
 using ArtHubDAO.DAO;
 using ArtHubDAO.Data;
 using ArtHubDAO.Interface;
@@ -6,7 +5,6 @@ using ArtHubRepository.DapperService;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using ArtHubService.Service;
-using User.Pages.Filter;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,17 +29,10 @@ builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
 });
 
 builder.Services.AddSession(options => {
-    options.Cookie.Name = "myapp_session";
+    options.Cookie.Name = "ArtworksSharingPlatform_Session";
     options.IdleTimeout = TimeSpan.FromMinutes(60 * 24);
 });
 
-//Add session
-//builder.Services.AddSession(options =>
-//{
-//    options.IdleTimeout = TimeSpan.FromMinutes(30);
-//    options.Cookie.HttpOnly = true;
-//    options.Cookie.IsEssential = true;
-//});
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IBaseDAO<>), typeof(BaseDAO<>));
