@@ -252,13 +252,13 @@ VALUES
 
 
 -- Inserting 5 posts (assuming there are at least 5 artists)
-INSERT INTO ArtHub.dbo.post (title, description, status, [scope], total_react, total_view, total_bookmark, artist_email, created_date)
+INSERT INTO ArtHub.dbo.post (title, description, status, [scope], total_react, total_view, total_bookmark, artist_email, created_date, updated_date)
 VALUES 
-(N'Post Title 1', N'Description 1', 'approval', 'public', 0, 0, 0, 'creator@gmail.com', GETDATE()),
-(N'Post Title 2', N'Description 2', 'approval', 'public', 0, 0, 0, 'creator2@gmail.com', GETDATE()),
-(N'Post Title 3', N'Description 3', 'approval', 'public', 0, 0, 0, 'creator3@gmail.com', GETDATE()),
-(N'Post Title 4', N'Description 4', 'approval', 'public', 0, 0, 0, 'creator4@gmail.com', GETDATE()),
-(N'Post Title 5', N'Description 5', 'approval', 'public', 0, 0, 0, 'creator5@gmail.com', GETDATE());
+(N'Post Title 1', N'Description 1', 'approval', 'public', 0, 0, 0, 'creator@gmail.com', GETDATE(), GETDATE()),
+(N'Post Title 2', N'Description 2', 'approval', 'public', 0, 0, 0, 'creator2@gmail.com', GETDATE(), GETDATE()),
+(N'Post Title 3', N'Description 3', 'approval', 'public', 0, 0, 0, 'creator3@gmail.com', GETDATE(), GETDATE()),
+(N'Post Title 4', N'Description 4', 'approval', 'public', 0, 0, 0, 'creator4@gmail.com', GETDATE(), GETDATE()),
+(N'Post Title 5', N'Description 5', 'approval', 'public', 0, 0, 0, 'creator5@gmail.com', GETDATE(), GETDATE());
 
 
 -- Inserting 5 bookmarks (assuming there are at least 5 posts and 5 accounts)
