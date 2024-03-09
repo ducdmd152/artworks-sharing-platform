@@ -1,19 +1,4 @@
-﻿@using ArtHubBO.Entities;
-@using Newtonsoft.Json;
-@using Microsoft.AspNetCore.Http;
-@{
-    var httpContext = ViewContext.HttpContext;
-    var userString = httpContext.Session.GetString("CREDENTIAL");
-    var user = userString != null ? JsonConvert.DeserializeObject<Account>(userString) : null;
-    string role;
-    @if (user != null)
-    {
-        ViewData["Avatar"] = user.Avatar;
-        ViewData["FirstName"] = user.FirstName;
-        role = user.Role.RoleName.ToLower();
-    }
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -29,169 +14,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <header class="header">
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
-            <div class="container-fluid d-flex justify-content-between align-items-center">
-                <div class="collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav">
-                        <li class="nav-item me-3 fs-5">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item me-3 fs-5">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Artworks</a>
-                        </li>
-                        <li class="nav-item me-3 fs-5">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Creators</a>
-                        </li>
-                        <li class="nav-item me-3 fs-5">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Contact</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="text-center">
-                    <img src="./images/ArtHub.png"
-                         class="w-50 rounded-t-5 rounded-tr-lg-0 rounded-bl-lg-5" />
-                </div>
-                <form class="form-inline my-2 my-lg-0">
-                    <div class="d-flex align-items-center">
-                        <div class="me-3">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                        </div>
-                        <div>
-                            <button type="submit" class="btn position-relative mx-2">Search</button>
-                        </div>
-                        @if (user == null)
-                        {
-                            <div>
-                                <a asp-page="/Login" type="button" class="btn position-relative mx-2">
-                                    <i class="fa-solid fa-user"></i>
-                                </a>
-                            </div>
-                        }
-                        else
-                        {
-                            switch (user.Role.RoleName)
-                            {
-                                case "moderator":
-                                    <div class="me-3 nav-user">
-                                        <img src="@ViewBag.Avatar" alt="" class="user-img m-2">
-                                        <span class="user-name my-1">@ViewBag.FirstName</span>
-                                        <ul class="user-menu list-unstyled me-3">
-                                            <li class="user-menu-item">
-                                                <a asp-page="/AudienceProfile" class="text-decoration-none text-dark">My Profile</a>
-                                            </li>
-                                            <li class="user-menu-item item-seperate">
-                                                <form method="get">
-                                                    <a asp-page="/Logout" class="text-decoration-none text-dark">Logout</a>
-                                                </form>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    break;
-                                case "admin":
-                                    <div class="me-3 nav-user">
-                                        <img src="@ViewBag.Avatar" alt="" class="user-img m-2">
-                                        <span class="user-name my-1">@ViewBag.FirstName</span>
-                                        <ul class="user-menu list-unstyled me-3">
-                                            <li class="user-menu-item item-seperate">
-                                                <a asp-page="/Logout" class="text-decoration-none text-dark">Logout</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    break;
-                                default:
-                                    <div>
-                                        <a asp-page="/Login" type="button" class="btn position-relative mx-2">
-                                            <i class="fa-solid fa-user"></i>
-                                        </a>
-                                    </div>
-                                    break;
-                            }
-                        }
-                    </div>
-                </form>
-            </div>
-        </nav>
-    </header>
+@await Component.InvokeAsync("Header")
 
-    @RenderBody()
+@RenderBody()
 
-    <footer class="footer border-top">
-        <div class="container d-flex justify-content-between align-items-center">
-            <div class="">
-                <img src="./images/ArtHub.png"
-                     class="w-50 rounded-t-5 rounded-tr-lg-0 rounded-bl-lg-5" />
-            </div>
-            <div class="collapse d-flex justify-content-between">
-                <div>
-                    <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                </div>
-                <div>
-                    <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Artworks</a>
-                </div>
-                <div>
-                    <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Creators</a>
-                </div>
-                <div>
-                    <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Contact</a>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3 d-flex flex-column align-items-end">
-                <div>
-                    <h5 class="fw-light mt-3 mb-0">Follow Us</h5>
-                </div>
-                <div>
-                    <ul class="list-unstyled d-flex justify-content-end">
-                        <li>
-                            <a class="text-white text-decoration-none text-muted fs-4 me-4">
-                                <i class="fab fa-facebook-f"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="text-white text-decoration-none text-muted fs-4 me-4">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="text-white text-decoration-none text-muted fs-4 me-4">
-                                <i class="fab fa-youtube"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="text-white text-decoration-none text-muted fs-4">
-                                <i class="fab fa-linkedin"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="w-100" style="height: 0.1px; background-color:#999;">
-        </div>
-        <div class="container d-flex justify-content-between align-items-center">
-            <div>
-                &copy; 2024 ArtHub Center
-            </div>
-            <div>
-                <ul class="list-unstyled d-flex justify-content-end">
-                    <li>
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Terms">Terms</a>
-                    </li>
-                    <li>
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                    </li>
-                    <li>
-                        <a class="nav-link pe-0 text-dark" asp-area="" asp-page="/Cookies">Cookies</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </footer>
+<partial name="Shared/Footer"/>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
 
-    @await RenderSectionAsync("Scripts", required: false)
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

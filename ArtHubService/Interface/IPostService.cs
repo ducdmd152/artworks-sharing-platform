@@ -6,5 +6,7 @@ namespace ArtHubService.Interface;
 
 public interface IPostService
 {
+    Task<IEnumerable<PostManagementItem>> GetListPostOrderByDate(SearchArtworkManagementConditionDto searchCondition);
+    
     List<Post> GetAllPostBySearchCondition(SearchPayload<PostSearchConditionDto> searchPayload);
 }

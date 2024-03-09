@@ -31,7 +31,6 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IBaseDAO<>), typeof(BaseDAO<>));
-builder.Services.AddDbContext<ArtHubDbContext>();
 
 string connectionString = builder.Configuration.GetConnectionString("DBDefault");
 // Register IDbConnection in DI container
