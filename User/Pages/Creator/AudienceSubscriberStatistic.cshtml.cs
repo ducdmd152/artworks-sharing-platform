@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace User.Pages
+namespace User.Pages.Creator
 {
-    public class CreatorUploadNewArtworkModel : PageModel
+    public class AudienceSubscriberStatisticModel : PageModel
     {
         public void OnGet()
         {

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using User.Pages.Resources;
 
-namespace User.Pages
+namespace User.Pages.Authenticate
 {
     public class LoginModel : PageModel
     {
@@ -44,12 +44,14 @@ namespace User.Pages
                 var accountJson = JsonConvert.SerializeObject(account, settings);
                 switch (role)
                 {
-                    case "audience":
+                    case "Audience":
                         HttpContext.Session.SetString("CREDENTIAL", accountJson);
+                        HttpContext.Session.SetString("ACCOUNT_EMAIL", account.Email);
                         return RedirectToPage("/Index");
-                    case "creator":
+                    case "Creator":
                         HttpContext.Session.SetString("CREDENTIAL", accountJson);
-                        return RedirectToPage("/CreatorProfile");
+                        HttpContext.Session.SetString("ACCOUNT_EMAIL", account.Email);
+                        return RedirectToPage("/Creator/Profile");
                     default:
                         ViewData["ErrorMessage"] = MessageResource.AccountNotHavePermission;
                         return Page();
