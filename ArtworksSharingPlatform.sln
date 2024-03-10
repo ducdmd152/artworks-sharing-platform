@@ -5,17 +5,17 @@ VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ArtHubGUI", "ArtHubGUI", "{A99E1054-124E-4410-8F96-ED2B5F04AA96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtHubBO", "ArtHubBO\ArtHubBO.csproj", "{D70E3FE7-EDBB-4F5E-981C-3E96B0BE9E51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArtHubBO", "ArtHubBO\ArtHubBO.csproj", "{D70E3FE7-EDBB-4F5E-981C-3E96B0BE9E51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtHubDAO", "ArtHubDAO\ArtHubDAO.csproj", "{9518BA24-0FE4-436B-85B8-327132B4A662}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArtHubDAO", "ArtHubDAO\ArtHubDAO.csproj", "{9518BA24-0FE4-436B-85B8-327132B4A662}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtHubRepository", "ArtHubRepository\ArtHubRepository.csproj", "{3B2FB1BF-CC82-4D0A-AB05-5F6E40B9CEF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArtHubRepository", "ArtHubRepository\ArtHubRepository.csproj", "{3B2FB1BF-CC82-4D0A-AB05-5F6E40B9CEF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtHubService", "ArtHubService\ArtHubService.csproj", "{34CDE07C-30D1-4588-93E0-F375347D5AE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArtHubService", "ArtHubService\ArtHubService.csproj", "{34CDE07C-30D1-4588-93E0-F375347D5AE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User", "User\User.csproj", "{91634C0B-F46D-483C-ABA8-6187766D55D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User", "User\User.csproj", "{91634C0B-F46D-483C-ABA8-6187766D55D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin", "Admin\Admin.csproj", "{5CA9A4B8-D633-4B03-AB63-D43ABF61DD3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Admin", "Admin\Admin.csproj", "{5CA9A4B8-D633-4B03-AB63-D43ABF61DD3E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,49 @@
+﻿@page
+@model Admin.Pages.TopCreator.IndexModel
+@{
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/tablelist.css" asp-append-version="true" />
+</head>
+<body>
+    <main class="table">
+        <section class="table_header">
+            <h1>Top Creator</h1>
+        </section>
+        <section class="table_body">
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>CREATOR</th>
+                        <th>EMAIL</th>
+                        <th>REVENUE</th>
+                        <th>FEE</th>
+                        <th>LOVED</th>
+                        <th>PROFIT</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for (int i = 1; i <= 10; i++)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td><img src="siêu phẩm.png" alt="">Taylor Swift</td>
+                            <td>taylor@gmail.com</td>
+                            <td>10</td>
+                            <td>10000000</td>
+                            <td>5</td>
+                            <td>6</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>
