@@ -43,7 +43,7 @@ namespace Admin.Pages
                 {                    
                     case "Moderator":
                         HttpContext.Session.SetString("CREDENTIAL", accountJson);                        
-                        return RedirectToPage("/ModHomePage");
+                        return RedirectToPage("/Moderator/ArtWorksManagement");
                     case "Admin":
                         HttpContext.Session.SetString("CREDENTIAL", accountJson);
                         return RedirectToPage("/Moderator/ArtWorksManagement");
