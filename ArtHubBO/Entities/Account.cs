@@ -47,7 +47,7 @@ namespace ArtHubBO.Entities
         [ForeignKey("RoleId")]
         [InverseProperty("Accounts")]
         public virtual Role Role { get; set; } = null!;
-        [InverseProperty("EmailNavigation")]
+        [InverseProperty("Account")]
         public virtual Artist? Artist { get; set; }
         [InverseProperty("AccountEmailNavigation")]
         public virtual ICollection<Bookmark> Bookmarks { get; set; }

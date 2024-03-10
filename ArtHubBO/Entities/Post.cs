@@ -10,7 +10,6 @@ namespace ArtHubBO.Entities
         public Post()
         {
             Bookmarks = new HashSet<Bookmark>();
-            Images = new HashSet<Image>();
             PostCategories = new HashSet<PostCategory>();
             Reactions = new HashSet<Reaction>();
         }
@@ -41,11 +40,11 @@ namespace ArtHubBO.Entities
 
         [ForeignKey("ArtistEmail")]
         [InverseProperty("Posts")]
-        public virtual Artist ArtistEmailNavigation { get; set; } = null!;
+        public virtual Artist Artist { get; set; } = null!;
         [InverseProperty("Post")]
         public virtual ICollection<Bookmark> Bookmarks { get; set; }
         [InverseProperty("Post")]
-        public virtual ICollection<Image> Images { get; set; }
+        public virtual Image? Image { get; set; }
         [InverseProperty("Post")]
         public virtual ICollection<PostCategory> PostCategories { get; set; }
         [InverseProperty("Post")]
