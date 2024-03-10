@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\images\" />
-    <Folder Include="ClientApp\js\" />
+    <Folder Include="ClientApp\js\" />    
   </ItemGroup>
 
 </Project>

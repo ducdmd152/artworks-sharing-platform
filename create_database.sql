@@ -309,7 +309,8 @@ VALUES
 INSERT INTO ArtHub.dbo.post_category (category_id, post_id, created_date, updated_date)
 VALUES 
 (0, 0, GETDATE(), GETDATE()),
-(1, 1, GETDATE(), GETDATE()),
+(1, 0, GETDATE(), GETDATE()),
+(0, 1, GETDATE(), GETDATE()),
 (2, 2, GETDATE(), GETDATE()),
 (3, 3, GETDATE(), GETDATE()),
 (4, 4, GETDATE(), GETDATE());	

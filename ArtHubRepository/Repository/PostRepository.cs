@@ -18,10 +18,9 @@ namespace ArtHubRepository.Repository
         {
 
             var searchCondition = searchPayload.SearchCondition;
-            var query = this.DbSet.Include(item => item.Images).Include(item => item.Artist).Include(item => item.Artist.Account).AsQueryable();
+            var query = this.DbSet.Include(p => p.PostCategories).Include(item => item.Images).Include(item => item.Artist).Include(item => item.Artist.Account).AsQueryable();
             if (searchCondition != null)
             {
-
                 if (searchCondition.ArtistEmail != null)
                 {
                     query = query.Where(p => p.ArtistEmail.Equals(searchCondition.ArtistEmail));
@@ -45,6 +44,11 @@ namespace ArtHubRepository.Repository
                 if (searchCondition.PostScope != null)
                 {
                     query = query.Where(p => p.Scope == (int)searchCondition.PostScope);
+                }
+
+                if (searchCondition.CategoryId != null)
+                {
+                    query = query.Where(p => p.PostCategories.Any(pc => searchCondition.CategoryId.Contains(pc.CategoryId)));
                 }
 
                 if (searchCondition.ReactFrom != null)
