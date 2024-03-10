@@ -10,11 +10,13 @@ namespace Admin.Pages
     {
         private readonly IAccountService accountService;
         private IDapperQueryService dapperQueryService;
+        private IPostService postService;
 
-        public SampleModel(IAccountService accountService, IDapperQueryService dapperQueryService)
+        public SampleModel(IAccountService accountService, IDapperQueryService dapperQueryService, IPostService postService)
         {
             this.accountService = accountService;
             this.dapperQueryService = dapperQueryService;
+            this.postService = postService;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -33,6 +35,8 @@ namespace Admin.Pages
 
             // remove
             var temp3 = await this.accountService.RemoveAccountAsync().ConfigureAwait(false);
+
+            var temp4 = this.postService.TestPostCategory();
             
             return this.Page();
         }

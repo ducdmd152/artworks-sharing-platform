@@ -1,10 +1,262 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "ArtHub";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ArtHub - Unleash Your Creativity</title>
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700"
+        rel="stylesheet"
+    />
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+        * {
+        box-sizing: border-box;
+        }
+        body,
+        h1,
+        p {
+        margin: 0;
+        padding: 0;
+        }
+        body {
+        font-family: "Open Sans", sans-serif;
+        line-height: 1.6;
+        }
+        .container {
+        width: 80%;
+        margin: auto;
+        }
+        .banner {
+            background: linear-gradient(to right, #a18cd1 0%, #fbc2eb 100%);
+            text-align: center;
+            color: white;
+            padding: 4rem 0;
+            height: 50vh;
+            display: flex;
+        }
+        nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 2rem;
+        }
+        nav a {
+        color: white;
+        text-decoration: none;
+        padding: 0 1rem;
+        }
+        nav input {
+        padding: 0.5rem;
+        }
+        h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        }
+        p {
+        margin-bottom: 1rem;
+        }
+        .btn-local {
+        display: inline-block;
+        background: #6c5ce7;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 2rem;
+        text-decoration: none;
+        font-weight: bold;
+        }
+        .gallery {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        }
+
+        .gallery-item {
+            position: relative;
+        background: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .gallery-image {
+            width: 100%;
+            display: block;
+            height: 240px;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .gallery-item-info {
+        padding: 4px;
+        text-align: center;
+        }
+
+        .artist-name {
+        margin: 8px 0;
+        font-size: 18px;
+        color: #333;
+        }
+
+        .gallery-item-stats {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 14px;
+        }
+
+        .gallery-item-stats span {
+        margin: 0 8px;
+        }
+
+        .likes,
+        .comments {
+        display: flex;
+        align-items: center;
+        }
+
+        .likes i,
+        .comments i {
+        margin-right: 4px;
+        }
+
+        .user-short-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px; /* Rounded corners for the container */
+        }
+
+        .artist-profile-pic {
+            width: 36px; /* Profile picture size */
+            height: 36px; /* Profile picture size */
+            border-radius: 50%; /* Make the image round */
+            margin-right: 10px; /* Space between the image and the name */
+            object-fit: cover; /* Ensures the image covers the area */
+        }
+
+        .artist-name {
+            font-size: 16px; /* Adjust as needed */
+            color: #333; /* Dark grey color for the text */
+            font-weight: 600; /* Bold font for the artist's name */
+        }
+
+        .gallery-item-title {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: dark;
+            background: #ccc;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            max-width: 220px;
+        }
+
+        .gallery-item:hover {
+            cursor: pointer;
+        }
+
+            .gallery-item:hover .gallery-image {
+                opacity: 0.6;
+            }
+
+            .gallery-item:hover .gallery-item-title {
+                opacity: 1;
+            }
+        /* Add responsiveness */
+        @@media (max-width: 768px) {
+        .gallery {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        }
+
+        @@media (max-width: 480px) {
+        .gallery {
+            grid-template-columns: 1fr;
+        }
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <div class="container">
+            <h1 style="margin-top: -12px;">Unleash Your Creativity,<br />Explore the World of Art</h1>
+            <p style="max-width: 60rem; margin: auto; margin-top: 24px; margin-bottom:40px;">
+              Whether you're a seasoned artist or just starting out, ArtHub is your
+              platform to showcase your talent, connect with fellow creators, and
+              fuel your artistic journey. Join us and let your creativity flourish.
+            </p>
+            <a id="get-started" href="#get-started" class="btn-local" style="margin: auto;">GET STARTED</a>
+        </div>
+    </div>
+
+    <div class="container mt-4 p-5">
+        @await Component.InvokeAsync("ArtworkFiltering")
+    </div>
+    <div class="gallery container p-5 mb-2" style="margin-top: -60px;">
+        @foreach (var item in Model.Posts)
+        {
+            <div class="gallery-item">
+                <img src="@(item.Image?.ImageUrl ?? "https://placehold.co/300")"
+                 class="gallery-image" />
+                <div class="gallery-item-title">@item.Title</div>
+            <div class="gallery-item-info d-flex justify-content-between">
+                <div class="user-short-item" style="flex: 2">
+                        <img src="@(item.Artist?.Account?.Avatar ?? "https://placehold.co/300")" class="artist-profile-pic" />
+                        <span class="artist-name">@item.Artist?.ArtistName</span>
+                </div>
+                <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
+                        <span class="likes"><i class="far fa-heart"></i> @item.TotalReact</span>
+                        <span class="comments"><i class="far fa-bookmark"></i> @item.TotalBookmark</span>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+    
+    <nav aria-label="Page navigation" style="display: flex; justify-content: center; width: 100%;">
+        <ul class="pagination">
+            @for (var i = 1; i <= @Model.SearchPayload.PageInfo.TotalPages; i++)
+            {
+                <li class="page-item @(Model.SearchPayload.PageInfo.PageNum == i ? "active" : "")">
+                    <a class="page-link" style="font-size: 20px; padding: 8px 16px;" href="?pageIndex=@i">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</body>
+
+@section Scripts {
+    <script type="text/javascript">
+        function getURL() {
+            var keyword = document.getElementById('searchInput').value.trim();
+            var orderSelect = document.getElementById('order-select').value;
+            console.log(orderSelect);
+            return '../Artworks?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect;
+        }
+        function handleOrderChange() {
+            window.location.href = getURL();
+        }
+
+        function filterByCategory(category) {
+            console.log("Filter by category: " + category);
+        }
+
+        function performSearch() {
+            event.preventDefault();
+            window.location.href = getURL();
+        }
+    </script>
+}

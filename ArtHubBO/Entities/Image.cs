@@ -21,10 +21,10 @@ namespace ArtHubBO.Entities
         [Column("delete_flag")]
         public bool DeleteFlag { get; set; }
         [Column("post_id")]
-        public int PostId { get; set; }
+        public int? PostId { get; set; }
 
         [ForeignKey("PostId")]
-        [InverseProperty("Images")]
-        public virtual Post Post { get; set; } = null!;
+        [InverseProperty("Image")]
+        public virtual Post? Post { get; set; } = null!;
     }
 }

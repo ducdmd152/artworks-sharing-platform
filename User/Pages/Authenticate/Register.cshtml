@@ -1,0 +1,64 @@
+﻿@page
+@model User.Pages.Authenticate.RegisterModel
+@{
+}
+<link rel="stylesheet" href="~/css/login-register.css" asp-append-version="true" />
+<section class=" text-center text-lg-start">
+    <div class="card" style="border:none;">
+        <div class="row g-0 d-flex align-items-center" style="background-color:var(--yellow-color-dark);">
+            <div class="image col-lg-4 d-none d-lg-flex">
+                <img src="../images/Login.png"
+                     class="w-100 rounded-t-5 rounded-tr-lg-0 rounded-bl-lg-5" />
+            </div>
+            <div class="d-flex align-items-center form col-lg-8" style="margin-top: 76px; max-height: calc(100vh - 75px)">
+                <div class="card-body py-5 px-md-5">
+                    <div class=" text-center">
+                        <span class="title">Create Account</span>
+                    </div>
+                    <form>                        
+                        <div class="d-flex justify-content-between form-outline mb-4">
+                            <!-- First Name input -->
+                            <div style="width:45%;">
+                                <label class="label-primary form-label" for="form2Example1">First Name</label>
+                                <input type="text" placeholder="Type here" class="form-control" />
+                            </div>
+                            <!-- Last Name input -->
+                            <div style="width:45%;">
+                                <label class="label-primary form-label" for="form2Example1">Last Name</label>
+                                <input type="text" placeholder="Type here" class="form-control" />
+                            </div>
+                        </div>
+
+                        <!-- Email input -->
+                        <div class="form-outline mb-4">
+                            <label class="label-primary form-label" for="form2Example1">Email address</label>
+                            <input type="email" placeholder="Type here" class="form-control" />
+                        </div>
+
+                        <!-- Password input -->
+                        <div class="form-outline mb-2">
+                            <label class="label-primary form-label" for="form2Example2">Password</label>
+                            <input type="password" placeholder="Type here" class="form-control" />
+                        </div>
+
+                        <div class="form-outline mb-2">
+                            <label class="label-primary form-label" for="form2Example2">Confirm Password</label>
+                            <input type="password" placeholder="Type here" class="form-control" />
+                        </div>
+
+                        <div class="label-primary row mb-4">
+                            <div class="col">
+                                Already have an account?
+                                <a class="label-primary" href="./Login"> Sign in</a>
+                            </div>
+                        </div>
+
+                        <!-- Submit button -->
+                        <button type="button" class="button mb-4">Sign up</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

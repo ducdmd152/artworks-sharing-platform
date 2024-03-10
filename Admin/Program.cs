@@ -3,14 +3,11 @@ using ArtHubDAO.DAO;
 using ArtHubDAO.Data;
 using ArtHubDAO.Interface;
 using ArtHubRepository.DapperService;
-using ArtHubRepository.Interface;
-using ArtHubRepository.Repository;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using System.Data;
-using System.Reflection;
 using ArtHubService.Service;
+using User.Pages.Filter;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,10 +21,16 @@ builder.Services.Scan(scan => scan
             type.Name.EndsWith("Repository") || type.Name.EndsWith("Service")))
                 .AsImplementedInterfaces()
                 .WithScopedLifetime());
+//Add session
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IBaseDAO<>), typeof(BaseDAO<>));
-builder.Services.AddDbContext<ArtHubDbContext>();
 
 string connectionString = builder.Configuration.GetConnectionString("DBDefault");
 // Register IDbConnection in DI container
@@ -44,8 +47,10 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseMiddleware<LoginMiddleware>();
 
 app.UseRouting();
 

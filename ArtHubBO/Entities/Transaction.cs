@@ -13,9 +13,7 @@ namespace ArtHubBO.Entities
         [Column("amount")]
         public double Amount { get; set; }
         [Column("status")]
-        [StringLength(100)]
-        [Unicode(false)]
-        public string Status { get; set; } = null!;
+        public int Status { get; set; }
         [Column("type")]
         [StringLength(100)]
         [Unicode(false)]
