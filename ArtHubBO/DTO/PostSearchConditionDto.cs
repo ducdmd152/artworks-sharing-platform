@@ -15,6 +15,7 @@ public class PostSearchConditionDto
     public int? BookmarkFrom { get; set; }
     public int? BookmarkTo { get; set;}
     public int? ViewFrom { get; set; }
-    public int? ViewTo { get; set; }   
-    public SortDirection? SortDirection { get; set; }
+    public int? ViewTo { get; set; }
+    public SortType? SortType { get; set; } = Enum.SortType.FAVOURITE;
+    public SortDirection? SortDirection { get; set; } = Enum.SortDirection.DESC;
 }

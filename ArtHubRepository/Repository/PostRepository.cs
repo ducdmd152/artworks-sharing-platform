@@ -14,14 +14,17 @@ namespace ArtHubRepository.Repository
         { 
         }
 
-        public List<Post> GetAllPostBySearchCondition(SearchPayload<PostSearchConditionDto> searchPayload)
+        public async Task<List<Post>> GetAllPostBySearchConditionAsync(SearchPayload<PostSearchConditionDto> searchPayload)
         {
 
             var searchCondition = searchPayload.SearchCondition;
-
+            var query = this.DbSet.Include(p => p.PostCategories).Include(item => item.Images).Include(item => item.Artist).Include(item => item.Artist.Account).AsQueryable();
             if (searchCondition != null)
             {
-                var query = this.DbSet.AsQueryable().Include(p => p.PostCategories).Where(p => p.ArtistEmail.Equals(searchCondition.ArtistEmail));
+                if (searchCondition.ArtistEmail != null)
+                {
+                    query = query.Where(p => p.ArtistEmail.Equals(searchCondition.ArtistEmail));
+                }
 
                 if (searchCondition.CreatedDate != null)
                 {
@@ -35,12 +38,12 @@ namespace ArtHubRepository.Repository
 
                 if (searchCondition.PostStatus != null)
                 {
-                    query = query.Where(p => p.Status.Equals(searchCondition.PostStatus.ToString()));
+                    query = query.Where(p => p.Status == (int)searchCondition.PostStatus);
                 }
 
                 if (searchCondition.PostScope != null)
                 {
-                    query = query.Where(p => p.Scope.Equals(searchCondition.PostScope.ToString()));
+                    query = query.Where(p => p.Scope == (int)searchCondition.PostScope);
                 }
 
                 if (searchCondition.CategoryId != null)
@@ -84,33 +87,59 @@ namespace ArtHubRepository.Repository
                     }
 
                 }
-                
-                if (searchCondition.SortDirection != null)
+
+                if (searchCondition.SortType != null)
                 {
-                    if (searchCondition.SortDirection.Equals(SortDirection.ASC))
+                    if (searchCondition.SortType.Equals(SortType.RECENT))
                     {
-                        query = query.OrderBy(p => p.CreatedDate);
-                    } else
+                        if (searchCondition.SortDirection != null)
+                        {
+                            if (searchCondition.SortDirection.Equals(SortDirection.ASC))
+                            {
+                                query = query.OrderBy(p => p.CreatedDate);
+                            }
+                            else
+                            {
+                                query = query.OrderByDescending(p => p.CreatedDate);
+                            }
+                        }
+                    }
+                    else if (searchCondition.SortType.Equals(SortType.FAVOURITE))
                     {
-                        query = query.OrderByDescending(p => p.CreatedDate);
+                        if (searchCondition.SortDirection != null)
+                        {
+                            if (searchCondition.SortDirection.Equals(SortDirection.ASC))
+                            {
+                                query = query.OrderBy(p => p.TotalReact);
+                            }
+                            else
+                            {
+                                query = query.OrderByDescending(p => p.TotalReact);
+                            }
+                        }
                     }
                 }
+            }
 
+            searchPayload.PageInfo.TotalItems = query.Count();
+
+            if (searchPayload.PageInfo != null)
+            {                                
+                searchPayload.PageInfo.TotalPages = (searchPayload.PageInfo.TotalItems + searchPayload.PageInfo.PageSize - 1) / searchPayload.PageInfo.PageSize;
                 query = query
                     .Skip((searchPayload.PageInfo.PageNum - 1) * searchPayload.PageInfo.PageSize)
                     .Take(searchPayload.PageInfo.PageSize);
+            }
 
-                return query.ToList();
-            }
-            else
-            {                
-                return new List<Post>();
-            }
+            var result = await query.ToListAsync();
+            return result;
         }
 
         public List<Post> GetAllPost()
         {
             return this.DbSet.Include(x => x.PostCategories).ToList();
         }
+
+        public Post Get(int id) => this.DbSet.Include(item => item.Images).Include(item => item.Artist.Account).FirstOrDefault(item => item.PostId == id);
     }
 }

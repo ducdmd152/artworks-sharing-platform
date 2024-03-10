@@ -30,10 +30,10 @@ namespace ArtHubBO.Entities
 
         [ForeignKey("Email")]
         [InverseProperty("Artist")]
-        public virtual Account EmailNavigation { get; set; } = null!;
+        public virtual Account Account { get; set; } = null!;
         [InverseProperty("ArtistEmailNavigation")]
         public virtual ICollection<Fee> Fees { get; set; }
-        [InverseProperty("ArtistEmailNavigation")]
+        [InverseProperty("Artist")]
         public virtual ICollection<Post> Posts { get; set; }
         [InverseProperty("EmailArtistNavigation")]
         public virtual ICollection<Subscriber> Subscribers { get; set; }

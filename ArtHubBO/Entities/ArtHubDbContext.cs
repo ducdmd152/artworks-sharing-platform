@@ -88,7 +88,7 @@ namespace ArtHubBO.Entities
                 entity.HasKey(e => e.Email)
                     .HasName("artist_pk");
 
-                entity.HasOne(d => d.EmailNavigation)
+                entity.HasOne(d => d.Account)
                     .WithOne(p => p.Artist)
                     .HasForeignKey<Artist>(d => d.Email)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -124,13 +124,14 @@ namespace ArtHubBO.Entities
                 entity.HasOne(d => d.Post)
                     .WithMany(p => p.Images)
                     .HasForeignKey(d => d.PostId)
+                    .IsRequired(false)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("image_post_FK");
             });
 
             modelBuilder.Entity<Post>(entity =>
             {
-                entity.HasOne(d => d.ArtistEmailNavigation)
+                entity.HasOne(d => d.Artist)
                     .WithMany(p => p.Posts)
                     .HasForeignKey(d => d.ArtistEmail)
                     .OnDelete(DeleteBehavior.ClientSetNull)

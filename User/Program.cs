@@ -21,7 +21,7 @@ builder.Services.Scan(scan => scan
     .WithScopedLifetime());
 
 // Configure Redis Based Distributed Session
-var redisConfigurationOptions = ConfigurationOptions.Parse("localhost:6379");
+var redisConfigurationOptions = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"));
 
 builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
 {
@@ -42,6 +42,8 @@ string connectionString = builder.Configuration.GetConnectionString("DBDefault")
 builder.Services.AddScoped<IDbConnection>((sp) => new SqlConnection(connectionString));
 
 builder.Services.AddMemoryCache();
+
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

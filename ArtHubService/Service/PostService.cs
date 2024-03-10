@@ -9,14 +9,12 @@ namespace ArtHubService.Service;
 
 public class PostService : IPostService
 {
-    private readonly IPostRepository postRepository;
-    private readonly ICategoryRepository categoryRepository;
+    private readonly IPostRepository postRepository;    
     private readonly IDapperQueryService dapperQueryService;
 
-    public PostService(IPostRepository postRepository, ICategoryRepository categoryRepository, IDapperQueryService dapperQueryService)
+    public PostService(IPostRepository postRepository, IDapperQueryService dapperQueryService)
     {
         this.postRepository = postRepository;
-        this.categoryRepository = categoryRepository;
         this.dapperQueryService = dapperQueryService;
     }
 
@@ -27,11 +25,12 @@ public class PostService : IPostService
         return listPost;
     }
 
-    public List<Post> GetAllPostBySearchCondition(SearchPayload<PostSearchConditionDto> searchPayload)
+    public async Task<List<Post>> GetAllPostBySearchConditionAsync(SearchPayload<PostSearchConditionDto> searchPayload)
     {
-        return postRepository.GetAllPostBySearchCondition(searchPayload);       
+        return await postRepository.GetAllPostBySearchConditionAsync(searchPayload);
     }
 
+    public Post Get(int id) => postRepository.Get(id);
     public List<Post> TestPostCategory()
     {
         return postRepository.GetAllPost();

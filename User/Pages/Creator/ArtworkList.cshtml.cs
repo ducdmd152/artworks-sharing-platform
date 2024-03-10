@@ -26,7 +26,7 @@ namespace User.Pages.Creator
             this.categoryService = categoryService;
         }
 
-        public void OnGet()
+        public async Task OnGetAsync()
         {
             var accountEmail = HttpContext.Session.GetString("ACCOUNT_EMAIL");     
             if (accountEmail != null)
@@ -34,7 +34,7 @@ namespace User.Pages.Creator
                 SearchPayload.SearchCondition.ArtistEmail = accountEmail;
             }
             Categories = categoryService.GetCategories().ToList();                        
-            var output = postService.GetAllPostBySearchCondition(SearchPayload);
+            var output = await postService.GetAllPostBySearchConditionAsync(SearchPayload);
             return;
         }
     }
