@@ -25,11 +25,12 @@ public class PostService : IPostService
         return listPost;
     }
 
-    public List<Post> GetAllPostBySearchCondition(SearchPayload<PostSearchConditionDto> searchPayload)
+    public async Task<List<Post>> GetAllPostBySearchConditionAsync(SearchPayload<PostSearchConditionDto> searchPayload)
     {
-        return _postRepository.GetAllPostBySearchCondition(searchPayload);       
+        return await _postRepository.GetAllPostBySearchConditionAsync(searchPayload);       
     }
 
+    public Post Get(int id) => _postRepository.Get(id);
     public List<Post> TestPostCategory()
     {
         return _postRepository.GetAllPost();

@@ -200,21 +200,21 @@
     <div class="gallery container p-5 mb-2" style="margin-top: -60px;">
         @foreach (var item in Model.Posts)
         {
-            <div class="gallery-item">
-                <img src="@(item.Image?.ImageUrl ?? "https://placehold.co/300")"
+            <a class="gallery-item" asp-page="./Details" asp-route-id="@item.PostId" style="color: black; text-decoration: none;">
+                <img src="@(item.Images.FirstOrDefault()?.ImageUrl ?? "https://placehold.co/300")"
                  class="gallery-image" />
                 <div class="gallery-item-title">@item.Title</div>
-            <div class="gallery-item-info d-flex justify-content-between">
-                <div class="user-short-item" style="flex: 2">
-                        <img src="@(item.Artist?.Account?.Avatar ?? "https://placehold.co/300")" class="artist-profile-pic" />
-                        <span class="artist-name">@item.Artist?.ArtistName</span>
+                <div class="gallery-item-info d-flex justify-content-between">
+                    <div class="user-short-item" style="flex: 2">
+                            <img src="@(item.Artist?.Account?.Avatar ?? "https://placehold.co/300")" class="artist-profile-pic" />
+                            <span class="artist-name">@item.Artist?.ArtistName</span>
+                    </div>
+                    <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
+                            <span class="likes"><i class="far fa-heart"></i> @item.TotalReact</span>
+                            <span class="comments"><i class="far fa-bookmark"></i> @item.TotalBookmark</span>
+                    </div>
                 </div>
-                <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
-                        <span class="likes"><i class="far fa-heart"></i> @item.TotalReact</span>
-                        <span class="comments"><i class="far fa-bookmark"></i> @item.TotalBookmark</span>
-                </div>
-            </div>
-        </div>
+            </a>
         }
     </div>
     

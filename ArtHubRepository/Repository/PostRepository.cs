@@ -14,11 +14,11 @@ namespace ArtHubRepository.Repository
         { 
         }
 
-        public List<Post> GetAllPostBySearchCondition(SearchPayload<PostSearchConditionDto> searchPayload)
+        public async Task<List<Post>> GetAllPostBySearchConditionAsync(SearchPayload<PostSearchConditionDto> searchPayload)
         {
 
             var searchCondition = searchPayload.SearchCondition;
-            var query = this.DbSet.AsQueryable();
+            var query = this.DbSet.Include(item => item.Images).Include(item => item.Artist).Include(item => item.Artist.Account).AsQueryable();
             if (searchCondition != null)
             {
 
@@ -127,12 +127,15 @@ namespace ArtHubRepository.Repository
                     .Take(searchPayload.PageInfo.PageSize);
             }
 
-            return query.Include(item => item.Artist).Include(item => item.Image).Include(item => item.Artist.Account).ToList();
+            var result = await query.ToListAsync();
+            return result;
         }
 
         public List<Post> GetAllPost()
         {
             return this.DbSet.Include(x => x.PostCategories).ToList();
         }
+
+        public Post Get(int id) => this.DbSet.Include(item => item.Images).Include(item => item.Artist.Account).FirstOrDefault(item => item.PostId == id);
     }
 }

@@ -8,7 +8,9 @@ public interface IPostService
 {
     Task<IEnumerable<PostManagementItem>> GetListPostOrderByDate(SearchArtworkManagementConditionDto searchCondition);
     
-    List<Post> GetAllPostBySearchCondition(SearchPayload<PostSearchConditionDto> searchPayload);
+    Task<List<Post>> GetAllPostBySearchConditionAsync(SearchPayload<PostSearchConditionDto> searchPayload);
 
     List<Post> TestPostCategory();
+
+    Post Get(int id);
 }

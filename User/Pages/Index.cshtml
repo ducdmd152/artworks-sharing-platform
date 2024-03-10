@@ -209,7 +209,7 @@
         @foreach (var item in Model.Posts)
         {
             <div class="gallery-item">
-                <img src="@(item.Image?.ImageUrl ?? "https://placehold.co/300")"
+                <img src="@(item.Images.FirstOrDefault()?.ImageUrl ?? "https://placehold.co/300")"
                  class="gallery-image" />
                 <div class="gallery-item-title">@item.Title</div>
             <div class="gallery-item-info d-flex justify-content-between">

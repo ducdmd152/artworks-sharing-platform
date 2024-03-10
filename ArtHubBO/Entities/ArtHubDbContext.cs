@@ -122,8 +122,8 @@ namespace ArtHubBO.Entities
             modelBuilder.Entity<Image>(entity =>
             {
                 entity.HasOne(d => d.Post)
-                    .WithOne(p => p.Image)
-                    .HasForeignKey<Image>(d => d.PostId)
+                    .WithMany(p => p.Images)
+                    .HasForeignKey(d => d.PostId)
                     .IsRequired(false)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("image_post_FK");
