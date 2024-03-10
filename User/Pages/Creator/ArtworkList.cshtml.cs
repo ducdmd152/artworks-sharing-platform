@@ -18,9 +18,9 @@ namespace User.Pages.Creator
             _postService = postService;
         }
 
-        public void OnGet()
+        public async Task OnGetAsync()
         {
-            var output = _postService.GetAllPostBySearchCondition(SearchPayload);
+            var output = await _postService.GetAllPostBySearchConditionAsync(SearchPayload);
             return;
         }
     }

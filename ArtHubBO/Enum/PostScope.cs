@@ -2,7 +2,7 @@
 
 public enum PostScope
 {
-    Private,
-    Subscriber,
-    Public
+    Public = 1,    
+    Subscriber = 2,
+    Private = 3,
 }

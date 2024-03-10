@@ -22,6 +22,7 @@
 
     /* Style for search box */
     .search-container {
+            width: 100%;
             display: flex;
             align-items: center;
             margin-bottom: 20px;
@@ -29,15 +30,13 @@
         }
 
         .search-input {
-            flex: 1;
+            width: 100%;            
             padding: 10px 16px;
             border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-right: 10px;
-            max-width: 70%;
+            border-radius: 5px;                       
         }
 
-        .order-select {
+        #order-select {
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -49,22 +48,31 @@
             justify-content: center;
         }
 </style>
-@model List<CategoryModel>
+@model ArtworkFilteringModel
+
 
 <div class="search-container">
-    <!-- Thanh tìm kiếm -->
-    <input type="text" class="search-input" placeholder="Search...">
-            
-    <!-- Select box sắp xếp -->
-    <select class="order-select">
-        <option value="date">Most favourite</option>
-        <option value="price">Most recent</option>        
+    <form action="../Artworks" style="flex: 1; max-width: 70%; margin-right: 10px;" method="GET">
+        <input type="text" class="search-input" id="searchInput" name="search" placeholder="Search..." value="@Model.SearchValue"> 
+    </form> 
+    <select id="order-select" onchange="handleOrderChange()">
+        @if (@Model.OrderByValue == "1")
+        {
+            <option value="1" selected>Most favourite</option>
+            <option value="2">Most recent</option>
+        }
+        else
+        {
+            <option value="1" >Most favourite</option>
+            <option value="2" selected>Most recent</option>
+        }
+
     </select>
-</div>
+ </div>
 
 <!-- Nơi hiển thị danh sách category -->
 <div id="category-list">
-    @foreach (var category in Model)
+    @foreach (var category in Model.Categories)
     {
         <button class="category-button"
             onclick="filterByCategory('@category.Name')">
@@ -76,17 +84,22 @@
 
 @section Scripts {
     <script type="text/javascript">
+        function getURL() {
+            var keyword = document.getElementById('searchInput').value.trim();
+            var orderSelect = document.getElementById('order-select').value;
+            return '../Artworks?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect;
+        }
+        function handleOrderChange() {
+            window.location.href = getURL();
+        }
+
         function filterByCategory(category) {
-            // Implement the logic to filter items by category
-            console.log("Filter by category: " + category);
-            // You might want to make an AJAX call here to update the content
+            console.log("Filter by category: " + category);            
         }
 
         function performSearch() {
-            var keyword = document.getElementById('searchInput').value;
-            // Implement the logic to perform search
-            console.log("Perform search with keyword: " + keyword);
-            // Similarly, an AJAX call can be made to search and update the content
+            event.preventDefault();
+            window.location.href = getURL();
         }
     </script>
 }
