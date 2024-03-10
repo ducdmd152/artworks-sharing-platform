@@ -230,3 +230,25 @@
     </nav>
 </body>
 
+@section Scripts {
+    <script type="text/javascript">
+        function getURL() {
+            var keyword = document.getElementById('searchInput').value.trim();
+            var orderSelect = document.getElementById('order-select').value;
+            console.log(orderSelect);
+            return '../Artworks?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect;
+        }
+        function handleOrderChange() {
+            window.location.href = getURL();
+        }
+
+        function filterByCategory(category) {
+            console.log("Filter by category: " + category);
+        }
+
+        function performSearch() {
+            event.preventDefault();
+            window.location.href = getURL();
+        }
+    </script>
+}

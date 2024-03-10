@@ -2,6 +2,6 @@
 
 public enum SortType
 {
-    RECENT = 1,
-    FAVOURITE = 2
+    FAVOURITE = 1,
+    RECENT = 2,    
 }

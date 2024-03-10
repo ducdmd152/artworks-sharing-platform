@@ -38,6 +38,8 @@ builder.Services.AddScoped<IDbConnection>((sp) => new SqlConnection(connectionSt
 
 builder.Services.AddMemoryCache();
 
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -29,6 +29,7 @@ namespace User.Pages.Audience
                 PostStatus = PostStatus.Approval,
                 SortType = orderBy == (int)SortType.FAVOURITE ? SortType.FAVOURITE : SortType.RECENT,
                 SortDirection = SortDirection.DESC,
+                Title = search,                
                 CategoryId = category
             };
 
