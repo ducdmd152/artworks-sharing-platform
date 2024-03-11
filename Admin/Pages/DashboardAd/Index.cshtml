@@ -1,0 +1,30 @@
+﻿@page
+@model Admin.Pages.DashboardAd.IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Users</a></li>
+            <li><a href="#">Products</a></li>
+            <li><a href="#">Settings</a></li>
+        </ul>
+    </nav>
+    <div class="content">
+        <h2>Welcome to your dashboard.</h2>
+    </div>
+</body>
+</html>
