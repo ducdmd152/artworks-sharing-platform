@@ -1,48 +1,52 @@
-﻿-- GetListPostOrderByDate.sql
-/*
+﻿/*
     CreatedBy: Thong
     Date: 03/09/2024
     
     @ArtworkTitle string
     @Date dateTime
-    @ArtistName string
+    @ArtworkName string
     @Status string
     @ArtworkID int
- */
+    @PageNumber int 
+    @PageSize int
+*/
 
+WITH ArtworkList AS (
+    SELECT
+        post.post_id,
+        post.title,
+        post.status,
+        post.created_date,
+        post.[scope],
+        artist.email,
+        artist.artist_name,
+        ROW_NUMBER() OVER (ORDER BY post.created_date DESC) AS RowNum,
+        COUNT(*) OVER () AS TotalRecords
+    FROM
+        post
+            INNER JOIN artist ON post.artist_email = artist.email
+    WHERE
+        (@ArtworkTitle IS NULL OR post.title LIKE CONCAT('%', @ArtworkTitle, '%'))
+      AND
+        (@ArtworkID IS NULL OR post.post_id = @ArtworkID)
+      AND
+        (@Date IS NULL OR post.created_date = @Date)
+      AND
+        (@ArtworkName IS NULL OR artist.artist_name LIKE CONCAT('%', @ArtworkName, '%'))
+      AND
+        (@Status IS NULL OR post.status = @Status)
+)
 SELECT
-    post.post_id AS PostId,
-    post.title AS Title,
-    post.status AS Status,
-    post.created_date AS Date,
-	post.[scope] AS Scope,
-	artist.email AS Email,
-	artist.artist_name AS ArtistName
+    CEILING(CONVERT(decimal, art.TotalRecords) / @PageSize) AS TotalPages,
+    art.TotalRecords AS TotalItems,
+    art.post_id AS PostId,
+    art.title AS Title,
+    art.status AS Status,
+    art.created_date AS Date,
+    art.[scope] AS Scope,
+    art.email AS Email,
+    art.artist_name AS ArtistName
 FROM
-    post
-    INNER JOIN artist ON post.artist_email = artist.email
+    ArtworkList as art
 WHERE
-    CASE
-        WHEN @ArtworkTitle IS NOT NULL THEN post.title LIKE '%' + @ArtworkTitle + '%'
-        ELSE 'TRUE'
-    END
-    AND
-        CASE
-            WHEN @ArtworkID IS NOT NULL THEN post.title LIKE '%' + @ArtworkID + '%'
-            ELSE 'TRUE'
-        END
-    AND
-        CASE 
-            WHEN @Date IS NOT NULL THEN post.created_date = @Date
-            ELSE 'TRUE'
-        END
-    AND
-        CASE 
-            WHEN @ArtistName IS NOT NULL THEN artist_name LIKE '%' + @ArtistName + '%'
-            ELSE 'TRUE'
-        END
-    AND
-        CASE
-            WHEN @Status IS NOT NULL THEN post.status = @Status
-            ELSE 'TRUE'
-        END;
+    art.RowNum BETWEEN (@PageNumber - 1) * @PageSize + 1 AND @PageNumber * @PageSize;

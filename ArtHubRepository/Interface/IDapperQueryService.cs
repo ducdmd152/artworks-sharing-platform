@@ -15,6 +15,8 @@ namespace ArtHubRepository.Interface
         Task<dynamic> SelectAsync(string query);
 
         Task<IEnumerable<T>> SelectAsync<T>(QueryName queryName, object queryParams);
+        
+        IEnumerable<T> Select<T>(QueryName queryName, object queryParams);
 
         Task<IEnumerable<TReturn>> SelectAsync<TFirst, TSecond, TReturn>(QueryName queryName, Func<TFirst, TSecond, TReturn> map, object queryParams, string splitOn);
 
