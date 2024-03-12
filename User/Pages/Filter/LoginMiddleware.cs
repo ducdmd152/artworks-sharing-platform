@@ -18,19 +18,19 @@ public class LoginMiddleware
     {
         var path = httpContext.Request.Path.ToString().ToLower();
         var userString = httpContext.Session.GetString("CREDENTIAL");
-        if (!URIConstant.WhiteListUris.Any(uri => uri.ToLower().Equals(path)))
+        if (!URIConstant.WhiteListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
         {
             if (userString != null)
             {
                 var userConvert = JsonConvert.DeserializeObject<Account>(userString);
                 if (userConvert != null)
                 {
-                    if (userConvert.Role.RoleName.Equals(RoleEnum.Audience.ToString()) && URIConstant.AudienceListUris.Any(uri => uri.ToLower().Equals(path)))
+                    if (userConvert.Role.RoleName.Equals(RoleEnum.Audience.ToString()) && URIConstant.AudienceListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
                     {
                         await _next(httpContext);
                         return;
                     }
-                    else if (userConvert.Role.RoleName.Equals(RoleEnum.Creator.ToString()) && URIConstant.CreatorListUris.Any(uri => uri.ToLower().Equals(path)))
+                    else if (userConvert.Role.RoleName.Equals(RoleEnum.Creator.ToString()) && URIConstant.CreatorListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
                     {
                         await _next(httpContext);
                         return;

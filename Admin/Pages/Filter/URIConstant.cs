@@ -4,16 +4,16 @@ public static class URIConstant
 {
     public static readonly string[] WhiteListUris = {         
         "/Login",
-        "/Logout"
+        "/Logout",
+        "/"
     };
 
     public static readonly string[] ModeratorListUris = {
-        "/ModeratorHomePage",
-        "/ArtWorksManagement"
+        "/Moderator/ArtWorksManagement"
     };
 
     public static readonly string[] AdminListUris = {
-        "/AdminHomePage"
+        "/Moderator/ArtWorksManagement"
     };
 
     public static readonly string HomePage = "/";

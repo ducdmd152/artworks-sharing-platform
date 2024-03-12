@@ -7,6 +7,7 @@ public class PageInfo
     public int TotalItems { get; set; }
     public int TotalPages { get; set; }
 
+    public PageInfo() { }
     public PageInfo(int pageNum, int pageSize)
     {
         PageNum = pageNum;

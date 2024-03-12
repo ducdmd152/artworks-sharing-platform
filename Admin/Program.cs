@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Data;
 using ArtHubService.Service;
 using User.Pages.Filter;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,13 +22,20 @@ builder.Services.Scan(scan => scan
             type.Name.EndsWith("Repository") || type.Name.EndsWith("Service")))
                 .AsImplementedInterfaces()
                 .WithScopedLifetime());
-//Add session
-builder.Services.AddSession(options =>
+
+// Configure Redis Based Distributed Session
+var redisConfigurationOptions = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"));
+
+builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+    redisCacheConfig.ConfigurationOptions = redisConfigurationOptions;
 });
+
+builder.Services.AddSession(options => {
+    options.Cookie.Name = "ArtworksSharingPlatform_Session";
+    options.IdleTimeout = TimeSpan.FromMinutes(60 * 24);
+});
+
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IBaseDAO<>), typeof(BaseDAO<>));
@@ -50,7 +58,7 @@ if (!app.Environment.IsDevelopment())
 app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseMiddleware<LoginMiddleware>();
+//app.UseMiddleware<LoginMiddleware>();
 
 app.UseRouting();
 

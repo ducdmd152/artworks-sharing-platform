@@ -1,4 +1,3 @@
-using ArtHubBO.Entities;
 using ArtHubDAO.DAO;
 using ArtHubDAO.Data;
 using ArtHubDAO.Interface;
@@ -6,7 +5,7 @@ using ArtHubRepository.DapperService;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using ArtHubService.Service;
-using User.Pages.Filter;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,13 +20,19 @@ builder.Services.Scan(scan => scan
     .AsImplementedInterfaces()
     .WithScopedLifetime());
 
-//Add session
-builder.Services.AddSession(options =>
+// Configure Redis Based Distributed Session
+var redisConfigurationOptions = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"));
+
+builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+    redisCacheConfig.ConfigurationOptions = redisConfigurationOptions;
 });
+
+builder.Services.AddSession(options => {
+    options.Cookie.Name = "ArtworksSharingPlatform_Session";
+    options.IdleTimeout = TimeSpan.FromMinutes(60 * 24);
+});
+
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IBaseDAO<>), typeof(BaseDAO<>));
@@ -37,6 +42,8 @@ string connectionString = builder.Configuration.GetConnectionString("DBDefault")
 builder.Services.AddScoped<IDbConnection>((sp) => new SqlConnection(connectionString));
 
 builder.Services.AddMemoryCache();
+
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

@@ -1,4 +1,4 @@
-﻿using ArtHubBO.DTO;
+using ArtHubBO.DTO;
 using ArtHubBO.Entities;
 using ArtHubBO.Enum;
 using ArtHubBO.Payload;
@@ -6,7 +6,7 @@ using ArtHubService.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace User.Pages
+namespace User.Pages.Audience
 {
     public class IndexModel : PageModel
     {
@@ -29,7 +29,7 @@ namespace User.Pages
                 PostStatus = PostStatus.Approval,
                 SortType = orderBy == (int)SortType.FAVOURITE ? SortType.FAVOURITE : SortType.RECENT,
                 SortDirection = SortDirection.DESC,
-                Title = search,
+                Title = search,                
                 CategoryId = category
             };
 

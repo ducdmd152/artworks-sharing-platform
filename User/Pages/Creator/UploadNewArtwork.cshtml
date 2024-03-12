@@ -6,9 +6,9 @@
     <div class="title text-center mt-4">
         <h2 class="position-relative d-inline-block">Upload New Artwork</h2>
     </div>
-    <form>
+    <form method="post" enctype="multipart/form-data">
         <div id="file-upload-container" class="file-upload-container my-4" ondragover="handleDragOver(event)" ondrop="handleDrop(event)">
-            <input type="file" id="file-upload" onchange="previewImage()" accept="image/*">
+            <input type="file" asp-for="@Model.FileUpload" id="file-upload" onchange="previewImage()" accept="image/*" />
             <label for="file-upload">
                 Drag a file here <br> or, if you prefer... <br>
             </label>

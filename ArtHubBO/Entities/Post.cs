@@ -41,7 +41,7 @@ namespace ArtHubBO.Entities
 
         [ForeignKey("ArtistEmail")]
         [InverseProperty("Posts")]
-        public virtual Artist ArtistEmailNavigation { get; set; } = null!;
+        public virtual Artist Artist { get; set; } = null!;
         [InverseProperty("Post")]
         public virtual ICollection<Bookmark> Bookmarks { get; set; }
         [InverseProperty("Post")]
