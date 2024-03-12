@@ -40,7 +40,8 @@ public class StorageService : IStorageService
             await transferUtility.UploadAsync(uploadRequest);
 
             response.StatusCode = (int) HttpStatusCode.OK;
-            response.Message = Constants.UploadSuccess;
+            response.Message = S3Constants.UploadSuccess;
+            response.LinkSource = S3Constants.BaseUrlS3 + s3Object.Name;
         } catch (AmazonS3Exception ex)
         {
             response.StatusCode = (int) ex.StatusCode;
@@ -80,7 +81,7 @@ public class StorageService : IStorageService
             await client.DeleteObjectAsync(deleteRequest);
 
             response.StatusCode = (int)HttpStatusCode.OK;
-            response.Message = Constants.DeleteSuccess;
+            response.Message = S3Constants.DeleteSuccess;
         }
         catch (AmazonS3Exception ex)
         {

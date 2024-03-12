@@ -6,6 +6,7 @@ using Microsoft.Data.SqlClient;
 using System.Data;
 using ArtHubService.Service;
 using StackExchange.Redis;
+using User.Pages.Filter;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,16 +22,25 @@ builder.Services.Scan(scan => scan
     .WithScopedLifetime());
 
 // Configure Redis Based Distributed Session
-var redisConfigurationOptions = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"));
+//var redisConfigurationOptions = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"));
 
-builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
+//builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
+//{
+//    redisCacheConfig.ConfigurationOptions = redisConfigurationOptions;
+//});
+
+//builder.Services.AddSession(options =>
+//{
+//    options.Cookie.Name = "ArtworksSharingPlatform_Session";
+//    options.IdleTimeout = TimeSpan.FromMinutes(60 * 24);
+//});
+
+//Add session
+builder.Services.AddSession(options =>
 {
-    redisCacheConfig.ConfigurationOptions = redisConfigurationOptions;
-});
-
-builder.Services.AddSession(options => {
-    options.Cookie.Name = "ArtworksSharingPlatform_Session";
-    options.IdleTimeout = TimeSpan.FromMinutes(60 * 24);
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
 
 

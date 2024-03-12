@@ -1,0 +1,29 @@
+﻿@model List<ArtHubBO.Entities.Post>
+@{
+    Layout = null;
+}
+@foreach (var post in Model)
+{
+    <div class="artwork-item">
+        <img src="@post.Images.First().ImageUrl" alt="Artwork" class="img-fluid">
+        <div class="d-flex justify-content-between ms-2 me-2">
+            <div class="d-flex align-items-center">
+                <div class="artwork-item-creator-img me-3">
+                    <img src="@post.Artist.Account.Avatar" alt="Profile Picture">
+                </div>
+                <span style="color: white;">@post.Artist.ArtistName</span>
+            </div>
+
+            <div class="d-flex align-items-center">
+                <button style="background-color:transparent; color:white;" class="p-0 border-0 ms-2 me-2">
+                    <i class="fa-regular fa-heart"></i>
+                    @post.TotalReact
+                </button>
+                <button style="background-color:transparent; color:white;" class="p-0 border-0 ms-2 me-2">
+                    <i class="fa-regular fa-eye"></i>
+                    @post.TotalView
+                </button>
+            </div>
+        </div>
+    </div>
+}
