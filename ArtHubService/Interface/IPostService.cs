@@ -13,4 +13,6 @@ public interface IPostService
     List<Post> TestPostCategory();
 
     Post Get(int id);
+
+    Task<bool> CreateNewPost(Post post, List<PostCategory> postCategories, Image image);
 }

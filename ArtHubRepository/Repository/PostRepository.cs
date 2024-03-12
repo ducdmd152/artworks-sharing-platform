@@ -46,7 +46,7 @@ namespace ArtHubRepository.Repository
                     query = query.Where(p => p.Scope == (int)searchCondition.PostScope);
                 }
 
-                if (searchCondition.CategoryId != null)
+                if (searchCondition.CategoryId != null && searchCondition.CategoryId.Length > 0)
                 {
                     query = query.Where(p => p.PostCategories.Any(pc => searchCondition.CategoryId.Contains(pc.CategoryId)));
                 }
