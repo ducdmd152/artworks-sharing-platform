@@ -77,45 +77,7 @@
         </thead>
         <tbody>
         <!-- Repeat for each artwork entry -->
-        <tr>
-            <td>5017</td>
-            <td>Artwork Title</td>
-            <td>2024-08-01</td>
-            <td><span class="badge bg-success">Approved</span></td>
-            <td>Cody Fisher</td>
-            <td><span class="dot-purple"></span>Subscribe Only</td>
-            <td><span type="button" class="btn btn-detail">Details</span></td>
-        </tr>
-        
-        <tr>
-            <td>5017</td>
-            <td>Artwork Title</td>
-            <td>2024-08-01</td>
-            <td><span class="badge bg-info">Pending</span></td>
-            <td>Cody Fisher</td>
-            <td><span class="dot-primary"></span>Public</td>
-            <td><span type="button" class="btn btn-detail">Details</span></td>
-        </tr>
-        
-        <tr>
-            <td>5017</td>
-            <td>Artwork Title</td>
-            <td>2024-08-01</td>
-            <td><span class="badge bg-warning text-dark">Re-pending</span></td>
-            <td>Cody Fisher</td>
-            <td><span class="dot-danger"></span>Private</td>
-            <td><span type="button" class="btn btn-detail">Details</span></td>
-        </tr>
-        
-        <tr>
-            <td>5017</td>
-            <td>Artwork Title</td>
-            <td>2024-08-01</td>
-            <td><span class="badge bg-danger">Reject</span></td>
-            <td>Cody Fisher</td>
-            <td><span class="dot-purple"></span>Subscribe Only</td>
-            <td><span type="button" class="btn btn-detail">Details</span></td>
-        </tr>
+        <partial name="Shared/_ArtWorkListPartial" model="@Model.ListPost" />
         <!-- Additional rows -->
         </tbody>
     </table>
@@ -145,6 +107,5 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
-
 </body>
 </html>
