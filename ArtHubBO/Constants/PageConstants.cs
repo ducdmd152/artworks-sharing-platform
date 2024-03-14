@@ -2,5 +2,5 @@
 
 public static class PageConstants
 {
-    public static readonly int PageSize = 2;
+    public static readonly int PageSize = 8;
 }
