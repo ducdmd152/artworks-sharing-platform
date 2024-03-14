@@ -28,7 +28,13 @@ namespace ArtHubRepository.Repository
 
                 if (searchCondition.CreatedDate != null)
                 {
-                    query = query.Where(p => p.CreatedDate >= searchCondition.CreatedDate);
+                    if (searchCondition.CreatedDate.Value.DayOfYear == DateTime.Now.DayOfYear && searchCondition.CreatedDate.Value.Year == DateTime.Now.Year)
+                    {
+                        query = query.Where(p => p.CreatedDate.DayOfYear == searchCondition.CreatedDate.Value.DayOfYear && p.CreatedDate.Year == searchCondition.CreatedDate.Value.Year);
+                    } else
+                    {
+                        query = query.Where(p => p.CreatedDate >= searchCondition.CreatedDate);
+                    }                    
                 }
 
                 if (!string.IsNullOrEmpty(searchCondition.Title))
@@ -140,6 +146,6 @@ namespace ArtHubRepository.Repository
             return this.DbSet.Include(x => x.PostCategories).ToList();
         }
 
-        public Post Get(int id) => this.DbSet.Include(item => item.Images).Include(item => item.Artist.Account).FirstOrDefault(item => item.PostId == id);
+        public Post Get(int id) => this.DbSet.Include(item => item.Images).Include(item => item.PostCategories).Include(item => item.Artist.Account).FirstOrDefault(item => item.PostId == id);
     }
 }
