@@ -41,8 +41,8 @@ namespace Admin.Pages
 
             var temp4 = this.postService.TestPostCategory();
 
-            _ = configuration[Constants.AccessKey];
-            _ = configuration[Constants.SecretKey];
+            _ = configuration[S3Constants.AccessKey];
+            _ = configuration[S3Constants.SecretKey];
             
             return this.Page();
         }
