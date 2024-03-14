@@ -123,6 +123,18 @@ html {
         object-fit: contain; /* This ensures the image fits both horizontally and vertically */
     }
 
+.artwork-item-img {
+    min-width: 430px;
+    max-height: 80vh;
+    background: #333;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 90%;
+    object-fit: contain; /* This ensures the image fits both horizontally and vertically */
+}
+
 .artwork-item-creator-img {
     width: 50px;
     height: 50px;
@@ -263,4 +275,53 @@ html {
 
 .item-seperate {
     border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/** btn paging*/
+.btn-paging {
+    font-size: 20px;
+    border-radius: 0 !important;
+    background-color: #fff !important;
+    color: rgb(85, 85, 85) !important;
+    padding: 8px 15px !important;
+    border: 1px solid rgb(85, 85, 85) !important;
+    text-decoration: none;
+}
+
+    .btn-paging:hover {
+        color: #fff !important;
+        background-color: rgb(85, 85, 85) !important;
+    }
+
+.btn-paging-active {
+    font-size: 20px;
+    font-weight: 400;
+    border-radius: 0 !important;
+    color: #fff !important;
+    background-color: rgb(85, 85, 85) !important;
+    padding: 8px 15px !important;
+    border: 1px solid rgb(85, 85, 85) !important;
+    text-decoration: none;
+}
+
+.tui-pagination .tui-prev {
+    margin-right: 10px;
+    width: 40px;
+    height: 44px;
+    margin-bottom: 18px;
+}
+
+.btn-paging-move {
+    font-size: 20px !important;
+    font-weight: 400;
+    border-radius: 0 !important;
+    color: rgb(85, 85, 85) !important;
+    background-color: #fff !important;
+    padding: 8px 15px !important;
+    border: none;
+    text-decoration: none;
+}
+
+.tui-pagination .tui-first, .tui-pagination .tui-prev, .tui-pagination .tui-next, .tui-pagination .tui-last, .tui-pagination .tui-prev-is-ellip, .tui-pagination .tui-next-is-ellip {
+    border: none !important;
 }

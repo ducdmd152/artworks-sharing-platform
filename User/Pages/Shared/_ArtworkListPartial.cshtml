@@ -2,8 +2,9 @@
 @{
     Layout = null;
 }
-@foreach (var post in Model)
+@for (var i = 0; i < Model.Count; i++)
 {
+    var post = Model[i];
     <div class="artwork-item">
         <img src="@post.Images.First().ImageUrl" alt="Artwork" class="img-fluid">
         <div class="d-flex justify-content-between ms-2 me-2">
@@ -26,4 +27,10 @@
             </div>
         </div>
     </div>
+
+    <input type="hidden" id="artwork@(i)Id" value="@post.PostId" />
+    <input type="hidden" id="artwork@(i)Title" value="@post.Title" />
+    <input type="hidden" id="artwork@(i)ImageUrl" value="@post.Images.First().ImageUrl" />
+    <input type="hidden" id="artwork@(i)Description" value="@post.Description" />
+
 }
