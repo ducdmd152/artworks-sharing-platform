@@ -166,7 +166,7 @@
                 {
                     for (int i = 1; i <= Model.PageResult.PageInfo.TotalPages; i++)
                     {
-                        <button type="button"  class="btn-primary mt-3 fs-6" style="border-radius: 0; width: 40px; height: 40px; padding: 0;">@i</button>
+                        <button type="button" class="btn-primary mt-3 fs-6" style="border-radius: 0; width: 40px; height: 40px; padding: 0;">@i</button>
                     }
                 }
             </div>
@@ -175,29 +175,26 @@
     </form>
 
     <!-- Popup show detail artwork -->
-    <form id="editForm" method="get" asp-action="">
-        <div class="modal fade" id="artworkDetailModal" tabindex="-1" role="dialog" aria-labelledby="artworkDetailModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="artworkDetailModalLabel">Artwork Title</h5>
-                        <button type="button" class="btn closeModalBtn">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary closeModalBtn" data-dismiss="modal">Cancel</button>
-                        <div class="edit-post">
-                            <button type="submit" class="btn btn-secondary">Edit</button>                            
-                        </div>                        
+    <div class="modal fade" id="artworkDetailModal" tabindex="-1" role="dialog" aria-labelledby="artworkDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="artworkDetailModalLabel">Artwork Title</h5>
+                    <button type="button" class="btn closeModalBtn">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary closeModalBtn" data-dismiss="modal">Cancel</button>
+                    <div class="edit-post">                        
                     </div>
                 </div>
             </div>
         </div>
-    </form>
-    
+    </div>
+
 </div>
 
 @Html.AntiForgeryToken()
@@ -217,8 +214,7 @@
 
             $('#artworkDetailModalLabel').text(title);
             $('.modal-body').html('<img src="' + imageUrl + '" alt="Artwork" class="artwork-item-img"> <p>' + description + '</p>');
-            $('#editForm').attr('asp-action', '/Creator/EditPost?postId=' + id);
-            $('#editForm').attr('action', '/Creator/EditPost?postId=' + id);
+            $('.edit-post').html('<a href="/Creator/EditPost?postId=' + id + '" class="btn btn-secondary">Edit</a>');
             // Show the modal
             $('#artworkDetailModal').modal('show');
         });
@@ -240,42 +236,42 @@
         });
     }
 
-    //function changePage(pageNumber) {           
-        
-    //    $.ajax({
-    //        url: '/Creator/ArtworkList?handler=ChangePage', // Replace with your actual controller and action
-    //        type: 'POST',
-    //        contentType: 'application/json',
-    //        headers: {                
-    //            RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
-    //        },
-    //        data: JSON.stringify(pageNumber),            
-    //        success: function (partialHtml) {                
-    //            $('#listArtworkPartial').html(partialHtml);
-    //        },
-    //        error: function (error) {                
-    //            console.error('Error loading partial:', error);
-    //        }
-    //    });
-    //}
+        //function changePage(pageNumber) {
 
-    //function filterSearch() {
-    //    $.ajax({
-    //        url: '/Creator/ArtworkList?handler=Async', // Replace with your actual controller and action
-    //        type: 'POST',
-    //        contentType: 'application/json',
-    //        headers: {
-    //            RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
-    //        },
-    //        data: JSON.stringify(pageNumber),
-    //        success: function (partialHtml) {
-    //            console.log"faillll";
-    //            $('#listArtworkPartial').html(partialHtml);
-    //        },
-    //        error: function (error) {
-    //            console.log"faillll";
-    //            console.error('Error loading partial:', error);
-    //        }
-    //    });
-    //}
+        //    $.ajax({
+        //        url: '/Creator/ArtworkList?handler=ChangePage', // Replace with your actual controller and action
+        //        type: 'POST',
+        //        contentType: 'application/json',
+        //        headers: {
+        //            RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+        //        },
+        //        data: JSON.stringify(pageNumber),
+        //        success: function (partialHtml) {
+        //            $('#listArtworkPartial').html(partialHtml);
+        //        },
+        //        error: function (error) {
+        //            console.error('Error loading partial:', error);
+        //        }
+        //    });
+        //}
+
+        //function filterSearch() {
+        //    $.ajax({
+        //        url: '/Creator/ArtworkList?handler=Async', // Replace with your actual controller and action
+        //        type: 'POST',
+        //        contentType: 'application/json',
+        //        headers: {
+        //            RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+        //        },
+        //        data: JSON.stringify(pageNumber),
+        //        success: function (partialHtml) {
+        //            console.log"faillll";
+        //            $('#listArtworkPartial').html(partialHtml);
+        //        },
+        //        error: function (error) {
+        //            console.log"faillll";
+        //            console.error('Error loading partial:', error);
+        //        }
+        //    });
+        //}
 </script>
