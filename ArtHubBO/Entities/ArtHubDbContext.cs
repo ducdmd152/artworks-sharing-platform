@@ -60,13 +60,14 @@ namespace ArtHubBO.Entities
 
         private string GetConnectionString()
         {
-            IConfiguration config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true)
-                .Build();
-            var strConn = config.GetConnectionString("DBDefault");
-
-            return strConn;
+            // IConfiguration config = new ConfigurationBuilder()
+            //     .SetBasePath(Directory.GetCurrentDirectory())
+            //     .AddJsonFile("appsettings.json", true, true)
+            //     .Build();
+            // var strConn = config.GetConnectionString("DBDefault");
+            //
+            // return strConn;
+            return Environment.GetEnvironmentVariable("DATABASE_URL");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

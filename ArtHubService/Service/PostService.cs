@@ -18,14 +18,30 @@ public class PostService : IPostService
         this.dapperQueryService = dapperQueryService;
     }
 
-    public async Task<IEnumerable<PostManagementItem>> GetListPostOrderByDate(SearchArtworkManagementConditionDto searchCondition)
+    public async Task<PageResult<PostManagementItem>> GetListPostOrderByDate(
+        SearchArtworkManagementConditionDto searchCondition)
     {
-            searchCondition = new SearchArtworkManagementConditionDto();
-            searchCondition.PageNumber = 1;
-            searchCondition.PageSize = 5;
+        try
+        {
             var listPost = this.dapperQueryService
                 .Select<PostManagementItem>(QueryName.GetListPostOrderByDate, searchCondition);
-            return listPost;
+            var result = new PageResult<PostManagementItem>
+            {
+                PageData = listPost.ToList(),
+                PageInfo = new PageInfo
+                {
+                    PageNum = searchCondition.PageNumber,
+                    PageSize = searchCondition.PageSize,
+                    TotalPages = listPost.First().TotalPages,
+                    TotalItems = listPost.First().TotalItems,
+                }
+            };
+            return result;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
     }
 
     public async Task<List<Post>> GetAllPostBySearchConditionAsync(SearchPayload<PostSearchConditionDto> searchPayload)
