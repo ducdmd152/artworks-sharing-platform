@@ -157,7 +157,7 @@
             <partial name="Shared/_ArtWorkListPartial" model="Model.PageResult.PageData" />
         </div>
         <input type="hidden" id="pageNumber" asp-for="@Model.SearchPayload.PageInfo.PageNum" value="@Model.SearchPayload.PageInfo.PageNum" />
-        <input type="hidden" asp-for="@Model.SearchPayload.PageInfo.PageSize" value="@Model.SearchPayload.PageInfo.PageSize" />
+        <input type="hidden" id="pageSize" asp-for="@Model.SearchPayload.PageInfo.PageSize" value="@Model.SearchPayload.PageInfo.PageSize" />
         <input type="hidden" asp-for="@Model.SearchPayload.PageInfo.TotalItems" value="@Model.SearchPayload.PageInfo.TotalItems" />
         <input type="hidden" asp-for="@Model.SearchPayload.PageInfo.TotalPages" value="@Model.SearchPayload.PageInfo.TotalPages" />
 
@@ -204,7 +204,7 @@
 <script src="~/js/site.js" asp-append-version="true"></script>
 <script>
     $(document).ready(function () {
-        $('.artwork-item').on('click', function () {
+        $(document).on('click', '.artwork-item', function () {
             // Get the index of the clicked artwork item
             var index = $('.artwork-item').index(this);
 
@@ -226,8 +226,6 @@
         });
     });
 
-
-
     function clearDateInput() {
         document.querySelector('input[type="date"]').value = ''; // Clear date input
     }
@@ -237,25 +235,6 @@
             radio.checked = false; // Uncheck all radio buttons
         });
     }
-
-    //function changePage(pageNumber) {
-
-    //    $.ajax({
-    //        url: '/Creator/ArtworkList?handler=ChangePage', // Replace with your actual controller and action
-    //        type: 'POST',
-    //        contentType: 'application/json',
-    //        headers: {
-    //            RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
-    //        },
-    //        data: JSON.stringify(pageNumber),
-    //        success: function (partialHtml) {
-    //            $('#listArtworkPartial').html(partialHtml);
-    //        },
-    //        error: function (error) {
-    //            console.error('Error loading partial:', error);
-    //        }
-    //    });
-    //}
 
     function filterSearch() {
         var form = document.forms.namedItem("myForm");

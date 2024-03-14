@@ -21,18 +21,18 @@
         firstItemClassName: 'tui-first-child',
         lastItemClassName: 'tui-last-child',
         template: {
-            page: '<a href="#" class="btn-primary mt-3 fs-6" style="border-radius: 0; width: 40px; height: 40px; padding: 0;">{{page}}</a>',
-            currentPage: '<strong class="btn-primary text-danger mt-3 fs-6" style="border-radius: 0; width: 40px; height: 40px; padding: 0;">{{page}}</strong>',
+            page: '<a href="#" class="btn-paging mx-1">{{page}}</a>',
+            currentPage: '<strong class="btn-paging-active mx-1">{{page}}</strong>',
             moveButton:
-                '<a href="#" class="tui-page-btn tui-{{type}} custom-class-{{type}}">' +
+                '<a href="#" class="btn-paging-move mx-1 tui-{{type}} custom-class-{{type}}">' +
                 '<span class="tui-ico-{{type}}">{{type}}</span>' +
                 '</a>',
             disabledMoveButton:
-                '<span class="tui-page-btn tui-is-disabled tui-{{type}} custom-class-{{type}}">' +
+                '<span class="btn-paging-move mx-1 tui-is-disabled tui-{{type}} custom-class-{{type}}">' +
                 '<span class="tui-ico-{{type}}">{{type}}</span>' +
                 '</span>',
             moreButton:
-                '<a href="#" class="tui-page-btn tui-{{type}}-is-ellip custom-class-{{type}}">' +
+                '<a href="#" class="btn-paging-move mx-1 tui-{{type}}-is-ellip custom-class-{{type}}">' +
                 '<span class="tui-ico-ellip">...</span>' +
                 '</a>'
         }

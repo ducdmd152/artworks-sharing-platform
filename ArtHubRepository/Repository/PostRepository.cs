@@ -28,7 +28,13 @@ namespace ArtHubRepository.Repository
 
                 if (searchCondition.CreatedDate != null)
                 {
-                    query = query.Where(p => p.CreatedDate >= searchCondition.CreatedDate);
+                    if (searchCondition.CreatedDate.Value.DayOfYear == DateTime.Now.DayOfYear && searchCondition.CreatedDate.Value.Year == DateTime.Now.Year)
+                    {
+                        query = query.Where(p => p.CreatedDate.DayOfYear == searchCondition.CreatedDate.Value.DayOfYear && p.CreatedDate.Year == searchCondition.CreatedDate.Value.Year);
+                    } else
+                    {
+                        query = query.Where(p => p.CreatedDate >= searchCondition.CreatedDate);
+                    }                    
                 }
 
                 if (!string.IsNullOrEmpty(searchCondition.Title))
