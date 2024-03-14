@@ -1,9 +1,10 @@
 ﻿@page
 @model User.Pages.Creator.ArtworkListModel
 @{
+
 }
 <div class="container p-0 mb-4" style="margin-top: 76px;">
-    <form method="post">
+    <form method="post" id="myForm">
         <div class="filter-panel">
             <div class="form-row mb-3">
                 <div class="d-flex align-items-center">
@@ -155,12 +156,12 @@
             <!-- Show list artwork -->
             <partial name="Shared/_ArtWorkListPartial" model="Model.PageResult.PageData" />
         </div>
-        <input type="hidden" asp-for="@Model.SearchPayload.PageInfo.PageNum" value="@Model.SearchPayload.PageInfo.PageNum" />
+        <input type="hidden" id="pageNumber" asp-for="@Model.SearchPayload.PageInfo.PageNum" value="@Model.SearchPayload.PageInfo.PageNum" />
         <input type="hidden" asp-for="@Model.SearchPayload.PageInfo.PageSize" value="@Model.SearchPayload.PageInfo.PageSize" />
         <input type="hidden" asp-for="@Model.SearchPayload.PageInfo.TotalItems" value="@Model.SearchPayload.PageInfo.TotalItems" />
         <input type="hidden" asp-for="@Model.SearchPayload.PageInfo.TotalPages" value="@Model.SearchPayload.PageInfo.TotalPages" />
 
-        <div class="d-flex justify-content-center mt-3">
+        @*<div class="d-flex justify-content-center mt-3">
             <div class="text-center me-3">
                 @if (Model.PageResult.PageInfo.TotalPages > 0)
                 {
@@ -170,8 +171,8 @@
                     }
                 }
             </div>
-        </div>
-        @Model.SearchPayload.PageInfo.PageNum
+        </div>*@
+        <partial name="Shared/_PagingPartial" model="Model.PageResult.PageInfo" />
     </form>
 
     <!-- Popup show detail artwork -->
@@ -188,7 +189,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary closeModalBtn" data-dismiss="modal">Cancel</button>
-                    <div class="edit-post">                        
+                    <div class="edit-post">
                     </div>
                 </div>
             </div>
@@ -198,8 +199,9 @@
 </div>
 
 @Html.AntiForgeryToken()
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
 <script>
     $(document).ready(function () {
         $('.artwork-item').on('click', function () {
@@ -236,42 +238,67 @@
         });
     }
 
-        //function changePage(pageNumber) {
+    //function changePage(pageNumber) {
 
-        //    $.ajax({
-        //        url: '/Creator/ArtworkList?handler=ChangePage', // Replace with your actual controller and action
-        //        type: 'POST',
-        //        contentType: 'application/json',
-        //        headers: {
-        //            RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
-        //        },
-        //        data: JSON.stringify(pageNumber),
-        //        success: function (partialHtml) {
-        //            $('#listArtworkPartial').html(partialHtml);
-        //        },
-        //        error: function (error) {
-        //            console.error('Error loading partial:', error);
-        //        }
-        //    });
-        //}
+    //    $.ajax({
+    //        url: '/Creator/ArtworkList?handler=ChangePage', // Replace with your actual controller and action
+    //        type: 'POST',
+    //        contentType: 'application/json',
+    //        headers: {
+    //            RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+    //        },
+    //        data: JSON.stringify(pageNumber),
+    //        success: function (partialHtml) {
+    //            $('#listArtworkPartial').html(partialHtml);
+    //        },
+    //        error: function (error) {
+    //            console.error('Error loading partial:', error);
+    //        }
+    //    });
+    //}
 
-        //function filterSearch() {
-        //    $.ajax({
-        //        url: '/Creator/ArtworkList?handler=Async', // Replace with your actual controller and action
-        //        type: 'POST',
-        //        contentType: 'application/json',
-        //        headers: {
-        //            RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
-        //        },
-        //        data: JSON.stringify(pageNumber),
-        //        success: function (partialHtml) {
-        //            console.log"faillll";
-        //            $('#listArtworkPartial').html(partialHtml);
-        //        },
-        //        error: function (error) {
-        //            console.log"faillll";
-        //            console.error('Error loading partial:', error);
-        //        }
-        //    });
-        //}
+    function filterSearch() {
+        var form = document.forms.namedItem("myForm");
+        var data = new FormData(form);
+
+        $.ajax({
+            url: '/Creator/ArtworkList?handler=Search', // Replace with your actual controller and action
+            type: 'POST',
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            data: data,
+            processData: false,  // Don't process the data (already FormData)
+            contentType: false,  // Don't set contentType (let jQuery handle it)
+            success: function (partialHtml) {
+                $('#listArtworkPartial').html(partialHtml);
+            },
+            error: function (error) {
+                console.error('Error loading partial:', error);
+            }
+        });
+    }
+   
+    function getListByPaging(pageNumber) {
+        document.getElementById("pageNumber").value = pageNumber;
+        var form = document.forms.namedItem("myForm");
+        var data = new FormData(form);
+
+        $.ajax({
+            url: '/Creator/ArtworkList?handler=Search', // Replace with your actual controller and action
+            type: 'POST',
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            data: data,
+            processData: false,  // Don't process the data (already FormData)
+            contentType: false,  // Don't set contentType (let jQuery handle it)
+            success: function (partialHtml) {
+                $('#listArtworkPartial').html(partialHtml);
+            },
+            error: function (error) {
+                console.error('Error loading partial:', error);
+            }
+        });
+    }
 </script>

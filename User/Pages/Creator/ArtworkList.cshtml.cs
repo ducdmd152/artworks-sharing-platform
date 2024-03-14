@@ -91,7 +91,7 @@ namespace User.Pages.Creator
             return Partial("_ArtworkListPartial", PageResult);
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostSearchAsync()
         {                        
             var accountEmail = HttpContext.Session.GetString("ACCOUNT_EMAIL");
             if (accountEmail != null)
@@ -153,7 +153,8 @@ namespace User.Pages.Creator
             {
                 PageResult = PageResult.PageNoData(SearchPayload.PageInfo);
             }
-            return Page();
+
+            return Partial("_ArtworkListPartial", PageResult.PageData);
         }
     }
 }
