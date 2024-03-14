@@ -13,7 +13,7 @@ GO
 USE [ArtHub]   
 GO 
 CREATE TABLE ArtHub.dbo.system_config (
-	config_id int IDENTITY(1,1) NOT NULL,
+	config_id int IDENTITY(0,1) NOT NULL,
 	commision_rate float NOT NULL,
 	created_date datetime NOT NULL,
 	updated_date datetime NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE ArtHub.dbo.system_config (
 );
 
 CREATE TABLE ArtHub.dbo.[role] (
-	role_id int IDENTITY(1,1) NOT NULL,
+	role_id int IDENTITY(0,1) NOT NULL,
 	role_name nvarchar(256)  NOT NULL,
 	created_date datetime NOT NULL,
 	updated_date datetime NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE ArtHub.dbo.artist (
 );
 
 CREATE TABLE ArtHub.dbo.fee (
-	fee_id int IDENTITY(1,1) NOT NULL,
+	fee_id int IDENTITY(0,1) NOT NULL,
 	amount float DEFAULT 0 NOT NULL,
 	artist_email varchar(256) NOT NULL,
 	created_date datetime NOT NULL,
@@ -70,7 +70,7 @@ ALTER TABLE ArtHub.dbo.fee ADD CONSTRAINT fee_pk PRIMARY KEY (fee_id);
 
 
 CREATE TABLE ArtHub.dbo.subscriber (
-	subscriber_id int IDENTITY(1,1) NOT NULL,
+	subscriber_id int IDENTITY(0,1) NOT NULL,
 	email_user varchar(256) NOT NULL,
 	email_artist varchar(256) NOT NULL,
 	status int NOT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE ArtHub.dbo.subscriber (
 ALTER TABLE ArtHub.dbo.subscriber ADD CONSTRAINT subscriber_pk PRIMARY KEY (subscriber_id);
 
 CREATE TABLE ArtHub.dbo.[transaction] (
-	transaction_id int IDENTITY(1,1) NOT NULL,
+	transaction_id int IDENTITY(0,1) NOT NULL,
 	amount float DEFAULT 0 NOT NULL,
 	status int NOT NULL,
 	[type] varchar(100) NOT NULL,
@@ -100,7 +100,7 @@ ALTER TABLE ArtHub.dbo.[transaction] ADD CONSTRAINT transaction_pk PRIMARY KEY (
 
 
 CREATE TABLE ArtHub.dbo.post (
-	post_id int IDENTITY(1,1) NOT NULL,
+	post_id int IDENTITY(0,1) NOT NULL,
 	title nvarchar(256) NOT NULL,
 	description nvarchar(512) NOT NULL,
 	status int NOT NULL,
@@ -116,7 +116,7 @@ CREATE TABLE ArtHub.dbo.post (
 );
 
 CREATE TABLE ArtHub.dbo.bookmark (
-	bookmark_id int IDENTITY(1,1) NOT NULL,
+	bookmark_id int IDENTITY(0,1) NOT NULL,
 	delete_flag bit NOT NULL,
 	post_id int NOT NULL,
 	account_email int NOT NULL,
@@ -130,7 +130,7 @@ ALTER TABLE ArtHub.dbo.bookmark ALTER COLUMN account_email varchar(256) NOT NULL
 ALTER TABLE ArtHub.dbo.bookmark ADD CONSTRAINT bookmark_account_FK FOREIGN KEY (account_email) REFERENCES ArtHub.dbo.account(email);
 
 CREATE TABLE ArtHub.dbo.[image] (
-	image_id int IDENTITY(1,1) NOT NULL,
+	image_id int IDENTITY(0,1) NOT NULL,
 	[type] varchar(100) NOT NULL,
 	image_url varchar(256) NOT NULL,
 	delete_flag bit DEFAULT 0 NOT NULL,
@@ -142,7 +142,7 @@ CREATE TABLE ArtHub.dbo.[image] (
 );
 
 CREATE TABLE ArtHub.dbo.reaction (
-	reaction_id int IDENTITY(1,1) NOT NULL,
+	reaction_id int IDENTITY(0,1) NOT NULL,
 	post_id int NOT NULL,
 	account_email varchar(256) NOT NULL,
 	created_date datetime NOT NULL,
@@ -154,7 +154,7 @@ CREATE TABLE ArtHub.dbo.reaction (
 
 
 CREATE TABLE ArtHub.dbo.category (
-	category_id int IDENTITY(1,1) NOT NULL,
+	category_id int IDENTITY(0,1) NOT NULL,
 	category_name varchar(100) NOT NULL,
 	description nvarchar(512) NOT NULL,
 	created_date datetime NOT NULL,
@@ -185,31 +185,31 @@ INSERT INTO ArtHub.dbo.[role] (role_name,created_date,updated_date) VALUES
 	 (N'Admin','2023-05-05 00:00:00.0','2023-05-05 00:00:00.0');
 	 
 INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
-	 (N'thongne@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',1,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
+	 (N'thongne@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',0,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
 INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
-	 (N'user1@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',1,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
+	 (N'user1@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',0,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
 INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
-	 (N'user2@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',1,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');	
+	 (N'user2@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',0,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');	
 INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
-	 (N'user3@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',1,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
+	 (N'user3@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',0,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
 INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
-	 (N'user4@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',1,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
+	 (N'user4@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',0,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
 INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
-	 (N'user5@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',1,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');		
+	 (N'user5@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',0,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');		
 INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
-	 (N'creator@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',2,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
+	 (N'creator@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',1,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
 INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
-	 (N'creator2@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',2,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
+	 (N'creator2@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',1,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
 INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
-	 (N'creator3@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',2,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
+	 (N'creator3@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',1,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
 INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
-	 (N'creator4@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',2,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');	
+	 (N'creator4@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',1,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');	
 INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
-	 (N'creator5@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',2,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');	
+	 (N'creator5@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',1,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');	
 INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
-	 (N'moderator@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',3,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
+	 (N'moderator@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',2,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
 INSERT INTO account (email,password,first_name,last_name,gender,status,enabled,avatar,role_id,created_date,updated_date) VALUES
-	 (N'admin@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',4,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
+	 (N'admin@gmail.com',N'5Hzghx8mdZs7r8BgULR4IQ==',N'hehe',N'hehehe',N'Male',1,1,N'../images/CreatorProfile.jpg',3,'2024-05-05 00:00:00.0','2024-02-25 16:02:24.74');
 	 
 	
 
@@ -246,11 +246,11 @@ VALUES
 -- Inserting 5 transactions (assuming there are at least 5 fees and 5 subscribers)
 INSERT INTO ArtHub.dbo.[transaction] (amount, status, [type], fee_id, subscriber_id, created_date, updated_date)
 VALUES 
-(50, 1, 'Paypal', 1, 1, GETDATE(), GETDATE()),
-(60, 1, 'Paypal', 2, 2, GETDATE(), GETDATE()),
-(70, 0, 'Paypal', 3, 3, GETDATE(), GETDATE()),
-(80, 2, 'Paypal', 4, 4, GETDATE(), GETDATE()),
-(90, 2, 'Paypal', 5, 5, GETDATE(), GETDATE());
+(50, 1, 'Paypal', 0, 0, GETDATE(), GETDATE()),
+(60, 1, 'Paypal', 1, 1, GETDATE(), GETDATE()),
+(70, 0, 'Paypal', 2, 2, GETDATE(), GETDATE()),
+(80, 2, 'Paypal', 3, 3, GETDATE(), GETDATE()),
+(90, 2, 'Paypal', 4, 4, GETDATE(), GETDATE());
 
 
 -- Inserting 5 posts (assuming there are at least 5 artists)
@@ -268,31 +268,31 @@ VALUES
 -- Inserting 5 bookmarks (assuming there are at least 5 posts and 5 accounts)
 INSERT INTO ArtHub.dbo.bookmark (delete_flag, post_id, account_email, created_date, updated_date)
 VALUES 
-(0, 1, 'user1@gmail.com', GETDATE(), GETDATE()),
-(0, 2, 'user2@gmail.com', GETDATE(), GETDATE()),
-(0, 3, 'user3@gmail.com', GETDATE(), GETDATE()),
-(0, 4, 'user4@gmail.com', GETDATE(), GETDATE()),
-(0, 5, 'user5@gmail.com', GETDATE(), GETDATE());
+(0, 0, 'user1@gmail.com', GETDATE(), GETDATE()),
+(0, 1, 'user2@gmail.com', GETDATE(), GETDATE()),
+(0, 2, 'user3@gmail.com', GETDATE(), GETDATE()),
+(0, 3, 'user4@gmail.com', GETDATE(), GETDATE()),
+(0, 4, 'user5@gmail.com', GETDATE(), GETDATE());
 
 
 -- Inserting 5 images (assuming there are at least 5 posts)
 INSERT INTO ArtHub.dbo.[image] ([type], image_url, post_id, created_date, updated_date)
 VALUES 
-('jpg', '../images/CreatorProfile.jpg', 1, GETDATE(), GETDATE()),
-('png', '../images/Login.png', 2, GETDATE(), GETDATE()),
-('jpg', '../images/CreatorProfile.jpg', 3, GETDATE(), GETDATE()),
-('png', '../images/Login.png', 4, GETDATE(), GETDATE()),
-('jpg', '../images/CreatorProfile.jpg', 5, GETDATE(), GETDATE());
+('jpg', '../images/CreatorProfile.jpg', 0, GETDATE(), GETDATE()),
+('png', '../images/Login.png', 1, GETDATE(), GETDATE()),
+('jpg', '../images/CreatorProfile.jpg', 2, GETDATE(), GETDATE()),
+('png', '../images/Login.png', 3, GETDATE(), GETDATE()),
+('jpg', '../images/CreatorProfile.jpg', 4, GETDATE(), GETDATE());
 
 
 -- Inserting 5 reactions (assuming there are at least 5 posts and 5 accounts)
 INSERT INTO ArtHub.dbo.reaction (post_id, account_email, created_date, updated_date)
 VALUES 
-(1, 'user1@gmail.com', GETDATE(), GETDATE()),
-(2, 'user2@gmail.com', GETDATE(), GETDATE()),
-(3, 'user3@gmail.com', GETDATE(), GETDATE()),
-(4, 'user4@gmail.com', GETDATE(), GETDATE()),
-(5, 'user5@gmail.com', GETDATE(), GETDATE());
+(0, 'user1@gmail.com', GETDATE(), GETDATE()),
+(1, 'user2@gmail.com', GETDATE(), GETDATE()),
+(2, 'user3@gmail.com', GETDATE(), GETDATE()),
+(3, 'user4@gmail.com', GETDATE(), GETDATE()),
+(4, 'user5@gmail.com', GETDATE(), GETDATE());
 
 
 -- Inserting 5 categories
@@ -308,9 +308,9 @@ VALUES
 -- Inserting 5 post_category links (assuming there are at least 5 posts and 5 categories)
 INSERT INTO ArtHub.dbo.post_category (category_id, post_id, created_date, updated_date)
 VALUES 
-(1, 1, GETDATE(), GETDATE()),
-(2, 1, GETDATE(), GETDATE()),
-(1, 2, GETDATE(), GETDATE()),
+(0, 0, GETDATE(), GETDATE()),
+(1, 0, GETDATE(), GETDATE()),
+(0, 1, GETDATE(), GETDATE()),
+(2, 2, GETDATE(), GETDATE()),
 (3, 3, GETDATE(), GETDATE()),
-(4, 4, GETDATE(), GETDATE()),
-(5, 5, GETDATE(), GETDATE());	
+(4, 4, GETDATE(), GETDATE());	
