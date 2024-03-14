@@ -11,5 +11,7 @@ namespace ArtHubService.Interface
         public Task<bool> RegisterAccountAsync();
 
         public Task<bool> RemoveAccountAsync();
+
+        public int GetTotalUsers();
     }
 }

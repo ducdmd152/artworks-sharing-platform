@@ -9,5 +9,11 @@ namespace ArtHubRepository.Repository
         public SubscriberRepository(IBaseDAO<Subscriber> baseDAO) : base(baseDAO)
         {
         }
+
+        public int GetTotalSubscribers()
+        {
+            return this.DbSet.Count();
+        }
+
     }
 }

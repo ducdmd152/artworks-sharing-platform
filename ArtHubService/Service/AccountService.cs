@@ -130,5 +130,10 @@ namespace ArtHubService.Service
 
             return false;
         }
+
+        public int GetTotalUsers()
+        {
+            return this.accountRepository.GetTotalUsers();
+        }
     }
 }

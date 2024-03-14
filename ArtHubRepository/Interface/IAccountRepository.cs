@@ -5,5 +5,6 @@ namespace ArtHubRepository.Interface
     public interface IAccountRepository : IBaseRepository<Account> 
     {
         IEnumerable<Account> GetAccounts();
+        public int GetTotalUsers();
     }
 }

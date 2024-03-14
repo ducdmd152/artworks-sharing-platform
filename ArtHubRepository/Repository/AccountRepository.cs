@@ -14,5 +14,10 @@ namespace ArtHubRepository.Repository
         {
             return this.DbSet.ToList();
         }
+
+        public int GetTotalUsers()
+        {
+            return this.DbSet.Count(p => p.RoleId != 2 && p.RoleId != 3);
+        }
     }
 }
