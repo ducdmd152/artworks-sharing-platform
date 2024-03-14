@@ -2,8 +2,8 @@
 
 public class PageResult<T>
 {
-    public PageInfo PageInfo { get; set; }
-    public List<T> PageData { get; set; }
+    public PageInfo PageInfo { get; set; } = new PageInfo();
+    public List<T> PageData { get; set; } = new List<T>();
 
     public PageResult<T> PageNoData(PageInfo pageInfo)
     {

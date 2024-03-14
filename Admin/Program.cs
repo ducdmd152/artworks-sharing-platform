@@ -37,11 +37,13 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 //     redisCacheConfig.ConfigurationOptions = redisConfigurationOptions;
 // });
 
-builder.Services.AddSession(options => {
-    options.Cookie.Name = "ArtworksSharingPlatform_Session";
-    options.IdleTimeout = TimeSpan.FromMinutes(60 * 24);
+//Add session
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
-
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IBaseDAO<>), typeof(BaseDAO<>));

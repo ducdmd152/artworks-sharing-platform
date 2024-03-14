@@ -1,8 +1,8 @@
 ﻿namespace ArtHubBO.Constants;
 
-public class Constants
+public class S3Constants
 {
-    private Constants() { }
+    private S3Constants() { }
 
     public static readonly string AccessKey = "AWS_ACCESS_KEY";
     public static readonly string SecretKey = "AWS_SECRET_KEY";

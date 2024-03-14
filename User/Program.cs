@@ -9,6 +9,7 @@ using ArtHubBO.Entities;
 using ArtHubService.Service;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
+using User.Pages.Filter;
 
 DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
