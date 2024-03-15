@@ -7,6 +7,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Text.Json.Serialization;
+using Admin;
 using ArtHubService.Service;
 using User.Pages.Filter;
 using StackExchange.Redis;
@@ -47,6 +48,7 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IBaseDAO<>), typeof(BaseDAO<>));
+builder.Services.AddTransient<IHelper, Helper>();
 
 string connectionString = builder.Configuration["DATABASE_URL"];
 // Register IDbConnection in DI container

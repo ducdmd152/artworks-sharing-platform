@@ -1,5 +1,6 @@
 ﻿using ArtHubBO.DTO;
 using ArtHubBO.Entities;
+using ArtHubBO.Enum;
 using ArtHubBO.Payload;
 
 namespace ArtHubService.Interface;
@@ -14,5 +15,6 @@ public interface IPostService
 
     Post Get(int id);
 
-    Task<bool> CreateNewPost(Post post, List<PostCategory> postCategories, Image image);    
+    Task<bool> CreateNewPost(Post post, List<PostCategory> postCategories, Image image);
+    Task<Result> UpdateStatusOfPostAsync(int artworkModePostId, int artworkModeMode);
 }

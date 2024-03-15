@@ -61,7 +61,6 @@
             </select>
         </div>
     </div>
-    
     <table class="table table-hover">
         <thead>
         <tr style="background-color: #f8f9fa; font-weight: 500;">
@@ -83,10 +82,51 @@
         </tbody>
     </table>
     @* paging *@
-    <div>
+    <div id="pagingPartial">
         <partial name="Shared/_PagingPartial" model="@Model.PageResult.PageInfo"/>
     </div>
 
+    <!-- Popup show upload artwork -->
+    <div class="modal fade" id="artworkDetailModal" tabindex="-1" role="dialog" aria-labelledby="artworkDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header m-auto">
+                    <h5 class="modal-title" id="modalArtworkTitle">
+                        <span>Artwork Title</span>
+                    </h5>                        
+                    <button type="button" class="btn closeModalBtn" onclick="onCloseClick()">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Image preview -->
+                    <!-- Bag with green color -->
+                    <div class="bag-icon" id="modelBorderVisibility">
+                        <span id="modalVisibility">Public</span>
+                    </div>
+                    <!-- Image preview -->
+                    <img src="" alt="Artwork" id="modalImagePreview" class="img-fluid rounded" style="width: 760px; height: 430px;">
+                    <div class="d-flex align-items-center">
+                        <span class="me-1 fw-bold">Artist</span>
+                    </div>                        
+                    <div class="d-flex align-items-center">
+                        <div class="avatar mb-3">
+                            <img src=""  id="modelAvatarImage" class="rounded-circle me-2" alt="Avatar" style="width: 40px; height: 40px;">
+                        </div>
+                        <h5 class="text-center" id="modelArtistName">John Doe</h5>
+                    </div>
+                    
+                    <p class="card-text ms-2" id="modalDescription"></p>
+                    
+                    <!-- Buttons -->
+                    <div class="text-center mt-3">
+                        <button type="button" class="btn btn-success me-2" onclick="approveArtwork()">Approved</button>
+                        <button type="button" class="btn btn-danger" onclick="rejectArtwork()">Reject</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <partial name="Shared/Partial/_toastyAnnouncePartial"/>
 </div>
 

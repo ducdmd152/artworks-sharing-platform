@@ -1,5 +1,6 @@
 ﻿using ArtHubBO.DTO;
 using ArtHubBO.Entities;
+using ArtHubBO.Enum;
 using ArtHubBO.Payload;
 using ArtHubDAO.Data;
 using ArtHubDAO.Interface;
@@ -74,8 +75,29 @@ public class PostService : IPostService
         }
         catch (Exception ex)
         {               
-            unitOfWork.RollbackTransaction();
+            
         }
         return false;
+    }
+
+    public async Task<Result> UpdateStatusOfPostAsync(int artworkModePostId, int artworkModeMode)
+    {
+        try
+        {
+            await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+            var post = this.postRepository.GetById(artworkModePostId);
+            if (post != default)
+            {
+                post.Status = artworkModeMode;
+            }
+            //await postCategoryRepository.AddRangeAsync(postCategories).ConfigureAwait(false);
+            await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+            return Result.Ok;
+        }
+        catch (Exception e)
+        {
+            unitOfWork.RollbackTransaction();
+            return Result.Error;
+        }
     }
 }
