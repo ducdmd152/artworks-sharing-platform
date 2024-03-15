@@ -96,12 +96,15 @@
                                     <div class="me-3 nav-user">
                                         <img src="@ViewBag.Avatar" alt="" class="user-img m-2">
                                         <span class="user-name my-1">@ViewBag.FirstName</span>
-                                        <ul class="user-menu list-unstyled me-3">
-                                            <li class="user-menu-item">
-                                                <a asp-page="/Creator/Profile" class="text-decoration-none text-dark">My Profile</a>
-                                            </li>
+                                        <ul class="user-menu list-unstyled me-3">                                            
                                             <li class="user-menu-item">
                                                 <a asp-page="/Creator/ArtworkList" class="text-decoration-none text-dark">My Artwork</a>
+                                            </li>
+                                            <li class="user-menu-item">
+                                                <a asp-page="/Creator/UploadNewArtwork" class="text-decoration-none text-dark">Upload Artwork</a>
+                                            </li>
+                                            <li class="user-menu-item">
+                                                <a asp-page="/Creator/Profile" class="text-decoration-none text-dark">My Profile</a>
                                             </li>
                                             <li class="user-menu-item item-seperate">
                                                 <a asp-page="/Authenticate/Logout" class="text-decoration-none text-dark">Logout</a>

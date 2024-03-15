@@ -9,37 +9,41 @@
 <div id="pagination" class="tui-pagination"></div>
 
 <script>
-    const Pagination = tui.Pagination;
+    function initializePagination() {
+        const Pagination = tui.Pagination;
 
-    const container = document.getElementById('pagination');
-    const options = { // below default value of options
-        totalItems: @Model.TotalItems,
-        itemsPerPage: @Model.PageSize,
-        visiblePages: 6,
-        page: @Model.PageNum,
-        centerAlign: false,
-        firstItemClassName: 'tui-first-child',
-        lastItemClassName: 'tui-last-child',
-        template: {
-            page: '<a href="#" class="btn-paging mx-1">{{page}}</a>',
-            currentPage: '<strong class="btn-paging-active mx-1">{{page}}</strong>',
-            moveButton:
-                '<a href="#" class="btn-paging-move mx-1 tui-{{type}} custom-class-{{type}}">' +
-                '<span class="tui-ico-{{type}}">{{type}}</span>' +
-                '</a>',
-            disabledMoveButton:
-                '<span class="btn-paging-move mx-1 tui-is-disabled tui-{{type}} custom-class-{{type}}">' +
-                '<span class="tui-ico-{{type}}">{{type}}</span>' +
-                '</span>',
-            moreButton:
-                '<a href="#" class="btn-paging-move mx-1 tui-{{type}}-is-ellip custom-class-{{type}}">' +
-                '<span class="tui-ico-ellip">...</span>' +
-                '</a>'
-        }
-    };
-    const pagination = new Pagination(container, options);
+        const container = document.getElementById('pagination');
+        const options = {
+            totalItems: @Model.TotalItems,
+            itemsPerPage: @Model.PageSize,
+            visiblePages: 6,
+            page: @Model.PageNum,
+            centerAlign: false,
+            firstItemClassName: 'tui-first-child',
+            lastItemClassName: 'tui-last-child',
+            template: {
+                page: '<a href="#" class="btn-paging mx-1">{{page}}</a>',
+                currentPage: '<strong class="btn-paging-active mx-1">{{page}}</strong>',
+                moveButton:
+                    '<a href="#" class="btn-paging-move mx-1 tui-{{type}} custom-class-{{type}}">' +
+                    '<span class="tui-ico-{{type}}">{{type}}</span>' +
+                    '</a>',
+                disabledMoveButton:
+                    '<span class="btn-paging-move mx-1 tui-is-disabled tui-{{type}} custom-class-{{type}}">' +
+                    '<span class="tui-ico-{{type}}">{{type}}</span>' +
+                    '</span>',
+                moreButton:
+                    '<a href="#" class="btn-paging-move mx-1 tui-{{type}}-is-ellip custom-class-{{type}}">' +
+                    '<span class="tui-ico-ellip">...</span>' +
+                    '</a>'
+            }
+        };
+        const pagination = new Pagination(container, options);
 
-    pagination.on('beforeMove', function (eventData) {
-        getListByPaging(eventData.page);
-    });
+        pagination.on('beforeMove', function (eventData) {
+            getListByPaging(eventData.page);
+        });
+    }
+
+    initializePagination(); // Call the function to initialize pagination
 </script>

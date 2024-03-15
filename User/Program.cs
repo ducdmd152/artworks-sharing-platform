@@ -7,6 +7,7 @@ using System.Data;
 using ArtHubService.Service;
 using StackExchange.Redis;
 using User.Pages.Filter;
+using User.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +47,7 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IBaseDAO<>), typeof(BaseDAO<>));
+builder.Services.AddTransient<IHelper, Helper>();
 
 string connectionString = builder.Configuration.GetConnectionString("DBDefault");
 // Register IDbConnection in DI container

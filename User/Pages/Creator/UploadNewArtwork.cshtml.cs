@@ -56,7 +56,7 @@ public class UploadNewArtworkModel : PageModel
         await using var memoryStream = new MemoryStream();
         await FileUpload.CopyToAsync(memoryStream);
         var fileExt = Path.GetExtension(FileUpload.FileName);
-        var objName = $"{Guid.NewGuid()}{fileExt}";
+        var objName = $"{S3Constants.FolderS3}{Guid.NewGuid()}{fileExt}";
         var s3Obj = new S3ObjectModel()
         {
             BucketName = configuration[S3Constants.BucketName] ?? "",
@@ -69,7 +69,7 @@ public class UploadNewArtworkModel : PageModel
             AwsKey = configuration[S3Constants.AccessKey] ?? "",
             AwsSecret = configuration[S3Constants.SecretKey] ?? ""
         };
-        // var responseUploadImage = await storageService.UploadFileAsync(s3Obj, credential);
+        var responseUploadImage = await storageService.UploadFileAsync(s3Obj, credential);
 
         var postScope = Request.Form["PostScope"];
         if (Enum.TryParse(postScope, out PostScope parsedScope))
@@ -105,8 +105,7 @@ public class UploadNewArtworkModel : PageModel
         Image image = new Image()
         {
             Type = fileExt[1..],
-            // ImageUrl = responseUploadImage.LinkSource,
-            ImageUrl = "tesst",
+            ImageUrl = responseUploadImage.LinkSource,            
             DeleteFlag = false
         };        
         postCategories.ForEach(pc => Post.PostCategories.Add(pc));        

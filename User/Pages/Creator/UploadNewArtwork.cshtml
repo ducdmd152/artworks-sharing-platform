@@ -12,8 +12,8 @@
             <label for="file-upload">
                 Drag a file here <br> or, if you prefer... <br>
             </label>
-            <div id="image-preview" class="my-4 image-preview" style="display: none;">
-                <img id="preview" src="#" alt="Uploaded Image" style="max-width: 100%; max-height: 300px;">
+            <div id="image-preview" class="my-4" style="display: none;">
+                <img id="preview" class="img-fluid" src="#" alt="Uploaded Image" style="max-width: 100%; max-height: 70%;">
             </div>
         </div>
         <div class="d-flex justify-content-between mb-4">
@@ -137,14 +137,14 @@
         reader.onloadend = function () {
             preview.src = reader.result;
             document.getElementById('image-preview').style.display = "block";
-            label.style.display = "none"; // Hide the label when an image is uploaded
+            //label.style.display = "none"; // Hide the label when an image is uploaded
         }
 
         if (file) {
             reader.readAsDataURL(file);
         } else {
             preview.src = "";
-            label.style.display = "block"; // Show the label when no image is selected
+            //label.style.display = "block"; // Show the label when no image is selected
         }
     }
 </script>
