@@ -152,14 +152,16 @@
         <div class="title text-center mt-4">
             <h2 class="position-relative d-inline-block">My Artwork</h2>
         </div>
-        <div class="artwork-grid" id="listArtworkPartial">
+        <div id="listArtworkPartial">
             <!-- Show list artwork -->
-            <partial name="Shared/_ArtWorkListPartial" model="Model.PageResult.PageData" />
+            <partial name="Shared/_ArtworkListPartial" model="Model.PageResult" />
         </div>
         <input type="hidden" id="pageNumber" asp-for="@Model.SearchPayload.PageInfo.PageNum" value="@Model.SearchPayload.PageInfo.PageNum" />
         <input type="hidden" id="pageSize" asp-for="@Model.SearchPayload.PageInfo.PageSize" value="@Model.SearchPayload.PageInfo.PageSize" />
         <input type="hidden" asp-for="@Model.SearchPayload.PageInfo.TotalItems" value="@Model.SearchPayload.PageInfo.TotalItems" />
         <input type="hidden" asp-for="@Model.SearchPayload.PageInfo.TotalPages" value="@Model.SearchPayload.PageInfo.TotalPages" />
+        <input type="hidden" id="sortCondition" asp-for="@Model.SearchPayload.SearchCondition.SortDirection" value="@Model.SearchPayload.SearchCondition.SortDirection" />
+        <input type="hidden" id="sortType" asp-for="@Model.SearchPayload.SearchCondition.SortType" value="@Model.SearchPayload.SearchCondition.SortType" />
 
         @*<div class="d-flex justify-content-center mt-3">
             <div class="text-center me-3">
@@ -171,8 +173,7 @@
                     }
                 }
             </div>
-        </div>*@
-        <partial name="Shared/_PagingPartial" model="Model.PageResult.PageInfo" />
+        </div>*@        
     </form>
 
     <!-- Popup show detail artwork -->
