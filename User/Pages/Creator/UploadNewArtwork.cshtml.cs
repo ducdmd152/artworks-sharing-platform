@@ -30,7 +30,7 @@ public class UploadNewArtworkModel : PageModel
     public PostScope PostScopePrivate { get; } = PostScope.Private;
 
     [BindProperty]
-    public Post Post { get; set; }
+    public Post Post { get; set; } = new Post();
 
     public UploadNewArtworkModel(IConfiguration configuration, IStorageService storageService, ICategoryService categoryService, IPostService postService)
     {
@@ -69,7 +69,7 @@ public class UploadNewArtworkModel : PageModel
             AwsKey = configuration[S3Constants.AccessKey] ?? "",
             AwsSecret = configuration[S3Constants.SecretKey] ?? ""
         };
-        var responseUploadImage = await storageService.UploadFileAsync(s3Obj, credential);
+        // var responseUploadImage = await storageService.UploadFileAsync(s3Obj, credential);
 
         var postScope = Request.Form["PostScope"];
         if (Enum.TryParse(postScope, out PostScope parsedScope))
@@ -104,10 +104,13 @@ public class UploadNewArtworkModel : PageModel
         //Image of post
         Image image = new Image()
         {
-            Type = fileExt.Substring(1),
-            ImageUrl = responseUploadImage.LinkSource,
+            Type = fileExt[1..],
+            // ImageUrl = responseUploadImage.LinkSource,
+            ImageUrl = "tesst",
             DeleteFlag = false
-        };
+        };        
+        postCategories.ForEach(pc => Post.PostCategories.Add(pc));        
+        Post.Images.Add(image);
         //Post.PostCategories = postCategories;
         await postService.CreateNewPost(Post, postCategories, image);
 

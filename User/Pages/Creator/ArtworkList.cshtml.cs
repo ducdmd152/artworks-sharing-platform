@@ -65,7 +65,7 @@ namespace User.Pages.Creator
             var output = await postService.GetAllPostBySearchConditionAsync(SearchPayload);
             if (output != null && output.Count > 0)
             {
-                PageResult = PageResult.Build(SearchPayload.PageInfo, output.Count(), output.ToList());
+                PageResult = PageResult.Build(SearchPayload.PageInfo, SearchPayload.PageInfo.TotalItems, output.ToList());
             } else
             {
                 PageResult = PageResult.PageNoData(SearchPayload.PageInfo);
@@ -73,9 +73,26 @@ namespace User.Pages.Creator
             return;
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostChangePage([FromBody] int pageNumber)
         {
-            SearchPayload.PageInfo = new PageInfo(1, PageConstants.PageSize);
+            if (pageNumber > 0)
+            {
+                SearchPayload.PageInfo.PageNum = pageNumber;
+            }
+            var output = await postService.GetAllPostBySearchConditionAsync(SearchPayload);
+            if (output != null && output.Count > 0)
+            {
+                PageResult = PageResult.Build(SearchPayload.PageInfo, SearchPayload.PageInfo.TotalItems, output.ToList());
+            }
+            else
+            {
+                PageResult = PageResult.PageNoData(SearchPayload.PageInfo);
+            }
+            return Partial("_ArtworkListPartial", PageResult);
+        }
+
+        public async Task<IActionResult> OnPostSearchAsync()
+        {                        
             var accountEmail = HttpContext.Session.GetString("ACCOUNT_EMAIL");
             if (accountEmail != null)
             {
@@ -126,17 +143,18 @@ namespace User.Pages.Creator
                 DateFilter = parsedCustomDate;
             }
 
-            Console.WriteLine(SearchPayload);
+
             var output = await postService.GetAllPostBySearchConditionAsync(SearchPayload);
             if (output != null && output.Count > 0)
             {
-                PageResult = PageResult.Build(SearchPayload.PageInfo, output.Count(), output.ToList());
+                PageResult = PageResult.Build(SearchPayload.PageInfo, SearchPayload.PageInfo.TotalItems, output.ToList());
             }
             else
             {
                 PageResult = PageResult.PageNoData(SearchPayload.PageInfo);
             }
-            return Page();
+
+            return Partial("_ArtworkListPartial", PageResult.PageData);
         }
     }
 }

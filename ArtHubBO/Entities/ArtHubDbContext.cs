@@ -138,6 +138,18 @@ namespace ArtHubBO.Entities
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("post_artist_FK");
             });
+            
+            modelBuilder.Entity<Category>(entity =>
+            {
+                entity.HasKey(e => e.CategoryId)
+                    .HasName("category_pk");
+            });
+            
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.HasKey(e => e.RoleId)
+                    .HasName("role_pk");
+            });
 
             modelBuilder.Entity<PostCategory>(entity =>
             {
