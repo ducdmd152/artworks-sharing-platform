@@ -14,12 +14,15 @@
             </label>
             <div id="image-preview" class="my-4" style="display: none;">
                 <img id="preview" class="img-fluid" src="#" alt="Uploaded Image" style="max-width: 100%; max-height: 70%;">
-            </div>
+            </div>            
         </div>
+        <span id="errorMessageFileUpload" class="text-danger">@ViewData["ErrorMessageFileUpload"]</span>
         <div class="d-flex justify-content-between mb-4">
             <div class="form-group col-12">
                 <label for="artworkTitle">Artwork Title</label>
                 <input asp-for="@Model.Post.Title" type="text" class="form-control" id="artworkTitle" placeholder="Enter the title...">
+                <input type="hidden" asp-for="Post.Title" />
+                <span asp-validation-for="@Model.Post.Title" class="text-danger"></span>
             </div>
         </div>
         <label for="artworkTitle">Category</label>
@@ -34,10 +37,21 @@
                 </div>
             }
         </div>
+        <span id="errorMessageCategories" class="text-danger">@ViewData["ErrorMessageCategories"]</span>
+        @{
+            var categories = Model.Categories.ToList();
+        }
+        @for (var i = 0; i < categories.Count; i++)
+        {
+            <input type="hidden" name="Categories[@i].CategoryId" value="@categories[i].CategoryId">
+            <input type="hidden" name="Categories[@i].CategoryName" value="@categories[i].CategoryName">
+        }
         
         <div class="form-group mb-4">
             <label for="description">Description</label>
             <textarea asp-for="@Model.Post.Description" class="form-control" id="description" rows="3" placeholder="Enter the description..."></textarea>
+            <input type="hidden" asp-for="Post.Description" />
+            <span asp-validation-for="@Model.Post.Description" class="text-danger"></span>
         </div>
         
         <div class="form-group form-check">
@@ -56,6 +70,8 @@
             <button type="button" id="previewButton" class="btn btn-primary me-4">Preview</button>
             <button type="button" class="btn btn-primary">Cancel</button>
         </div>
+        <span id="errorMessagePostScope" class="text-danger">@ViewData["ErrorMessagePostScope"]</span>
+        <input type="hidden" asp-for="@Model.Post.Scope" />
         <!-- Popup show upload artwork -->
         <div class="modal fade" id="artworkDetailModal" tabindex="-1" role="dialog" aria-labelledby="artworkDetailModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -76,14 +92,25 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="closeModalBtn btn btn-secondary" onclick="onCloseClick()">Cancel</button>
-                        <button type="submit" class="btn btn-secondary">Upload</button>
+                        <button id="uploadButton" type="submit" class="btn btn-secondary">Upload</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>    
 </div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
 <script>
+    document.querySelector('#uploadButton').addEventListener('click', function () {        
+        document.querySelector('#errorMessageCategories').textContent = '';
+        document.querySelector('#errorMessageFileUpload').textContent = '';
+        document.querySelector('#errorMessagePostScope').textContent = '';
+    });
+
     document.querySelector('#previewButton').addEventListener('click', function () {
         // Get user input values
         var title = document.querySelector('#artworkTitle').value || "Untitled";
