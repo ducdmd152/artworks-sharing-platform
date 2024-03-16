@@ -34,18 +34,35 @@
             <div class="container-fluid d-flex justify-content-between align-items-center">
                 <div class="collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav">
-                        <li class="nav-item me-3 fs-5">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item me-3 fs-5">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Artworks/Index">Artworks</a>
-                        </li>
-                        <li class="nav-item me-3 fs-5">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Creators</a>
-                        </li>
-                        <li class="nav-item me-3 fs-5">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Contact</a>
-                        </li>
+                        @if (user != null && user.Role.RoleName == "Creator")
+                        {
+                            <li class="nav-item me-3 fs-5">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Creator/ArtworkList">My Artwork</a>
+                            </li>
+                            <li class="nav-item me-3 fs-5">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Creator/UploadNewArtwork">Upload Artwork</a>
+                            </li>
+                            <li class="nav-item me-3 fs-5">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Creator/Profile">Profile</a>
+                            </li>
+                            <li class="nav-item me-3 fs-5">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Contact</a>
+                            </li>
+                        } else
+                        {
+                            <li class="nav-item me-3 fs-5">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            </li>
+                            <li class="nav-item me-3 fs-5">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Artworks/Index">Artworks</a>
+                            </li>
+                            <li class="nav-item me-3 fs-5">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Creators</a>
+                            </li>
+                            <li class="nav-item me-3 fs-5">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Contact</a>
+                            </li>
+                        }                        
                     </ul>
                 </div>
                 <div class="text-center">

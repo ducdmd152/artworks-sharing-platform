@@ -25,5 +25,5 @@ public static class URIConstant
 
     public static readonly string Login = "/Authenticate/Login";
 
-
+    public static readonly string ArtworkList = "/Creator/ArtworkList";
 }

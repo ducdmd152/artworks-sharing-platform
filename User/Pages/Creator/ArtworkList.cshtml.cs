@@ -67,7 +67,7 @@ namespace User.Pages.Creator
             {
                 SearchPayload.SearchCondition.ArtistEmail = accountEmail;
             }
-            SearchPayload.SearchCondition.SortDirection = SortDirection.ASC;
+            SearchPayload.SearchCondition.SortDirection = SortDirection.DESC;
             SearchPayload.SearchCondition.SortType = SortType.RECENT;
             Categories = categoryService.GetCategories().ToList();                        
             var output = await postService.GetAllPostBySearchConditionAsync(SearchPayload);
