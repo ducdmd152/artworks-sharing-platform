@@ -6,10 +6,13 @@ using ArtHubRepository.DapperService;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Text.Json.Serialization;
+using Admin;
 using ArtHubService.Service;
 using User.Pages.Filter;
 using StackExchange.Redis;
 
+DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -22,19 +25,18 @@ builder.Services.Scan(scan => scan
             type.Name.EndsWith("Repository") || type.Name.EndsWith("Service")))
                 .AsImplementedInterfaces()
                 .WithScopedLifetime());
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 // Configure Redis Based Distributed Session
-//var redisConfigurationOptions = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"));
-
-//builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
-//{
-//    redisCacheConfig.ConfigurationOptions = redisConfigurationOptions;
-//});
-
-//builder.Services.AddSession(options => {
-//    options.Cookie.Name = "ArtworksSharingPlatform_Session";
-//    options.IdleTimeout = TimeSpan.FromMinutes(60 * 24);
-//});
+// var redisConfigurationOptions = ConfigurationOptions.Parse(redisConfigurationOptions);
+//
+// builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
+// {
+//     redisCacheConfig.ConfigurationOptions = redisConfigurationOptions;
+// });
 
 //Add session
 builder.Services.AddSession(options =>
@@ -46,10 +48,13 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IBaseDAO<>), typeof(BaseDAO<>));
+builder.Services.AddTransient<IHelper, Helper>();
 
-string connectionString = builder.Configuration.GetConnectionString("DBDefault");
+string connectionString = builder.Configuration["DATABASE_URL"];
 // Register IDbConnection in DI container
 builder.Services.AddScoped<IDbConnection>((sp) => new SqlConnection(connectionString));
+builder.Services.AddDbContext<ArtHubDbContext>(options =>
+    options.UseSqlServer(builder.Configuration["DATABASE_URL"]));
 
 builder.Services.AddMemoryCache();
 

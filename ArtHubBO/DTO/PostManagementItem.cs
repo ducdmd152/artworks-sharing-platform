@@ -9,4 +9,7 @@ public class PostManagementItem
     public string Email { get; set; }
     public string ArtistName { get; set; }
     public int Scope { get; set; }
+    public int TotalPages { get; set; }
+    public int TotalItems { get; set; }
+    
 }

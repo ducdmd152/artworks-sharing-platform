@@ -1,5 +1,6 @@
 ﻿using ArtHubBO.DTO;
 using ArtHubBO.Entities;
+using ArtHubBO.Enum;
 using ArtHubBO.Payload;
 using ArtHubDAO.Data;
 using ArtHubDAO.Interface;
@@ -23,14 +24,30 @@ public class PostService : IPostService
         this.unitOfWork = unitOfWork;        
     }
 
-    public async Task<IEnumerable<PostManagementItem>> GetListPostOrderByDate(SearchArtworkManagementConditionDto searchCondition)
+    public async Task<PageResult<PostManagementItem>> GetListPostOrderByDate(
+        SearchArtworkManagementConditionDto searchCondition)
     {
-            searchCondition = new SearchArtworkManagementConditionDto();
-            searchCondition.PageNumber = 1;
-            searchCondition.PageSize = 5;
+        try
+        {
             var listPost = this.dapperQueryService
                 .Select<PostManagementItem>(QueryName.GetListPostOrderByDate, searchCondition);
-            return listPost;
+            var result = new PageResult<PostManagementItem>
+            {
+                PageData = listPost.ToList(),
+                PageInfo = new PageInfo
+                {
+                    PageNum = searchCondition.PageNumber,
+                    PageSize = searchCondition.PageSize,
+                    TotalPages = listPost.First().TotalPages,
+                    TotalItems = listPost.First().TotalItems,
+                }
+            };
+            return result;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
     }
 
     public async Task<List<Post>> GetAllPostBySearchConditionAsync(SearchPayload<PostSearchConditionDto> searchPayload)
@@ -55,11 +72,32 @@ public class PostService : IPostService
         }
         catch (Exception ex)
         {               
-            unitOfWork.RollbackTransaction();
+            
         }
         return false;
     }
 
+    public async Task<Result> UpdateStatusOfPostAsync(int artworkModePostId, int artworkModeMode)
+    {
+        try
+        {
+            await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+            var post = this.postRepository.GetById(artworkModePostId);
+            if (post != default)
+            {
+                post.Status = artworkModeMode;
+            }
+            //await postCategoryRepository.AddRangeAsync(postCategories).ConfigureAwait(false);
+            await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+            return Result.Ok;
+        }
+        catch (Exception e)
+        {
+            unitOfWork.RollbackTransaction();
+            return Result.Error;
+        }
+    }
+    
     public async Task<Post> UpdatePost(PostUpdateDto post)
     {
         try

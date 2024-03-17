@@ -34,6 +34,7 @@ namespace ArtHubService.Service
             {
                 await this.unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
                 var accounts = this.GetAccounts();
+                accounts.First().Enabled = false;
                 foreach (var account in accounts)
                 {
                     account.Avatar = "avater new";

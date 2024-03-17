@@ -9,5 +9,7 @@ namespace ArtHubRepository.Interface
         Task<List<Post>> GetAllPostBySearchConditionAsync(SearchPayload<PostSearchConditionDto> searchPayload);
         List<Post> GetAllPost();
         Post Get(int id);
+
+        Post GetById(int postId);
     }
 }
