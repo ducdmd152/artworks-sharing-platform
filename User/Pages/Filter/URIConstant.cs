@@ -1,12 +1,12 @@
 ﻿namespace User.Pages.Filter;
 
 public static class URIConstant
-{
+{    
     public static readonly string[] WhiteListUris = {         
         "/",
-        "/Login",
-        "/Logout",
-        "/Register",
+        "/Authenticate/Login",
+        "/Authenticate/Logout",
+        "/Authenticate/Register",
         "/Artworks/"
     };
 
@@ -25,5 +25,5 @@ public static class URIConstant
 
     public static readonly string Login = "/Authenticate/Login";
 
-
+    public static readonly string ArtworkList = "/Creator/ArtworkList";
 }

@@ -189,7 +189,7 @@
         }
     </style>
 </head>
-<body>
+<body style="margin-top: 76px;">
     <div class="banner">
         <div class="container">
             <h1 style="margin-top: -12px;">Unleash Your Creativity,<br />Explore the World of Art</h1>
@@ -209,7 +209,7 @@
         @foreach (var item in Model.Posts)
         {
             <div class="gallery-item">
-                <img src="@(item.Image?.ImageUrl ?? "https://placehold.co/300")"
+                <img src="@(item.Images.FirstOrDefault()?.ImageUrl ?? "https://placehold.co/300")"
                  class="gallery-image" />
                 <div class="gallery-item-title">@item.Title</div>
             <div class="gallery-item-info d-flex justify-content-between">

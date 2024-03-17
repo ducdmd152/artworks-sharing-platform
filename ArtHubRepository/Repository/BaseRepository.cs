@@ -8,6 +8,7 @@ namespace ArtHubRepository.Repository
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
     {
         private readonly IBaseDAO<TEntity> baseDAO;
+        private static readonly object instanceLock = new object();
 
         public BaseRepository(IBaseDAO<TEntity> baseDAO)
         {
@@ -18,7 +19,10 @@ namespace ArtHubRepository.Repository
         {
             get
             {
-                return this.baseDAO.DbSet;
+                lock (instanceLock)
+                {
+                    return this.baseDAO.DbSet;
+                }
             }
         }
 

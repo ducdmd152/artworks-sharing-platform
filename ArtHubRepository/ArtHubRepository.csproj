@@ -17,7 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Queries\FirstQuery.sql" />
+    <EmbeddedResource Include="Queries\GetListPostOrderByDate.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Queries\FirstQuery.sql" />
   </ItemGroup>
 

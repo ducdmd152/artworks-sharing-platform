@@ -41,12 +41,12 @@ namespace Admin.Pages
                 var accountJson = JsonConvert.SerializeObject(account, settings);
                 switch (role)
                 {                    
-                    case "moderator":
+                    case "Moderator":
                         HttpContext.Session.SetString("CREDENTIAL", accountJson);                        
-                        return RedirectToPage("/ModHomePage");
-                    case "admin":
+                        return RedirectToPage("/Moderator/ArtWorksManagement");
+                    case "Admin":
                         HttpContext.Session.SetString("CREDENTIAL", accountJson);
-                        return RedirectToPage("/AdminHomePage");
+                        return RedirectToPage("/Moderator/ArtWorksManagement");
                     default:
                         ViewData["ErrorMessage"] = MessageResource.AccountNotHavePermission;
                         return Page();

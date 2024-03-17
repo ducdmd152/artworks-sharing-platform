@@ -10,6 +10,7 @@ namespace ArtHubBO.Entities
         public Post()
         {
             Bookmarks = new HashSet<Bookmark>();
+            Images = new HashSet<Image>();
             PostCategories = new HashSet<PostCategory>();
             Reactions = new HashSet<Reaction>();
         }
@@ -44,7 +45,7 @@ namespace ArtHubBO.Entities
         [InverseProperty("Post")]
         public virtual ICollection<Bookmark> Bookmarks { get; set; }
         [InverseProperty("Post")]
-        public virtual Image? Image { get; set; }
+        public virtual ICollection<Image> Images { get; set; }
         [InverseProperty("Post")]
         public virtual ICollection<PostCategory> PostCategories { get; set; }
         [InverseProperty("Post")]

@@ -60,13 +60,14 @@ namespace ArtHubBO.Entities
 
         private string GetConnectionString()
         {
-            IConfiguration config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true)
-                .Build();
-            var strConn = config.GetConnectionString("DBDefault");
-
-            return strConn;
+            // IConfiguration config = new ConfigurationBuilder()
+            //     .SetBasePath(Directory.GetCurrentDirectory())
+            //     .AddJsonFile("appsettings.json", true, true)
+            //     .Build();
+            // var strConn = config.GetConnectionString("DBDefault");
+            //
+            // return strConn;
+            return Environment.GetEnvironmentVariable("DATABASE_URL");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -122,8 +123,8 @@ namespace ArtHubBO.Entities
             modelBuilder.Entity<Image>(entity =>
             {
                 entity.HasOne(d => d.Post)
-                    .WithOne(p => p.Image)
-                    .HasForeignKey<Image>(d => d.PostId)
+                    .WithMany(p => p.Images)
+                    .HasForeignKey(d => d.PostId)
                     .IsRequired(false)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("image_post_FK");
@@ -136,6 +137,18 @@ namespace ArtHubBO.Entities
                     .HasForeignKey(d => d.ArtistEmail)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("post_artist_FK");
+            });
+            
+            modelBuilder.Entity<Category>(entity =>
+            {
+                entity.HasKey(e => e.CategoryId)
+                    .HasName("category_pk");
+            });
+            
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.HasKey(e => e.RoleId)
+                    .HasName("role_pk");
             });
 
             modelBuilder.Entity<PostCategory>(entity =>

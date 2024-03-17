@@ -21,7 +21,7 @@ namespace User.Pages
         public SearchPayload<PostSearchConditionDto> SearchPayload = default!;
 
 
-        public void OnGet(int pageIndex = 1, int pageSize = 12, string? search = "", int? orderBy = null, int[]? category = null)
+        public async Task OnGetAsync(int pageIndex = 1, int pageSize = 12, string? search = "", int? orderBy = null, int[]? category = null)
         {
             PostSearchConditionDto condition = new PostSearchConditionDto()
             {
@@ -43,7 +43,7 @@ namespace User.Pages
                 SearchCondition = condition
             };
 
-            Posts = postService.GetAllPostBySearchCondition(SearchPayload);
+            Posts = await postService.GetAllPostBySearchConditionAsync(SearchPayload);
         }
     }
 }

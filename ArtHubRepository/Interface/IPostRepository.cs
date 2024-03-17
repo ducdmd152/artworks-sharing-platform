@@ -6,7 +6,10 @@ namespace ArtHubRepository.Interface
 {
     public interface IPostRepository : IBaseRepository<Post> 
     {
-        List<Post> GetAllPostBySearchCondition(SearchPayload<PostSearchConditionDto> searchPayload);
+        Task<List<Post>> GetAllPostBySearchConditionAsync(SearchPayload<PostSearchConditionDto> searchPayload);
         List<Post> GetAllPost();
+        Post Get(int id);
+
+        Post GetById(int postId);
     }
 }

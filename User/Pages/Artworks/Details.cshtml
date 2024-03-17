@@ -3,8 +3,6 @@
 @{
     ViewData["Title"] = "ArtHub | Artwork Details";
 }
-
-
 <head>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -133,6 +131,7 @@
         }
 
         .gallery-item {
+            position: relative;
             background: #ffffff;
             border-radius: 8px;
             overflow: hidden;
@@ -201,7 +200,32 @@
             color: #333; /* Dark grey color for the text */
             font-weight: 600; /* Bold font for the artist's name */
         }
+        .gallery-item-title {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: dark;
+            background: #ccc;
+            font-weight: 600;
+            font-size: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            max-width: 220px;
+        }
 
+        .gallery-item:hover {
+            cursor: pointer;
+        }
+
+        .gallery-item:hover .gallery-image {
+            opacity: 0.6;            
+        }
+        .gallery-item:hover .gallery-item-title {
+            opacity: 1;
+        }
         @@media (max-width: 768px) {
             .thumbnails {
                 flex-direction: column;
@@ -217,111 +241,70 @@
 <body>
   <div class="artwork-exploration">
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <h1 class="title-local">Artwork Title</h1>
+        <h1 class="title-local">@Model.Post?.Title</h1>
         <div class="gallery-item-stats">
                 <span class="love"><i class="fa-solid fa-heart"></i> </span>
                 <span class="bookmark ms-2"><i class="fa-solid fa-bookmark"></i></span>
         </div>
       </div>
       <div class="main-artwork">
-        <img src="https://placehold.co/768x432" alt="Main Artwork Image" class="main-image">
+        <img src="@(Model.Post?.Images.FirstOrDefault()?.ImageUrl ?? "https://placehold.co/768x432")" alt="Main Artwork Image" class="main-image">
       </div>
       <div class="artwork-details">
         
         <div class="d-flex justify-content-between align-items-center">
             <div class="artist-info">
-                  <img src="https://placehold.co/50" alt="Artist Profile Picture" class="artist-profile-pic">
-                  <span class="artist-name">Martin Deavin</span>
+                  <img src="@(Model.Post?.Artist?.Account?.Avatar ?? "https://placehold.co/50")" alt="Artist Profile Picture" class="artist-profile-pic">
+                  <span class="artist-name">@Model.Post?.Artist?.ArtistName</span>
             </div>
             <div class="loves-saveds">
-                <span class="loves"><i class="fas fa-heart"></i> 187</span>
-                <span class="saveds"><i class="fas fa-bookmark"></i> 19.7k</span>
+                <span class="loves"><i class="fas fa-heart"></i> @Model.Post?.TotalReact</span>
+                <span class="saveds"><i class="fas fa-bookmark"></i> @Model.Post?.TotalBookmark</span>
             </div>
         </div>
         <p class="artwork-description m-2">
-          Collectors tend to appreciate works more if they know the "story" behind them, so be sure to write informative artwork descriptions.
+            @Model.Post?.Description          
         </p>
       </div>
       <hr/>
       <div class="more-artwork mt-4">
         <h2 class="m-3 text-center">More from Martin Deavin</h2>
         <div class="thumbnails">
-          <!-- Repeat this structure for each thumbnail -->
-          <div class="thumbnail">
-            <img src="https://placehold.co/200x200" alt="Artwork Thumbnail" class="thumbnail-image">
-          </div>
-           <div class="thumbnail">
-            <img src="https://placehold.co/200x200" alt="Artwork Thumbnail" class="thumbnail-image">
-          </div>
-           <div class="thumbnail">
-                  <img src="https://placehold.co/200x200" alt="Artwork Thumbnail" class="thumbnail-image">
-              </div>
-          <!-- ... -->
+          @foreach (var item in Model.ArtistSuggestion)
+          {
+            <a class="thumbnail" asp-page="./Details" asp-route-id="@item.PostId" style="color: black; text-decoration: none;">
+                <img src="@(item?.Images?.FirstOrDefault()?.ImageUrl ?? "https://placehold.co/300")" alt="Artwork Thumbnail" class="thumbnail-image">
+            </a>
+          }                       
         </div>
       </div>
       <hr/>
+      @if (Model.OtherSuggestion != null) {
         <div class="more-artwork mb-4" style="margin-left: -32px; margin-right: -32px;">
             <h2 class="m-3 text-center">More by other creators</h2>
             <div class="gallery mt-2 mb-2">
-                <!-- Start of gallery item -->
-                <div class="gallery-item">
-                    <img src="https://placehold.co/300"
-                         class="gallery-image" />
-                    <div class="gallery-item-info d-flex justify-content-between">
-                        <div class="user-short-item" style="flex: 2">
-                            <img src="https://placehold.co/30" class="artist-profile-pic-suggest" />
-                            <span class="artist-name-suggest">Martin Deavin</span>
+                @foreach (var item in Model.OtherSuggestion)
+                {
+                    <a class="gallery-item" asp-page="./Details" asp-route-id="@item.PostId" style="color: black; text-decoration: none;">
+                        <img src="@(item?.Images?.FirstOrDefault()?.ImageUrl ?? "https://placehold.co/300")"
+                            class="gallery-image" />
+                        <div class="gallery-item-title">@item.Title</div>
+                        <div class="gallery-item-info d-flex justify-content-between">
+                            <div class="user-short-item" style="flex: 2">
+                                    <img src="@(item.Artist?.Account?.Avatar ?? "https://placehold.co/300")" class="artist-profile-pic-suggest" />
+                                    <span class="artist-name-suggest">@item.Artist?.ArtistName</span>
+                            </div>
+                            <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
+                                    <span class="likes"><i class="far fa-heart"></i> @item.TotalReact</span>
+                                    <span class="comments"><i class="far fa-bookmark"></i> @item.TotalBookmark</span>
+                            </div>
                         </div>
-                        <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
-                            <span class="likes"><i class="far fa-heart"></i> 137</span>
-                            <span class="comments"><i class="far fa-bookmark"></i> 12</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="gallery-item">
-                    <img src="https://placehold.co/300"
-                         class="gallery-image" />
-                    <div class="gallery-item-info d-flex justify-content-between">
-                        <div class="user-short-item" style="flex: 2">
-                            <img src="https://placehold.co/30" class="artist-profile-pic-suggest" />
-                            <span class="artist-name-suggest">Martin Deavin</span>
-                        </div>
-                        <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
-                            <span class="likes"><i class="far fa-heart"></i> 137</span>
-                            <span class="comments"><i class="far fa-bookmark"></i> 12</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="gallery-item">
-                    <img src="https://placehold.co/300"
-                         class="gallery-image" />
-                    <div class="gallery-item-info d-flex justify-content-between">
-                        <div class="user-short-item" style="flex: 2">
-                            <img src="https://placehold.co/30" class="artist-profile-pic-suggest" />
-                            <span class="artist-name-suggest">Martin Deavin</span>
-                        </div>
-                        <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
-                            <span class="likes"><i class="far fa-heart"></i> 137</span>
-                            <span class="comments"><i class="far fa-bookmark"></i> 12</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="gallery-item">
-                    <img src="https://placehold.co/300"
-                         class="gallery-image" />
-                    <div class="gallery-item-info d-flex justify-content-between">
-                        <div class="user-short-item" style="flex: 2">
-                            <img src="https://placehold.co/30" class="artist-profile-pic-suggest" />
-                            <span class="artist-name-suggest">Martin Deavin</span>
-                        </div>
-                        <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
-                            <span class="likes"><i class="far fa-heart"></i> 137</span>
-                            <span class="comments"><i class="far fa-bookmark"></i> 12</span>
-                        </div>
-                    </div>
-                </div>
+                    </a>
+                }
             </div>
         </div>
+      }
+        
     </div>
 
 </body>
