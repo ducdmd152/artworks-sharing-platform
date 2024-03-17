@@ -1,4 +1,4 @@
-name: ci
+name: admin
 
 on:
   pull_request:
