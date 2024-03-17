@@ -11,7 +11,7 @@ using Admin;
 using ArtHubService.Service;
 using User.Pages.Filter;
 using StackExchange.Redis;
-
+using Microsoft.AspNetCore.DataProtection;
 DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,13 +30,17 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
+var redis = ConnectionMultiplexer
+    .Connect(Environment.GetEnvironmentVariable("REDIS_URL"));
 // Configure Redis Based Distributed Session
-// var redisConfigurationOptions = ConfigurationOptions.Parse(redisConfigurationOptions);
-//
-// builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
-// {
-//     redisCacheConfig.ConfigurationOptions = redisConfigurationOptions;
-// });
+var redisConfigurationOptions = builder.Configuration["REDIS_URL"];
+
+builder.Services.AddDataProtection()
+    .PersistKeysToStackExchangeRedis(redis, "Secrets-admin-data-protection");
+builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
+{
+    redisCacheConfig.ConfigurationOptions = ConfigurationOptions.Parse(redisConfigurationOptions);
+});
 
 //Add session
 builder.Services.AddSession(options =>

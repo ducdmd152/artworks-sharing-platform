@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 using User.Pages.Filter;
 using User.Helpers;
-
+using Microsoft.AspNetCore.DataProtection;
 DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,13 +30,19 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
+var redis = ConnectionMultiplexer
+    .Connect(Environment.GetEnvironmentVariable("REDIS_URL"));
 // Configure Redis Based Distributed Session
 var redisConfigurationOptions = builder.Configuration["REDIS_URL"];
 
-// builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
-// {
-//     redisCacheConfig.ConfigurationOptions = ConfigurationOptions.Parse(redisConfigurationOptions);
-// });
+builder.Services.AddDataProtection()
+    .PersistKeysToStackExchangeRedis(redis, "Secrets-user-data-protection");
+builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
+{
+    redisCacheConfig.ConfigurationOptions = ConfigurationOptions.Parse(redisConfigurationOptions);
+});
+
+
 
 builder.Services.AddSession(options => {
     options.Cookie.Name = "ArtworksSharingPlatform_Session";
