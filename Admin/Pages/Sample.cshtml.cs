@@ -1,3 +1,4 @@
+using ArtHubBO.Constants;
 using ArtHubRepository.Enum;
 using ArtHubRepository.Interface;
 using ArtHubService.Interface;
@@ -10,11 +11,15 @@ namespace Admin.Pages
     {
         private readonly IAccountService accountService;
         private IDapperQueryService dapperQueryService;
+        private IPostService postService;
+        private IConfiguration configuration;
 
-        public SampleModel(IAccountService accountService, IDapperQueryService dapperQueryService)
+        public SampleModel(IAccountService accountService, IDapperQueryService dapperQueryService, IPostService postService, IConfiguration configuration)
         {
             this.accountService = accountService;
             this.dapperQueryService = dapperQueryService;
+            this.postService = postService;
+            this.configuration = configuration;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -33,6 +38,11 @@ namespace Admin.Pages
 
             // remove
             var temp3 = await this.accountService.RemoveAccountAsync().ConfigureAwait(false);
+
+            var temp4 = this.postService.TestPostCategory();
+
+            _ = configuration[S3Constants.AccessKey];
+            _ = configuration[S3Constants.SecretKey];
             
             return this.Page();
         }

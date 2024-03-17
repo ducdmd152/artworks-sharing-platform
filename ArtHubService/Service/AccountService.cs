@@ -3,6 +3,7 @@ using ArtHubBO.Enum;
 using ArtHubDAO.Interface;
 using ArtHubRepository.Interface;
 using ArtHubService.Interface;
+using ArtHubService.Utils;
 
 namespace ArtHubService.Service
 {
@@ -21,12 +22,19 @@ namespace ArtHubService.Service
             return this.accountRepository.GetAccounts();
         }
 
+        public Account? GetAccountByUsernameAndPassword(string email, string password)
+        {            
+            var decryptPassword = Encryption.Encrypt(password);           
+            return this.accountRepository.GetAccountsIncludeRoleByEmailPassword(email, decryptPassword);
+        }
+
         public async Task<Account> UpdateAsync()
         {
             try
             {
                 await this.unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
                 var accounts = this.GetAccounts();
+                accounts.First().Enabled = false;
                 foreach (var account in accounts)
                 {
                     account.Avatar = "avater new";
@@ -59,9 +67,9 @@ namespace ArtHubService.Service
                         FirstName = "2",
                         LastName = "3",
                         Gender = Gender.Female.ToString(),
-                        Status = "ok",
+                        Status = 1,
                         Avatar = "dep gai",
-                        RoleId = 8,
+                        RoleId = 0,
                     },
                     new Account()
                     {
@@ -70,9 +78,9 @@ namespace ArtHubService.Service
                         FirstName = "2",
                         LastName = "3",
                         Gender = Gender.Male.ToString(),
-                        Status = "ok",
+                        Status = 1,
                         Avatar = "dep trai",
-                        RoleId = 8,
+                        RoleId = 0,
                     }
                 };
 
@@ -102,9 +110,9 @@ namespace ArtHubService.Service
                         FirstName = "2",
                         LastName = "3",
                         Gender = Gender.Female.ToString(),
-                        Status = "ok",
+                        Status = 1,
                         Avatar = "dep gai",
-                        RoleId = 8,
+                        RoleId = 0,
                     },
                     new Account()
                     {
@@ -113,9 +121,9 @@ namespace ArtHubService.Service
                         FirstName = "2",
                         LastName = "3",
                         Gender = Gender.Male.ToString(),
-                        Status = "ok",
+                        Status = 1,
                         Avatar = "dep trai",
-                        RoleId = 8,
+                        RoleId = 0,
                     }
                 };
                 

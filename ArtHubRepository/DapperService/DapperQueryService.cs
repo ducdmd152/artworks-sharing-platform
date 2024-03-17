@@ -14,7 +14,6 @@ namespace ArtHubRepository.DapperService
     {
         private static readonly HashSet<QueryName> CachedQuery = new HashSet<QueryName>()
         {
-            QueryName.FirstQuery,
         };
 
         private static readonly TimeSpan CacheSpan = TimeSpan.FromMinutes(10);
@@ -105,8 +104,6 @@ namespace ArtHubRepository.DapperService
                 }
 
                 result = await this.db.QueryAsync<T>(query, queryParams).ConfigureAwait(false);
-                
-
                 this.SetCache(cacheKey, result);
 
                 return result;
@@ -115,6 +112,35 @@ namespace ArtHubRepository.DapperService
             {
                 if (isClosed)
                     await ((DbConnection)this.db).CloseAsync().ConfigureAwait(false);
+            }
+        }
+        
+        public IEnumerable<T> Select<T>(QueryName queryName, object queryParams)
+        {
+            if (this.TryGetCache(queryName, queryParams, out IEnumerable<T> result, out string cacheKey))
+            {
+                return result;
+            }
+
+            string query = this.GetQueryString(queryName);
+            bool isClosed = this.db.State == ConnectionState.Closed;
+
+            try
+            {
+                if (isClosed)
+                {
+                    this.db.Open();
+                }
+
+                result =  this.db.Query<T>(query, queryParams);
+                this.SetCache(cacheKey, result);
+
+                return result;
+            }
+            finally
+            {
+                if (isClosed)
+                    this.db.Close();
             }
         }
 
@@ -143,22 +169,25 @@ namespace ArtHubRepository.DapperService
         public async Task<IEnumerable<TReturn>> SelectAsync<TFirst, TSecond, TThird, TReturn>(QueryName queryName, Func<TFirst, TSecond, TThird, TReturn> map, object queryParams, string splitOn)
         {
             string query = await this.GetQueryStringAsync(queryName).ConfigureAwait(false);
-            bool isClosed = this.db.State == ConnectionState.Closed;
-
             try
             {
-                if (isClosed)
+                using (var connection = (DbConnection)this.db)
                 {
-                    await((DbConnection)this.db).OpenAsync().ConfigureAwait(false);
-                }
+                    if (connection.State == ConnectionState.Closed)
+                    {
+                        await connection.OpenAsync().ConfigureAwait(false);
+                    }
 
-                return await this.db.QueryAsync<TFirst, TSecond, TThird, TReturn>(query, map, queryParams, splitOn: splitOn).ConfigureAwait(false);
+                    return await connection.QueryAsync<TFirst, TSecond, TThird, TReturn>(query, map, queryParams, splitOn: splitOn).ConfigureAwait(false);
+                }
 
             }
             finally
             {
-                if (isClosed)
-                    await((DbConnection)this.db).CloseAsync().ConfigureAwait(false);
+                if (this.db.State == ConnectionState.Open)
+                {
+                    await ((DbConnection)this.db).CloseAsync().ConfigureAwait(false);
+                }
             }
         }
 
@@ -304,18 +333,23 @@ namespace ArtHubRepository.DapperService
         {
             string result = null;
 
-            string sqlFile = queryName.GetType().FullName + ".sql";
-            Stream stream = this.assembly.GetManifestResourceStream(this.assembly.GetName().Name + ".Queries." + sqlFile);
-            StreamReader reader = new StreamReader(stream);
-            result = await reader.ReadToEndAsync().ConfigureAwait(false);
-
-            if (string.IsNullOrWhiteSpace(result))
+            string sqlFile = queryName.ToString() + ".sql";
+            using (Stream stream =
+                   this.assembly.GetManifestResourceStream(this.assembly.GetName().Name + ".Queries." + sqlFile))
             {
-                throw new ArgumentException("Not exist file sql with name ", sqlFile);
-            }
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    result = await reader.ReadToEndAsync().ConfigureAwait(false);
+                }
 
-            Debug.WriteLine("Dapper: " + sqlFile);
-            return result;
+                if (string.IsNullOrWhiteSpace(result))
+                {
+                    throw new ArgumentException("Not exist file sql with name ", sqlFile);
+                }
+
+                Debug.WriteLine("Dapper: " + sqlFile);
+                return result;
+            }
         }
 
         private object AddValue<T>()

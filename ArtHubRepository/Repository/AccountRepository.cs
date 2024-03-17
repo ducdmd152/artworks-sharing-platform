@@ -1,6 +1,7 @@
 ﻿using ArtHubBO.Entities;
 using ArtHubDAO.Interface;
 using ArtHubRepository.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace ArtHubRepository.Repository
 {
@@ -15,7 +16,12 @@ namespace ArtHubRepository.Repository
             return this.DbSet.ToList();
         }
 
-        public int GetTotalUsers()
+        public Account? GetAccountsIncludeRoleByEmailPassword(string email, string password)
+        {
+            return this.DbSet.Include(a => a.Role).FirstOrDefault(a => a.Email.Equals(email) && a.Password.Equals(password));
+        }
+        
+         public int GetTotalUsers()
         {
             return this.DbSet.Count(p => p.RoleId != 2 && p.RoleId != 3);
         }

@@ -1,0 +1,48 @@
+﻿@using ArtHubBO.Enum
+@model List<ArtHubBO.DTO.PostManagementItem>
+
+@{
+    Layout = null;
+}
+
+@foreach (var artworkItem in @Model.Select((item, index) => (item, index)).ToList())
+{
+    <tr>
+        <td>@artworkItem.item.PostId</td>
+        <td>@artworkItem.item.Title</td>
+        <td>@artworkItem.item.Date</td>
+        @if (@artworkItem.item.Status == (int)PostStatus.Reject)
+        {
+            <td><span class="badge bg-danger">Reject</span></td>
+        }
+        else if (@artworkItem.item.Status == (int)PostStatus.Approval)
+        {
+            <td><span class="badge bg-success">Approved</span></td>
+        }
+        else if (@artworkItem.item.Status == (int)PostStatus.Pending)
+        {
+            <td><span class="badge bg-info">Pending</span></td>
+        }
+        else if (@artworkItem.item.Status == (int)PostStatus.Repending)
+        {
+            <td><span class="badge bg-warning text-dark">Re-pending</span></td>
+        }
+        
+        <td>@artworkItem.item.ArtistName</td>
+        
+        @if (@artworkItem.item.Scope == (int)PostScope.Private)
+        {
+            <td><span class="dot-danger"></span>Private</td>
+        }
+        else if (@artworkItem.item.Scope == (int)PostScope.Public)
+        {
+            <td><span class="dot-primary"></span>Public</td>
+        }
+        else if (@artworkItem.item.Scope == (int)PostScope.Subscriber)
+        {
+            <td><span class="dot-purple"></span>Subscribe Only</td>
+        }
+        
+        <td><span type="button" class="btn btn-detail" onclick="showDetailArtwork('@artworkItem.item.PostId')">Details</span></td>
+    </tr>
+}

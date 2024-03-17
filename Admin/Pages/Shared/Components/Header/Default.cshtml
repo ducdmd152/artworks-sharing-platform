@@ -1,0 +1,80 @@
+﻿@model ArtHubBO.Entities.Account
+<!-- Navbar -->
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
+        <div class="container-fluid d-flex align-items-center">
+            <div class="collapse d-sm-inline-flex col-4">
+                <ul class="navbar-nav">
+                    <li class="nav-item me-3 fs-6">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Moderator/ArtWorksManagement">Artwork Management</a>
+                    </li>
+                    <li class="nav-item me-3 fs-6">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Moderator/ArtWorksManagement">Report Management</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-4 text-center">
+                <img src="/images/ArtHub.png" alt=""
+                     class="w-50 rounded-t-5 rounded-tr-lg-0 rounded-bl-lg-5" />
+            </div>
+            <div class="form-inline my-2 my-lg-0 col-4">
+                @if (@Model == null)
+                {
+                    <div>
+                        <a asp-page="/Login" type="button" class="btn position-relative mx-2">
+                            <i class="fa-solid fa-user"></i>
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    switch(@Model.Role.RoleName)
+                    {
+                        case "audience":
+                            <div class="me-3 nav-user">
+                                <img src="@ViewBag.Avatar" alt="" class="user-img m-2">
+                                <span class="user-name my-1">@ViewBag.FirstName</span>
+                                <ul class="user-menu list-unstyled me-3">
+                                    <li class="user-menu-item">
+                                        <a asp-page="/AudienceProfile" class="text-decoration-none text-dark">My Profile</a>
+                                    </li>
+                                    <li class="user-menu-item">
+                                        <a asp-page="/AudienceArtworkInteration" class="text-decoration-none text-dark">Interation</a>
+                                    </li>
+                                    
+                                    <li class="user-menu-item item-seperate">
+                                        <form method="get">
+                                            <a asp-page="/Logout" class="text-decoration-none text-dark">Logout</a>
+                                        </form>                                                
+                                    </li>
+                                </ul>
+                            </div>
+                            break;
+                        case "creator":
+                            <div class="me-3 nav-user">
+                                <img src="@ViewBag.Avatar" alt="" class="user-img m-2">
+                                <span class="user-name my-1">@ViewBag.FirstName</span>
+                                <ul class="user-menu list-unstyled me-3">
+                                    <li class="user-menu-item">
+                                        <a asp-page="/CreatorProfile" class="text-decoration-none text-dark">My Profile</a>
+                                    </li>
+                                    <li class="user-menu-item">
+                                        <a asp-page="/CreatorArtworkList" class="text-decoration-none text-dark">My Artwork</a>
+                                    </li>
+                                    <li class="user-menu-item item-seperate">
+                                        <a asp-page="/Logout" class="text-decoration-none text-dark">Logout</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            break;
+                        default:
+                            <div>
+                                <a asp-page="/Login" type="button" class="btn position-relative mx-2">
+                                    <i class="fa-solid fa-user"></i>
+                                </a>
+                            </div>
+                            break;
+                    }                            
+                }
+            </div>
+        </div>
+    </nav>

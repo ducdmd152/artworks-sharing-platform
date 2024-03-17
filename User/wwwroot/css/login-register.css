@@ -1,0 +1,55 @@
+.rounded-t-5 {
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
+.image {
+    background-color: var(--yellow-color-dark);
+}
+
+/* Label */
+.label-primary {
+    color: var(--text-secondary);
+    font-weight: bold;
+    font-size: var(--normal-font-size);
+}
+
+/*BUTTONS*/
+.button {
+    font-family: "Baloo 2";
+    display: inline-block;
+    white-space: nowrap;
+    background-color: var(--purple-color-bold);
+    color: var(--white-color);
+    border: none;
+    padding: 0.6rem;
+    font-weight: var(--font-semi-bold);
+    font-size: var(--normal-font-size);
+    border-radius: 0.5rem;
+    transition: 0.3s;
+    width: 100%;
+}
+
+    .button:hover {
+        transform: translateY(-0.25rem);
+    }
+
+.title {
+    font-family: "Baloo 2";
+    font-size: var(--title-font-size);
+    font-weight: var(--font-semi-bold);
+    color: var(--text-primary);
+}
+
+
+
+a:hover {
+    color: var(--text-primary);
+}
+
+.form {
+    background-color: white;
+    height: 99vh;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+}

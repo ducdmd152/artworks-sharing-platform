@@ -13,6 +13,315 @@ html {
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
+:root {
+    /*===== Text =====*/
+    --text-primary: #804DD4;
+    --text-secondary: #9586A8;
+    /*===== Font and typography =====*/
+    --body-font: 'Poppins', san-serif;
+    --big-font-size: 1.25rem;
+    --bigger-font-size: 1.5rem;
+    --biggest-font-size: 2rem;
+    --title-font-size: 3rem;
+    --h2-font-size: 1.25rem;
+    --normal-font-size: 0.938rem;
+    --smaller-font-size: 0.813rem;
+    /*===== Colores =====*/
+    --purple-color-bold: #804DD4;
+    --purple-color-light: #9586A8;
+    --yellow-color-dark: #E4B72C;
+    --dark-color: #141414;
+    --dark-color-light: #8A8A8A;
+    --dark-color-lighten: #F2F2F2;
+    --white-color: #FFF;
+    /*===== Font weight =====*/
+    --font-medium: 500;
+    --font-bold: 600;
+    --font-semi-bold: 700;
+}
+
+.header {
+    font-family: "Baloo 2";
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000; /* Ensure it's above other content */
+}
+
+.footer {
+    font-family: "Baloo 2";
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 0;
+    height: 0px;
+    width: 100vw;
+    background: yellow;
+}
+
+.btn {
+    border-color: #333;
+}
+
+    .btn:hover {
+        background-color: #333;
+        color: #fff;
+    }
+
+        .btn:hover i {
+            color: #fff;
+        }
+
+.btn-primary {
+    background-color: #fff;
+    color: rgb(85, 85, 85);
+    padding: 10px 28px;
+    border-radius: 25px;
+    border: 1px solid rgb(85, 85, 85);
+}
+
+    .btn-primary:hover {
+        background-color: #333;
+        color: #fff;
+    }
+
+/* Profile picture */
+.profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    overflow: hidden;
+    margin: 0 auto 20px auto;
+}
+
+    .profile-pic img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+/* Artwork grid */
+
+.artwork-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.artwork-item {
+    min-width: 430px;
+    min-height: 600px;
+    background: #333;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+    .artwork-item img {
+        width: 100%;
+        height: 90%;
+        object-fit: contain; /* This ensures the image fits both horizontally and vertically */
+    }
+
+.artwork-item-img {
+    min-width: 430px;
+    max-height: 80vh;
+    background: #333;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 90%;
+    object-fit: contain; /* This ensures the image fits both horizontally and vertically */
+}
+
+.artwork-item-creator-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+    .artwork-item-creator-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+
+/* Filter */
+.filter-panel {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 5px;
+}
+
+.filter-btn {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+    .filter-btn:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+/* Label */
+.label {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ced4da;
+    border-radius: 2px;
+    padding: 0 5px;
+}
+
+/* Title */
+.title h2::before {
+    position: absolute;
+    content: "";
+    width: 4px;
+    height: 50px;
+    background-color: var(--purple-color-light);
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Upload image */
+.file-upload-container {
+    border: 2px dashed #000;
+    padding: 30px;
+    text-align: center;
+}
+
+    .file-upload-container input[type="file"] {
+        display: none;
+    }
+
+    .file-upload-container label {
+        color: #000;
+        cursor: pointer;
+    }
+
+.image-preview {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+    .image-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+
+
+.user-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.user-menu {
+    position: absolute;
+    top: 88%;
+    right: 0px;
+    width: 130px;
+    background-color: rgb(247, 233, 233);
+    border-radius: 2px;
+    z-index: 1;
+    box-shadow: 0 2px 5px #cfcbcb;
+    display: none;
+}
+
+    .user-menu::before {
+        content: "";
+        position: absolute;
+        right: 8px;
+        top: -30px;
+        border-width: 20px 26px;
+        border-style: solid;
+        border-color: transparent transparent rgb(247, 233, 233) transparent;
+        cursor: pointer;
+        z-index: -1;
+    }
+
+    .user-menu::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: -22%;        
+        width: 130px;
+        height: 30px;
+    }
+
+.user-menu-item a {
+    display: block;
+    padding: 5px 10px;
+}
+
+.user-menu-item:hover a {
+    background-color: var(--dark-color-light);
+    color: #fff !important;
+}
+
+.nav-user:hover .user-menu {
+    display: block;
+}
+
+.item-seperate {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/** btn paging*/
+.btn-paging {
+    font-size: 20px;
+    border-radius: 0 !important;
+    background-color: #fff !important;
+    color: rgb(85, 85, 85) !important;
+    padding: 8px 15px !important;
+    border: 1px solid rgb(85, 85, 85) !important;
+    text-decoration: none;
+}
+
+    .btn-paging:hover {
+        color: #fff !important;
+        background-color: rgb(85, 85, 85) !important;
+    }
+
+.btn-paging-active {
+    font-size: 20px;
+    font-weight: 400;
+    border-radius: 0 !important;
+    color: #fff !important;
+    background-color: rgb(85, 85, 85) !important;
+    padding: 8px 15px !important;
+    border: 1px solid rgb(85, 85, 85) !important;
+    text-decoration: none;
+}
+
+.tui-pagination .tui-prev {
+    margin-right: 10px;
+    width: 40px;
+    height: 44px;
+    margin-bottom: 18px;
+}
+
+.btn-paging-move {
+    font-size: 20px !important;
+    font-weight: 400;
+    border-radius: 0 !important;
+    color: rgb(85, 85, 85) !important;
+    background-color: #fff !important;
+    padding: 8px 15px !important;
+    border: none;
+    text-decoration: none;
+}
+
+.tui-pagination .tui-first, .tui-pagination .tui-prev, .tui-pagination .tui-next, .tui-pagination .tui-last, .tui-pagination .tui-prev-is-ellip, .tui-pagination .tui-next-is-ellip {
+    border: none !important;
 }

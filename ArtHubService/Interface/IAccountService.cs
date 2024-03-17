@@ -6,6 +6,8 @@ namespace ArtHubService.Interface
     {
         IEnumerable<Account> GetAccounts();
 
+        Account? GetAccountByUsernameAndPassword(string email, string password);
+
         public Task<Account> UpdateAsync();
 
         public Task<bool> RegisterAccountAsync();

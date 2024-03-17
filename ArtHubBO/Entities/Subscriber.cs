@@ -24,9 +24,7 @@ namespace ArtHubBO.Entities
         [Unicode(false)]
         public string EmailArtist { get; set; } = null!;
         [Column("status")]
-        [StringLength(100)]
-        [Unicode(false)]
-        public string Status { get; set; } = null!;
+        public int Status { get; set; }
         [Column("expired_date", TypeName = "datetime")]
         public DateTime ExpiredDate { get; set; }
 

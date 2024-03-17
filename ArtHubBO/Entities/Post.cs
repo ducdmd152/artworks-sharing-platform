@@ -11,6 +11,7 @@ namespace ArtHubBO.Entities
         {
             Bookmarks = new HashSet<Bookmark>();
             Images = new HashSet<Image>();
+            PostCategories = new HashSet<PostCategory>();
             Reactions = new HashSet<Reaction>();
         }
 
@@ -24,13 +25,9 @@ namespace ArtHubBO.Entities
         [StringLength(512)]
         public string Description { get; set; } = null!;
         [Column("status")]
-        [StringLength(100)]
-        [Unicode(false)]
-        public string Status { get; set; } = null!;
+        public int Status { get; set; }
         [Column("scope")]
-        [StringLength(100)]
-        [Unicode(false)]
-        public string Scope { get; set; } = null!;
+        public int Scope { get; set; }
         [Column("total_react")]
         public int TotalReact { get; set; }
         [Column("total_view")]
@@ -44,11 +41,13 @@ namespace ArtHubBO.Entities
 
         [ForeignKey("ArtistEmail")]
         [InverseProperty("Posts")]
-        public virtual Artist ArtistEmailNavigation { get; set; } = null!;
+        public virtual Artist Artist { get; set; } = null!;
         [InverseProperty("Post")]
         public virtual ICollection<Bookmark> Bookmarks { get; set; }
         [InverseProperty("Post")]
         public virtual ICollection<Image> Images { get; set; }
+        [InverseProperty("Post")]
+        public virtual ICollection<PostCategory> PostCategories { get; set; }
         [InverseProperty("Post")]
         public virtual ICollection<Reaction> Reactions { get; set; }
     }

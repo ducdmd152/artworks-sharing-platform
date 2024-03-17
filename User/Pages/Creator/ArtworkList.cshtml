@@ -1,0 +1,388 @@
+﻿@page
+@model User.Pages.Creator.ArtworkListModel
+@{
+
+}
+<style>
+    .gallery-item-info {
+        padding: 4px;
+        text-align: center;
+    }
+
+    .user-short-item {
+        display: flex;
+        align-items: center;
+        border-radius: 8px; /* Rounded corners for the container */
+    }
+
+    .artist-profile-pic-suggest {
+        width: 40px; /* Profile picture size */
+        height: 40px; /* Profile picture size */
+        border-radius: 50%; /* Make the image round */
+        margin-right: 4px; /* Space between the image and the name */
+        object-fit: cover; /* Ensures the image covers the area */
+    }
+
+    .artist-name-suggest {
+        font-size: 18px; /* Adjust as needed */
+        color: #333; /* Dark grey color for the text */
+        font-weight: 600; /* Bold font for the artist's name */
+    }
+
+    .gallery-item-stats {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 14px;
+    }
+
+        .gallery-item-stats span {
+            margin: 0 4px;
+        }
+
+    .likes,
+    .comments {
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+    }
+
+        .likes i,
+        .comments i {
+            margin-right: 4px;
+            font-size: 18px;
+        }
+
+    .artwork-status,
+    .artwork-scope {
+        font-weight: normal;
+    }
+
+        .artwork-status b,
+        .artwork-scope b {
+            font-weight: bold;
+        }
+
+</style>
+<div class="container p-0 mb-4" style="margin-top: 76px;">
+    
+    <form method="post" id="myForm">
+        <div class="d-flex justify-content-between align-items-center">
+            <div style="opacity: 0;">
+                <i class="fa-solid fa-arrow-down-wide-short"></i>
+                <span>Filter</span>
+            </div>
+            <div id="titleArtwork" class="title text-center mt-4">
+                <h2 class="position-relative d-inline-block">My Artwork</h2>
+            </div>
+            <div id="toggleFilterBtn" class="btn mt-4">
+                <i class="fa-solid fa-arrow-down-wide-short"></i>
+                <span>Filter</span>
+            </div>            
+        </div>
+        
+        <div id="filter" class="filter-panel mt-3" style="display: none;">
+            <div class="form-row mb-3">
+                <div class="d-flex align-items-center">
+                    <span>
+                        Today
+                    </span>
+                    <div class="mx-3">
+                        <input name="DateFilter" value="@Model.Today" type="radio" class="btn ms-0" onclick="clearDateInput()" checked="@(Model.SearchPayload.SearchCondition.CreatedDate != null && Model.DateFilter == null && Model.SearchPayload.SearchCondition.CreatedDate.Value.DayOfYear == Model.Today.DayOfYear)" />
+                    </div>
+                    <span>
+                        Yesterday
+                    </span>
+                    <div class="mx-3">
+                        <input name="DateFilter" value="@Model.Today.AddDays(-1)" type="radio" class="btn" onclick="clearDateInput()" checked="@(Model.SearchPayload.SearchCondition.CreatedDate != null && Model.DateFilter == null && Model.SearchPayload.SearchCondition.CreatedDate.Value.DayOfYear == Model.Today.AddDays(-1).DayOfYear)" />
+                    </div>
+                    <span>
+                        Last7Date
+                    </span>
+                    <div class="mx-3">
+                        <input name="DateFilter" value="@Model.Today.AddDays(-7)" type="radio" class="btn" onclick="clearDateInput()" checked="@(Model.SearchPayload.SearchCondition.CreatedDate != null && Model.DateFilter == null && Model.SearchPayload.SearchCondition.CreatedDate.Value.DayOfYear == Model.Today.AddDays(-7).DayOfYear)" />
+                    </div>
+                    <span>
+                        Last30Date
+                    </span>
+                    <div class="ms-3">
+                        <input name="DateFilter" value="@Model.Today.AddDays(-30)" type="radio" class="btn" onclick="clearDateInput()" checked="@(Model.SearchPayload.SearchCondition.CreatedDate != null && Model.DateFilter == null && Model.SearchPayload.SearchCondition.CreatedDate.Value.DayOfYear == Model.Today.AddDays(-30).DayOfYear)" />
+                    </div>
+                    <input type="date" name="CustomFilterDate" class="form-control d-inline-block w-auto mx-3" onchange="clearRadioButtons()" value="@(Model.DateFilter?.ToString("yyyy-MM-dd"))" asp-for="@Model.DateFilter">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="d-inline-flex mb-3 me-5">
+                    <div class="label d-flex align-items-center me-3 p-1 px-3">
+                        <span>
+                            Title
+                        </span>
+                    </div>
+                    <div style="width: 522px;">
+                        <input asp-for="@Model.SearchPayload.SearchCondition.Title" type="text" class="form-control form-control-sm py-2" placeholder="Title">
+                    </div>
+                </div>
+                <div class="d-flex align-content-center mb-3">
+                    <div class="label d-flex align-items-center me-3 p-1 px-3">
+                        <span>
+                            Status
+                        </span>
+                    </div>
+                    <select name="PostStatus" class="custom-select custom-select-sm p-2 h-100 me-3" style="border-radius:2px;">
+                        <option selected>Status</option>
+                        <option value="@Model.PostStatusPending" selected="@(Model.SearchPayload.SearchCondition.PostStatus != null && Model.SearchPayload.SearchCondition.PostStatus == Model.PostStatusPending)">Pending</option>
+                        <option value="@Model.PostStatusApproval" selected="@(Model.SearchPayload.SearchCondition.PostStatus != null && Model.SearchPayload.SearchCondition.PostStatus == Model.PostStatusApproval)">Approval</option>
+                        <option value="@Model.PostStatusReject" selected="@(Model.SearchPayload.SearchCondition.PostStatus != null && Model.SearchPayload.SearchCondition.PostStatus == Model.PostStatusReject)">Reject</option>
+                        <option value="@Model.PostStatusRepending" selected="@(Model.SearchPayload.SearchCondition.PostStatus != null && Model.SearchPayload.SearchCondition.PostStatus == Model.PostStatusRepending)">Repending</option>
+                    </select>
+
+                    <div class="label d-flex align-items-center me-3 p-1 px-3">
+                        <span>
+                            Scope
+                        </span>
+                    </div>
+                    <select name="PostScope" class="custom-select custom-select-sm p-2 h-100 me-3" style="border-radius:2px;">
+                        <option selected>Scope</option>
+                        <option value="@Model.PostScopePublic" selected="@(Model.SearchPayload.SearchCondition.PostScope != null && Model.SearchPayload.SearchCondition.PostScope == Model.PostScopePublic)">Public</option>
+                        <option value="@Model.PostScopeSubscriber" selected="@(Model.SearchPayload.SearchCondition.PostScope != null && Model.SearchPayload.SearchCondition.PostScope == Model.PostScopeSubscriber)">Subscriber</option>
+                        <option value="@Model.PostScopePrivate" selected="@(Model.SearchPayload.SearchCondition.PostScope != null && Model.SearchPayload.SearchCondition.PostScope == Model.PostScopePrivate)">Private</option>
+                    </select>
+
+                    <div class="label d-flex align-items-center me-3 p-1 px-3">
+                        <span>
+                            Category
+                        </span>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-around" style="width: 75%; height: 40px; border: 1px solid #767676;">
+                        @foreach (var category in Model.Categories.Select((item, index) => (item, index)).ToList())
+                        {
+                            <div class="form-check">
+                                <input name="SelectedCategories" class="form-check-input" type="checkbox" value="@category.item.CategoryId" checked="@(Model.SearchPayload.SearchCondition.CategoryId != null && Model.SearchPayload.SearchCondition.CategoryId.Any(c => c == category.item.CategoryId))" />
+                                <label class="form-check-label">
+                                    @category.item.CategoryName
+                                </label>
+                            </div>
+                            <input type="hidden" asp-for="@Model.Categories[category.index].CategoryId" />
+                            <input type="hidden" asp-for="@Model.Categories[category.index].CategoryName" />
+                        }
+                    </div>
+
+                </div>
+                <div class="d-flex justify-content-start">
+                    <div class="d-flex justify-content-start mb-3 me-5">
+                        <div class="label d-flex align-items-center me-3 p-1 px-3">
+                            <span>
+                                React
+                            </span>
+                        </div>
+                        <div class="me-3">
+                            <input asp-for="@Model.SearchPayload.SearchCondition.ReactFrom" type="number" class="form-control form-control-sm p-2" placeholder="From">
+                        </div>
+                        <div>
+                            <input asp-for="@Model.SearchPayload.SearchCondition.ReactTo" type="number" class="form-control form-control-sm p-2" placeholder="To">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-start mb-3 me-5">
+                        <div class="label d-flex align-items-center me-3 p-1 px-3">
+                            <span>
+                                Bookmark
+                            </span>
+                        </div>
+                        <div class="me-3">
+                            <input asp-for="@Model.SearchPayload.SearchCondition.BookmarkFrom" type="number" class="form-control form-control-sm p-2" placeholder="From">
+                        </div>
+                        <div>
+                            <input asp-for="@Model.SearchPayload.SearchCondition.BookmarkTo" type="number" class="form-control form-control-sm p-2" placeholder="To">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-start mb-3">
+                        <div class="label d-flex align-items-center me-3 p-1 px-3">
+                            <span>
+                                View
+                            </span>
+                        </div>
+                        <div class="me-3">
+                            <input asp-for="@Model.SearchPayload.SearchCondition.ViewFrom" type="number" class="form-control form-control-sm p-2" placeholder="From">
+                        </div>
+                        <div>
+                            <input asp-for="@Model.SearchPayload.SearchCondition.ViewTo" type="number" class="form-control form-control-sm p-2" placeholder="To">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <select name="SortDirection" class="custom-select custom-select-sm p-2 h-100" style="border-radius:2px;">
+                        <option selected>Sort by</option>
+                        <option value="@Model.SortASC" selected="@(Model.SearchPayload.SearchCondition.SortDirection != null && Model.SearchPayload.SearchCondition.SortDirection == Model.SortASC)">ASC</option>
+                        <option value="@Model.SortDESC" selected="@(Model.SearchPayload.SearchCondition.SortDirection != null && Model.SearchPayload.SearchCondition.SortDirection == Model.SortDESC)">DESC</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="d-flex justify-content-end">
+                    <button type="reset" class="btn btn-sm btn-outline-secondary px-4 py-2 me-4">Clean</button>
+                    <button type="button" onclick="filterSearch()" class="closeModalBtn btn btn-secondary">Filter</button>
+                </div>
+            </div>
+        </div>        
+        <div id="listArtworkPartial">
+            <!-- Show list artwork -->
+            <partial name="Shared/_ArtworkListPartial" model="Model.PageResult" />
+        </div>
+        <input type="hidden" id="pageNumber" asp-for="@Model.SearchPayload.PageInfo.PageNum" value="@Model.SearchPayload.PageInfo.PageNum" />
+        <input type="hidden" id="pageSize" asp-for="@Model.SearchPayload.PageInfo.PageSize" value="@Model.SearchPayload.PageInfo.PageSize" />
+        <input type="hidden" asp-for="@Model.SearchPayload.PageInfo.TotalItems" value="@Model.SearchPayload.PageInfo.TotalItems" />
+        <input type="hidden" asp-for="@Model.SearchPayload.PageInfo.TotalPages" value="@Model.SearchPayload.PageInfo.TotalPages" />
+        <input type="hidden" id="sortCondition" asp-for="@Model.SearchPayload.SearchCondition.SortDirection" value="@Model.SearchPayload.SearchCondition.SortDirection" />
+        <input type="hidden" id="sortType" asp-for="@Model.SearchPayload.SearchCondition.SortType" value="@Model.SearchPayload.SearchCondition.SortType" />
+
+        @*<div class="d-flex justify-content-center mt-3">
+            <div class="text-center me-3">
+                @if (Model.PageResult.PageInfo.TotalPages > 0)
+                {
+                    for (int i = 1; i <= Model.PageResult.PageInfo.TotalPages; i++)
+                    {
+                        <button type="button" class="btn-primary mt-3 fs-6" style="border-radius: 0; width: 40px; height: 40px; padding: 0;">@i</button>
+                    }
+                }
+            </div>
+        </div>*@        
+    </form>
+
+    <!-- Popup show detail artwork -->
+    <div class="modal fade" id="artworkDetailModal" tabindex="-1" role="dialog" aria-labelledby="artworkDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="artworkDetailModalLabel">Artwork Title</h5>
+                    <button type="button" class="btn closeModalBtn">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">                    
+                </div>                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary closeModalBtn" data-dismiss="modal">Cancel</button>
+                    <div class="edit-post">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.AntiForgeryToken()
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script>
+
+    $(document).ready(function () {
+        // Function to toggle the visibility of the filter form
+        $('#toggleFilterBtn').click(function () {
+            $('#filter').toggle(); // Toggle visibility of the form
+        });        
+    });
+
+    $(document).ready(function () {
+        $(document).on('click', '.artwork-item', function () {
+            // Get the index of the clicked artwork item
+            var index = $('.artwork-item').index(this);
+
+            // Populate the modal with post details dynamically based on the index
+            var title = $('#artwork' + index + 'Title').val();
+            var imageUrl = $('#artwork' + index + 'ImageUrl').val();
+            var description = $('#artwork' + index + 'Description').val();
+            var imageProfile = $('#artwork' + index + 'ArtistProfile').val();
+            var artistName = $('#artwork' + index + 'ArtistName').val();
+            var artworkLike = $('#artwork' + index + 'Like').val();
+            var artworkBookmark = $('#artwork' + index + 'Bookmark').val();
+            var artworkScope = $('#artwork' + index + 'Scope').val();
+            if (artworkScope == 1) {
+                artworkScope = "Public";
+            } else if (artworkScope == 2) {
+                artworkScope = "Subscriber";
+            } else {
+                artworkScope = "Private";
+            }
+            
+            var artworkStatus = $('#artwork' + index + 'Status').val();
+            if (artworkStatus == 1) {
+                artworkStatus = "Pending";
+            } else if (artworkStatus == 2) {
+                artworkStatus = "Approval";
+            } else if (artworkStatus == 3) {
+                artworkStatus = "Reject";
+            } else {
+                artworkStatus = "Repending";
+            }
+
+            var id = $('#artwork' + index + 'Id').val();
+
+            $('#artworkDetailModalLabel').text(title);
+            $('.modal-body').html('<img src="' + imageUrl + '" alt="Artwork" class="artwork-item-img"> <div class="gallery-item-info d-flex justify-content-between mt-2"> <div class="user-short-item"> <img src="' + imageProfile + '" class="artist-profile-pic-suggest" /> <span class="artist-name-suggest">' + artistName + '</span> </div> <div class="gallery-item-stats ml-1"> <span class="likes me-3"><i class="far fa-heart"></i>' + artworkLike + '</span> <span class="comments"><i class="far fa-bookmark"></i>' + artworkBookmark + '</span> </div> </div><div class="d-flex justify-content-start my-2"><span class="me-4"><b>Status:</b> <span class="artwork-status">' + artworkStatus + '</span></span><span><b>Scope:</b> <span class="artwork-scope">' + artworkScope + '</span></span></div> <p>' + description + '</p>');
+            $('.edit-post').html('<a href="/Creator/EditPost?postId=' + id + '" class="btn btn-secondary">Edit</a>');
+            // Show the modal
+            $('#artworkDetailModal').modal('show');
+        });
+
+        $('.closeModalBtn').on('click', function () {
+            $('#artworkDetailModal').modal('hide');
+        });
+    });
+
+    function clearDateInput() {
+        document.querySelector('input[type="date"]').value = ''; // Clear date input
+    }
+
+    function clearRadioButtons() {
+        document.querySelectorAll('input[type="radio"]').forEach(function (radio) {
+            radio.checked = false; // Uncheck all radio buttons
+        });
+    }
+
+    function filterSearch() {
+        var form = document.forms.namedItem("myForm");
+        var data = new FormData(form);
+
+        $.ajax({
+            url: '/Creator/ArtworkList?handler=Search', // Replace with your actual controller and action
+            type: 'POST',
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            data: data,
+            processData: false,  // Don't process the data (already FormData)
+            contentType: false,  // Don't set contentType (let jQuery handle it)
+            success: function (partialHtml) {
+                $('#listArtworkPartial').html(partialHtml);
+            },
+            error: function (error) {
+                console.error('Error loading partial:', error);
+            }
+        });
+    }
+   
+    function getListByPaging(pageNumber) {
+        document.getElementById("pageNumber").value = pageNumber;
+        var form = document.forms.namedItem("myForm");
+        var data = new FormData(form);
+
+        $.ajax({
+            url: '/Creator/ArtworkList?handler=Search', // Replace with your actual controller and action
+            type: 'POST',
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            data: data,
+            processData: false,  // Don't process the data (already FormData)
+            contentType: false,  // Don't set contentType (let jQuery handle it)
+            success: function (partialHtml) {
+                $('#listArtworkPartial').html(partialHtml);
+            },
+            error: function (error) {
+                console.error('Error loading partial:', error);
+            }
+        });
+    }
+</script>
