@@ -16,14 +16,12 @@ public class PostService : IPostService
     private readonly IPostRepository postRepository;    
     private readonly IDapperQueryService dapperQueryService;
     private readonly IUnitOfWork unitOfWork;
-    private readonly IPostCategoryRepository postCategoryRepository;
 
-    public PostService(IPostRepository postRepository, IDapperQueryService dapperQueryService, IUnitOfWork unitOfWork, IPostCategoryRepository postCategoryRepository)
+    public PostService(IPostRepository postRepository, IDapperQueryService dapperQueryService, IUnitOfWork unitOfWork)
     {
         this.postRepository = postRepository;
         this.dapperQueryService = dapperQueryService;
-        this.unitOfWork = unitOfWork;
-        this.postCategoryRepository = postCategoryRepository;
+        this.unitOfWork = unitOfWork;        
     }
 
     public async Task<PageResult<PostManagementItem>> GetListPostOrderByDate(
@@ -63,13 +61,12 @@ public class PostService : IPostService
         return postRepository.GetAllPost();
     }
 
-    public async Task<bool> CreateNewPost(Post post, List<PostCategory> postCategories, Image image)
+    public async Task<bool> CreateNewPost(Post post)
     {
         try
         {
             await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
-            await postRepository.AddAsync(post).ConfigureAwait(false);
-            //await postCategoryRepository.AddRangeAsync(postCategories).ConfigureAwait(false);
+            await postRepository.AddAsync(post).ConfigureAwait(false);            
             await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
             return true;
         }
@@ -99,5 +96,33 @@ public class PostService : IPostService
             unitOfWork.RollbackTransaction();
             return Result.Error;
         }
+    }
+    
+    public async Task<Post> UpdatePost(PostUpdateDto post)
+    {
+        try
+        {
+            await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+            var dataUpdate = postRepository.Get(post.PostId);
+            if (post.Images != null && post.Images.First().ImageUrl != null)
+            {
+                dataUpdate.Images.First().ImageUrl = post.Images.First().ImageUrl;
+            }            
+            dataUpdate.Title = post.Title;
+            dataUpdate.Description = post.Description;
+            if (post.PostCategories != null)
+            {
+                dataUpdate.PostCategories = post.PostCategories;
+            }
+            dataUpdate.Scope = post.Scope;
+            var updatedPost = postRepository.Update(dataUpdate);
+            await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+            return updatedPost;
+        }
+        catch (Exception ex)
+        {
+            unitOfWork.RollbackTransaction();
+        }
+        return null;
     }
 }

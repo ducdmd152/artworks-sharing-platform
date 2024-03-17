@@ -9,5 +9,6 @@ public class S3Constants
     public static readonly string BucketName = "AWS_BUCKET_NAME";
     public static readonly string UploadSuccess = "Upload successfull."; 
     public static readonly string DeleteSuccess = "Delete successfull.";
+    public static readonly string FolderS3 = "Artwork/";
     public static readonly string BaseUrlS3 = "S3_BASE_URL";
 }

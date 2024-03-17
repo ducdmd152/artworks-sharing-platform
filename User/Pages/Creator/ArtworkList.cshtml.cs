@@ -6,7 +6,12 @@ using ArtHubBO.Enum;
 using ArtHubBO.Payload;
 using ArtHubService.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 
 namespace User.Pages.Creator
@@ -42,7 +47,8 @@ namespace User.Pages.Creator
         public SortDirection SortASC { get; } = SortDirection.ASC;
         [BindProperty]
         public SortDirection SortDESC { get; } = SortDirection.DESC;
-
+        [BindProperty]
+        public SortType TypeRecent { get; } = SortType.RECENT;
         [BindProperty]
         public List<Category> Categories { get; set; }
 
@@ -62,6 +68,8 @@ namespace User.Pages.Creator
             {
                 SearchPayload.SearchCondition.ArtistEmail = accountEmail;
             }
+            SearchPayload.SearchCondition.SortDirection = SortDirection.DESC;
+            SearchPayload.SearchCondition.SortType = SortType.RECENT;
             Categories = categoryService.GetCategories().ToList();                        
             var output = await postService.GetAllPostBySearchConditionAsync(SearchPayload);
             if (output != null && output.Count > 0)
@@ -72,24 +80,6 @@ namespace User.Pages.Creator
                 PageResult = PageResult.PageNoData(SearchPayload.PageInfo);
             }            
             return;
-        }
-
-        public async Task<IActionResult> OnPostChangePage([FromBody] int pageNumber)
-        {
-            if (pageNumber > 0)
-            {
-                SearchPayload.PageInfo.PageNum = pageNumber;
-            }
-            var output = await postService.GetAllPostBySearchConditionAsync(SearchPayload);
-            if (output != null && output.Count > 0)
-            {
-                PageResult = PageResult.Build(SearchPayload.PageInfo, SearchPayload.PageInfo.TotalItems, output.ToList());
-            }
-            else
-            {
-                PageResult = PageResult.PageNoData(SearchPayload.PageInfo);
-            }
-            return Partial("_ArtworkListPartial", PageResult);
         }
 
         public async Task<IActionResult> OnPostSearchAsync()
@@ -155,7 +145,7 @@ namespace User.Pages.Creator
                 PageResult = PageResult.PageNoData(SearchPayload.PageInfo);
             }
 
-            return Partial("_ArtworkListPartial", PageResult.PageData);
+            return Partial("_ArtworkListPartial", PageResult);
         }
     }
 }

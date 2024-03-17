@@ -15,6 +15,9 @@ public interface IPostService
 
     Post Get(int id);
 
-    Task<bool> CreateNewPost(Post post, List<PostCategory> postCategories, Image image);
+    Task<bool> CreateNewPost(Post post);
+    
+    Task<Post> UpdatePost(PostUpdateDto post);
+    
     Task<Result> UpdateStatusOfPostAsync(int artworkModePostId, int artworkModeMode);
 }
