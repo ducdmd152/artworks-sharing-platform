@@ -1,4 +1,4 @@
-name: ci
+name: user
 
 on:
   pull_request:
@@ -28,6 +28,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile.user
+          file: ./Dockerfile.user2
           push: true
           tags: 1wolfalone1/swd-user:latest
