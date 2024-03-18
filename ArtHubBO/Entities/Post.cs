@@ -13,6 +13,7 @@ namespace ArtHubBO.Entities
             Images = new HashSet<Image>();
             PostCategories = new HashSet<PostCategory>();
             Reactions = new HashSet<Reaction>();
+            Reports = new HashSet<Report>();
         }
 
         [Key]
@@ -50,5 +51,8 @@ namespace ArtHubBO.Entities
         public virtual ICollection<PostCategory> PostCategories { get; set; }
         [InverseProperty("Post")]
         public virtual ICollection<Reaction> Reactions { get; set; }
+        
+        [InverseProperty("Post")]
+        public virtual ICollection<Report> Reports { get; set; }
     }
 }

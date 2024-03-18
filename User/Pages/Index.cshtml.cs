@@ -47,8 +47,6 @@ namespace User.Pages
             };
 
             Posts = await postService.GetAllPostBySearchConditionAsync(SearchPayload);
-
-            _logger.LogInformation("Log ne cu version: 1.1");
         }
     }
 }

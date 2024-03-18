@@ -4,5 +4,6 @@
     {
         FirstQuery,
         GetListPostOrderByDate,
+        GetListReportByDate,
     }
 }

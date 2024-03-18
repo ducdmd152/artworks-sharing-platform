@@ -118,7 +118,6 @@ public class UploadNewArtworkModel : PageModel
             });
         }
         //Image of post
-        logger.LogInformation("Here is link iamges {0}", responseUploadImage.LinkSource);
         Image image = new Image()
         {
             Type = fileExt[1..],
@@ -130,7 +129,8 @@ public class UploadNewArtworkModel : PageModel
             image
         };
         Post.PostCategories = new List<PostCategory>();
-        postCategories.ForEach(pc => Post.PostCategories.Add(pc));                        
+        postCategories.ForEach(pc => Post.PostCategories.Add(pc));     
+        logger.LogInformation("Here is link image {0}", Post.Images.First().ImageUrl);
         await postService.CreateNewPost(ConvertPostUpdateDtoToPost(Post));
         return RedirectToPage(URIConstant.ArtworkList);
     }
