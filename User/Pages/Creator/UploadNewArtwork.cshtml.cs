@@ -131,7 +131,7 @@ public class UploadNewArtworkModel : PageModel
         Post.PostCategories = new List<PostCategory>();
         postCategories.ForEach(pc => Post.PostCategories.Add(pc));     
         logger.LogInformation("Here is link image {0}", Post.Images.First().ImageUrl);
-        await postService.CreateNewPost(ConvertPostUpdateDtoToPost(Post));
+        await postService.CreateNewPost(ConvertPostUpdateDtoToPost(Post)).ConfigureAwait(false);
         return RedirectToPage(URIConstant.ArtworkList);
     }
 
