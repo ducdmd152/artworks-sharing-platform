@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Queries\SelectIsBookmarkedForPost.sql" />
+    <None Remove="Queries\SelectIsReactedForPost.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.28" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="6.0.27" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
@@ -17,6 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Queries\SelectIsBookmarkedForPost.sql" />
+    <EmbeddedResource Include="Queries\SelectIsReactedForPost.sql" />
     <EmbeddedResource Include="Queries\GetListPostOrderByDate.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
