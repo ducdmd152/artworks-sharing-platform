@@ -241,7 +241,8 @@
 <body>
   <div class="artwork-exploration">
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <h1 class="title-local">@Model.Post?.Title</h1>
+          <h1 class="title-local">@Model.Post?.Title</h1>
+          <input type="hidden" value="@Model.Post.PostId" id="postId"/>
         <div class="gallery-item-stats">
                 <span id="love" class=@(Model.IsReacted ? "did" : "")><i class="fa-solid fa-heart"></i> </span>
                 <span id="bookmark" class=@(Model.IsBookmarked ? "did ms-2" : "ms-2")><i class="fa-solid fa-bookmark"></i></span>                
@@ -260,7 +261,7 @@
             <div class="loves-saveds">                    
                 <span class="loves"><i class="fas fa-heart"></i> @Model.Post?.TotalReact</span>
                 <span class="saveds"><i class="fas fa-bookmark"></i> @Model.Post?.TotalBookmark</span>
-                    <button id="report" class="btn-outline-dark" data-bs-toggle="modal" data-bs-target="#report-model" style="border-radius: 4px; color: black;">Report</button>
+                    <button id="report" class="btn-outline-dark" onclick="showReport()" style="border-radius: 4px; color: black;">Report</button>
             </div>
         </div>
         <p class="artwork-description m-2">
@@ -308,34 +309,35 @@
         
     </div>
 
-    <div id="report-model" class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-             <form>
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Report this artwork</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                          <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">
-                                Please complete the reasons for reporting:
-                            </label>
-                            <textarea class="form-control" id="report-reasons" rows="3"></textarea>
-                            <div class="form-text">We'll collect for consideration and processing</div>
-                          </div>                    
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button id="completeReport" type="button" class="btn btn-dark">Report</button>
-                    </div>
+<div id="report-model" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Report this artwork</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </form>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">
+                            Please complete the reasons for reporting:
+                        </label>
+                        <textarea class="form-control" id="report-reasons" rows="3"></textarea>
+                        <div class="form-text">We'll collect for consideration and processing</div>
+                    </div>                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="completeReport" type="button" onclick="report()" class="btn btn-dark">Report</button>
+                </div>
+            </div>
+        </form>
             
-        </div>
     </div>
+</div>
+<partial name="Shared/Partial/_toastyAnnouncePartial"/>
 </body>
-
+@Html.AntiForgeryToken()
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -381,4 +383,52 @@
             //});
         });
     });
+    
+    function showReport(){
+        $('#report-model').modal('show');
+    }
+    
+   function report() {
+        // Get the postId from the hidden input
+        var postId = document.getElementById("postId").value;
+        
+        // Get the reason from the textarea
+        var reason = document.getElementById("report-reasons").value;
+        
+        // Make sure reason is not empty
+        if (reason.trim() === "") {
+            alert("Please provide a reason for reporting.");
+            return;
+        }
+        
+        // Prepare the data to send
+        var data = {
+            postId: postId,
+            reason: reason
+        };
+        
+        $.ajax({
+            url: '/Artworks/Details?handler=Report',
+            type: 'POST',
+            contentType: 'application/json',
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            data: JSON.stringify(data),
+            success: function (response) {
+                // Handle success response here
+                if(response.result === 'Ok'){
+                    showOutOfStockToastSuccess('Report', 'Report successfully!' );
+                }else if(response.result === 'Error'){
+                    showOutOfStockToastDanger('Report', 'You may need login to do this action');
+                }
+                $('#report-model').modal('hide');
+            },
+            error: function (error) {
+                // Handle error response here
+                console.error('Error approving artwork:', error);
+            }
+        });
+    }
+        
 </script>

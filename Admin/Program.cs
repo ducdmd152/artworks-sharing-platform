@@ -30,6 +30,12 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
+builder.Host.ConfigureLogging(logging =>
+{
+    logging.ClearProviders(); // Clear previous providers to avoid duplication
+    logging.AddConsole(); // Add console logger
+});
+
 var redis = ConnectionMultiplexer
     .Connect(Environment.GetEnvironmentVariable("REDIS_URL"));
 // Configure Redis Based Distributed Session

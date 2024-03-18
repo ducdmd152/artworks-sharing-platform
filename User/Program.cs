@@ -31,17 +31,17 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 
 
-//var redis = ConnectionMultiplexer
-//    .Connect(Environment.GetEnvironmentVariable("REDIS_URL"));
-//// Configure Redis Based Distributed Session
-//var redisConfigurationOptions = builder.Configuration["REDIS_URL"];
+var redis = ConnectionMultiplexer
+    .Connect(Environment.GetEnvironmentVariable("REDIS_URL"));
+// Configure Redis Based Distributed Session
+var redisConfigurationOptions = builder.Configuration["REDIS_URL"];
 
-//builder.Services.AddDataProtection()
-//    .PersistKeysToStackExchangeRedis(redis, "Secrets-user-data-protection");
-//builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
-//{
-//    redisCacheConfig.ConfigurationOptions = ConfigurationOptions.Parse(redisConfigurationOptions);
-//});
+builder.Services.AddDataProtection()
+    .PersistKeysToStackExchangeRedis(redis, "Secrets-user-data-protection");
+builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
+{
+    redisCacheConfig.ConfigurationOptions = ConfigurationOptions.Parse(redisConfigurationOptions);
+});
 
 builder.Services.AddSession(options => {
     options.Cookie.Name = "ArtworksSharingPlatform_Session";
@@ -80,7 +80,7 @@ if (!app.Environment.IsDevelopment())
 app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-//app.UseMiddleware<LoginMiddleware>();
+app.UseMiddleware<LoginMiddleware>();
 
 app.UseRouting();
 

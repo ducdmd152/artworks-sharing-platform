@@ -1,10 +1,12 @@
 ﻿using ArtHubBO.DTO;
+using ArtHubBO.Entities;
 using ArtHubBO.Enum;
 using ArtHubBO.Payload;
 using ArtHubDAO.Interface;
 using ArtHubRepository.Enum;
 using ArtHubRepository.Interface;
 using ArtHubService.Interface;
+using Microsoft.Extensions.Logging;
 
 namespace ArtHubService.Service;
 
@@ -14,13 +16,15 @@ public class ReportService : IReportService
     private readonly IReportRepository reportRepository;
     private readonly IAccountRepository accountRepository;
     private readonly IUnitOfWork unitOfWork;
+    private readonly ILogger<ReportService> logger;
 
-    public ReportService(IDapperQueryService dapperQueryService, IReportRepository reportRepository, IUnitOfWork unitOfWork, IAccountRepository accountRepository)
+    public ReportService(IDapperQueryService dapperQueryService, IReportRepository reportRepository, IUnitOfWork unitOfWork, IAccountRepository accountRepository, ILogger<ReportService> logger)
     {
         this.dapperQueryService = dapperQueryService;
         this.reportRepository = reportRepository;
         this.unitOfWork = unitOfWork;
         this.accountRepository = accountRepository;
+        this.logger = logger;
     }
 
 
@@ -86,6 +90,30 @@ public class ReportService : IReportService
         {
             unitOfWork.RollbackTransaction();
             return Result.Error;
+        }
+    }
+
+    public async Task<Result> Register(int reportDetailPostId, string reportDetailReason, string getEmailAccountLogin)
+    {
+        try
+        {
+            var report = new Report
+            {
+                Reason = reportDetailReason,
+                Status = (int)ReportStatus.Pending,
+                PostId = reportDetailPostId,
+                ReporterEmail = getEmailAccountLogin
+            };
+            await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+            this.reportRepository.AddAsync(report);
+            await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+            return Result.Ok;
+        }
+        catch (Exception ex)
+        {
+            this.unitOfWork.RollbackTransaction();
+            logger.LogWarning("Register new report fail {0}", ex.Message);
+            return Result.Ok;
         }
     }
 }
