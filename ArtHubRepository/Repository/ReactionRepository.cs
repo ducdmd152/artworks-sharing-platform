@@ -14,6 +14,6 @@ namespace ArtHubRepository.Repository
         public IEnumerable<Reaction> GetReactions()
         {
             return this.DbSet.AsNoTracking().ToList();
-        }
+        }        
     }
 }

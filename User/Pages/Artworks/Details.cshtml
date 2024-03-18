@@ -100,7 +100,7 @@
             object-position: center;
         }
 
-        .love, .bookmark {
+        #love, #bookmark {
             display: inline-flex;
             justify-content: center;
             align-items: center;
@@ -111,16 +111,16 @@
             color: gray;
         }
 
-        .love:hover, .bookmark:hover {
+        #love:hover, #bookmark:hover {
             transform: scale(1.1);
             cursor: pointer;
         }
 
-        .love:hover i {
+        #love.did ,#love:hover i {
             color: indianred;
         }
 
-        .bookmark:hover i {
+        #bookmark.did, #bookmark:hover i {
             color: goldenrod;
         }
 
@@ -241,10 +241,11 @@
 <body>
   <div class="artwork-exploration">
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <h1 class="title-local">@Model.Post?.Title</h1>
+          <h1 class="title-local">@Model.Post?.Title</h1>
+          <input type="hidden" value="@Model.Post.PostId" id="postId"/>
         <div class="gallery-item-stats">
-                <span class="love"><i class="fa-solid fa-heart"></i> </span>
-                <span class="bookmark ms-2"><i class="fa-solid fa-bookmark"></i></span>
+                <span id="love" class=@(Model.IsReacted ? "did" : "")><i class="fa-solid fa-heart"></i> </span>
+                <span id="bookmark" class=@(Model.IsBookmarked ? "did ms-2" : "ms-2")><i class="fa-solid fa-bookmark"></i></span>                
         </div>
       </div>
       <div class="main-artwork">
@@ -257,9 +258,10 @@
                   <img src="@(Model.Post?.Artist?.Account?.Avatar ?? "https://placehold.co/50")" alt="Artist Profile Picture" class="artist-profile-pic">
                   <span class="artist-name">@Model.Post?.Artist?.ArtistName</span>
             </div>
-            <div class="loves-saveds">
+            <div class="loves-saveds">                    
                 <span class="loves"><i class="fas fa-heart"></i> @Model.Post?.TotalReact</span>
                 <span class="saveds"><i class="fas fa-bookmark"></i> @Model.Post?.TotalBookmark</span>
+                    <button id="report" class="btn-outline-dark" onclick="showReport()" style="border-radius: 4px; color: black;">Report</button>
             </div>
         </div>
         <p class="artwork-description m-2">
@@ -307,4 +309,126 @@
         
     </div>
 
+<div id="report-model" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Report this artwork</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">
+                            Please complete the reasons for reporting:
+                        </label>
+                        <textarea class="form-control" id="report-reasons" rows="3"></textarea>
+                        <div class="form-text">We'll collect for consideration and processing</div>
+                    </div>                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="completeReport" type="button" onclick="report()" class="btn btn-dark">Report</button>
+                </div>
+            </div>
+        </form>
+            
+    </div>
+</div>
+<partial name="Shared/Partial/_toastyAnnouncePartial"/>
 </body>
+@Html.AntiForgeryToken()
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#love").click(function () {
+            var isReacted = !$(this).hasClass("did");
+            var postId = @Model.Post.PostId;
+            $(this).toggleClass("did");
+            $.ajax({
+                url: '/Artworks/Details?handler=ReactAsync&postId=' + postId,
+                type: 'POST',
+                success: function (result) {
+                    console.log("Update successful");
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 401) {
+                        window.location.href = '/Login';
+                    } else {
+                        console.error("Error updating post reaction:", error);
+                        $("#love").toggleClass("did");
+                    }
+                }
+            });
+        });
+        $("#bookmark").click(function () {
+            var isReacted = !$(this).hasClass("did");
+            $(this).toggleClass("did");
+
+            // Gửi yêu cầu AJAX đến máy chủ để cập nhật cơ sở dữ liệu
+            //$.ajax({
+            //    url: '/UpdatePostReaction',
+            //    type: 'POST',
+            //    contentType: 'application/json',
+            //    data: JSON.stringify({ postId: postId, isReacted: isReacted }),
+            //    success: function (result) {
+            //        console.log("Update successful");
+            //    },
+            //    error: function (xhr, status, error) {
+            //        console.error("Error updating post reaction:", error);
+            //        $("#" + reactionType).toggleClass("did");
+            //    }
+            //});
+        });
+    });
+    
+    function showReport(){
+        $('#report-model').modal('show');
+    }
+    
+   function report() {
+        // Get the postId from the hidden input
+        var postId = document.getElementById("postId").value;
+        
+        // Get the reason from the textarea
+        var reason = document.getElementById("report-reasons").value;
+        
+        // Make sure reason is not empty
+        if (reason.trim() === "") {
+            alert("Please provide a reason for reporting.");
+            return;
+        }
+        
+        // Prepare the data to send
+        var data = {
+            postId: postId,
+            reason: reason
+        };
+        
+        $.ajax({
+            url: '/Artworks/Details?handler=Report',
+            type: 'POST',
+            contentType: 'application/json',
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            data: JSON.stringify(data),
+            success: function (response) {
+                // Handle success response here
+                if(response.result === 'Ok'){
+                    showOutOfStockToastSuccess('Report', 'Report successfully!' );
+                }else if(response.result === 'Error'){
+                    showOutOfStockToastDanger('Report', 'You may need login to do this action');
+                }
+                $('#report-model').modal('hide');
+            },
+            error: function (error) {
+                // Handle error response here
+                console.error('Error approving artwork:', error);
+            }
+        });
+    }
+        
+</script>

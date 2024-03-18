@@ -140,7 +140,7 @@ public class EditPostModel : PageModel
         }
         
 
-        await postService.UpdatePost(Post);
+        await postService.UpdatePost(Post).ConfigureAwait(false);
 
         return RedirectToPage(URIConstant.ArtworkList);
     }
