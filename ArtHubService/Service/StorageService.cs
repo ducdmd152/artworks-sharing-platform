@@ -51,7 +51,7 @@ public class StorageService : IStorageService
 
             response.StatusCode = (int) HttpStatusCode.OK;
             response.Message = S3Constants.UploadSuccess;
-            response.LinkSource = "https://bird-trading-platform.s3.ap-southeast-1.amazonaws.com/" + s3Object.Name;
+            response.LinkSource = "https://d28yx6l5j59h9f.cloudfront.net/" + s3Object.Name;
             logger.LogInformation("Push to s3 success with link url {0}", response.LinkSource);
         } catch (AmazonS3Exception ex)
         {
