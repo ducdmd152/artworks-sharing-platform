@@ -8,14 +8,22 @@ using ArtHubBO.Models;
 using ArtHubService.Interface;
 using System.Net;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace ArtHubService.Service;
 
 public class StorageService : IStorageService
 {
+    private readonly ILogger<StorageService> logger;
+
+    public StorageService(ILogger<StorageService> logger)
+    {
+        this.logger = logger;
+    }
+
     public async Task<S3ResponseDto> UploadFileAsync(S3ObjectModel s3Object, AwsCredentials awsCredentials)
     {
-        //Add AWS credentials
+        //Add AWS credential
         var credentials = new BasicAWSCredentials(awsCredentials.AwsKey, awsCredentials.AwsSecret);
         //Specify the region
         var config = new AmazonS3Config()
@@ -44,14 +52,17 @@ public class StorageService : IStorageService
             response.StatusCode = (int) HttpStatusCode.OK;
             response.Message = S3Constants.UploadSuccess;
             response.LinkSource = "https://bird-trading-platform.s3.ap-southeast-1.amazonaws.com/" + s3Object.Name;
+            logger.LogInformation("Push to s3 success with link url {0}", response.LinkSource);
         } catch (AmazonS3Exception ex)
         {
             response.StatusCode = (int) ex.StatusCode;
             response.Message = ex.Message;
+            logger.LogWarning("Push image to s3 fail {0}", ex.Message);
         } catch (Exception ex) 
         {
             response.StatusCode = (int) HttpStatusCode.InternalServerError;
             response.Message = ex.Message;
+            logger.LogWarning("Push image to s3 fail {0}", ex.Message);
         }
         return response;
     }

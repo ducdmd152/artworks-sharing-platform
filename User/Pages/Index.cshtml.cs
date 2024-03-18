@@ -1,4 +1,5 @@
-﻿using ArtHubBO.DTO;
+﻿using System.Diagnostics;
+using ArtHubBO.DTO;
 using ArtHubBO.Entities;
 using ArtHubBO.Enum;
 using ArtHubBO.Payload;
@@ -11,10 +12,12 @@ namespace User.Pages
     public class IndexModel : PageModel
     {
         private readonly IPostService postService;
+        private readonly ILogger<IndexModel> _logger;
 
-        public IndexModel(IPostService postService) : base()
+        public IndexModel(IPostService postService, ILogger<IndexModel> logger) : base()
         {
             this.postService = postService;
+            _logger = logger;
         }
 
         public IList<Post> Posts { get; set; } = default!;
@@ -44,6 +47,8 @@ namespace User.Pages
             };
 
             Posts = await postService.GetAllPostBySearchConditionAsync(SearchPayload);
+
+            _logger.LogInformation("Log ne cu version: 1.1");
         }
     }
 }

@@ -30,17 +30,6 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
-var redis = ConnectionMultiplexer
-    .Connect(Environment.GetEnvironmentVariable("REDIS_URL"));
-// Configure Redis Based Distributed Session
-var redisConfigurationOptions = builder.Configuration["REDIS_URL"];
-
-builder.Services.AddDataProtection()
-    .PersistKeysToStackExchangeRedis(redis, "Secrets-user-data-protection");
-builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
-{
-    redisCacheConfig.ConfigurationOptions = ConfigurationOptions.Parse(redisConfigurationOptions);
-});
 
 
 
@@ -49,11 +38,16 @@ builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromMinutes(60 * 24);
 });
 
+// Logging configuration
+builder.Host.ConfigureLogging(logging =>
+{
+    logging.ClearProviders();
+    logging.AddConsole();
+});
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IBaseDAO<>), typeof(BaseDAO<>));
 builder.Services.AddTransient<IHelper, Helper>();
-
 string connectionString = builder.Configuration["DATABASE_URL"];
 // Register IDbConnection in DI container
 builder.Services.AddScoped<IDbConnection>((sp) => new SqlConnection(connectionString));
