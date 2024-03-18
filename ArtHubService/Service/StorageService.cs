@@ -7,6 +7,8 @@ using ArtHubBO.DTO;
 using ArtHubBO.Models;
 using ArtHubService.Interface;
 using System.Net;
+using Microsoft.Extensions.Configuration;
+
 namespace ArtHubService.Service;
 
 public class StorageService : IStorageService
@@ -41,7 +43,7 @@ public class StorageService : IStorageService
 
             response.StatusCode = (int) HttpStatusCode.OK;
             response.Message = S3Constants.UploadSuccess;
-            response.LinkSource = S3Constants.BaseUrlS3 + s3Object.Name;
+            response.LinkSource = "https://bird-trading-platform.s3.ap-southeast-1.amazonaws.com/" + s3Object.Name;
         } catch (AmazonS3Exception ex)
         {
             response.StatusCode = (int) ex.StatusCode;
