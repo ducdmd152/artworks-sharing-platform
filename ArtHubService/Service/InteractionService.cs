@@ -66,10 +66,14 @@ namespace ArtHubService.Service
                 PostId = postId
             };
 
+            var post = this.postRepository.Get(postId);
+            post.TotalReact += 1;
+
             try
             {                
                 await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
                 await reactionRepository.AddAsync(reaction).ConfigureAwait(false);
+                postRepository.Update(post);
                 await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
                 return true;
             }
@@ -90,10 +94,14 @@ namespace ArtHubService.Service
                 PostId = postId
             };
 
+            var post = this.postRepository.Get(postId);
+            post.TotalBookmark += 1;
+
             try
             {
                 await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
                 await bookmarkRepository.AddAsync(bookmark).ConfigureAwait(false);
+                postRepository.Update(post);
                 await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
                 return true;
             }
@@ -110,11 +118,13 @@ namespace ArtHubService.Service
             if (!this.CheckIsReactedForPost(email, postId))
                 return true;
             Reaction reaction = this.reactionRepository.GetByCompositeKey(email, postId);
-
+            var post = this.postRepository.Get(postId);
+            post.TotalReact -= 1;
             try
             {
                 await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
                 reactionRepository.Remove(reaction);
+                postRepository.Update(post);
                 await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
                 return true;
             }
@@ -130,11 +140,14 @@ namespace ArtHubService.Service
             if (!this.CheckIsBookmarkedForPost(email, postId))
                 return true;
             Bookmark bookmark = bookmarkRepository.GetByCompositeKey(email, postId);
+            var post = this.postRepository.Get(postId);
+            post.TotalBookmark -= 1;
 
             try
             {
                 await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
                 bookmarkRepository.Remove(bookmark);
+                postRepository.Update(post);
                 await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
                 return true;
             }

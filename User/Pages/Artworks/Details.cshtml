@@ -258,9 +258,9 @@
                   <img src="@(Model.Post?.Artist?.Account?.Avatar ?? "https://placehold.co/50")" alt="Artist Profile Picture" class="artist-profile-pic">
                   <span class="artist-name">@Model.Post?.Artist?.ArtistName</span>
             </div>
-            <div class="loves-saveds">                    
-                <span class="loves"><i class="fas fa-heart"></i> @Model.Post?.TotalReact</span>
-                <span class="saveds"><i class="fas fa-bookmark"></i> @Model.Post?.TotalBookmark</span>
+            <div class="loves-saveds">
+                    <span class="loves"><i class="fas fa-heart"></i><span id="noLoves">@Model.Post?.TotalReact</span> </span>
+                    <span class="saveds"><i class="fa-solid fa-eye"></i> @Model.Post?.TotalView</span>
                     <button id="report" class="btn-outline-dark" onclick="showReport()" style="border-radius: 4px; color: black;">Report</button>
             </div>
         </div>
@@ -346,6 +346,7 @@
         $("#love").click(function () {
             var isReacted = !$(this).hasClass("did");
             var postId = @Model.Post.PostId;
+            var loves = parseInt($("#noLoves").text(), 0);
             $(this).toggleClass("did");
 
             if (isReacted) {
@@ -355,8 +356,9 @@
                     headers: {
                         RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
                     },
-                    success: function (result) {
+                    success: function (result) {                     
                         console.log("Update successful");
+                        $("#noLoves").text("" + (loves + 1));
                     },
                     error: function (xhr, status, error) {
                         if (xhr.status === 401) {
@@ -377,6 +379,7 @@
                     },
                     success: function (result) {
                         console.log("Update successful");
+                        $("#noLoves").text("" + (loves - 1));
                     },
                     error: function (xhr, status, error) {
                         if (xhr.status === 401) {
