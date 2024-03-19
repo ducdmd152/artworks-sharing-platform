@@ -7,8 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Queries\SelectAllPostListForAuthenticatedAudience.sql" />
     <None Remove="Queries\SelectIsBookmarkedForPost.sql" />
     <None Remove="Queries\SelectIsReactedForPost.sql" />
+    <None Remove="Queries\SelectSuggestPostList.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Queries\SelectSuggestPostList.sql" />
+    <EmbeddedResource Include="Queries\SelectAllPostListForAuthenticatedAudience.sql" />
     <EmbeddedResource Include="Queries\SelectIsBookmarkedForPost.sql" />
     <EmbeddedResource Include="Queries\SelectIsReactedForPost.sql" />
     <EmbeddedResource Include="Queries\GetListPostOrderByDate.sql">
