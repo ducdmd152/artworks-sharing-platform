@@ -8,6 +8,7 @@ using ArtHubRepository.Enum;
 using ArtHubRepository.Interface;
 using ArtHubRepository.Repository;
 using ArtHubService.Interface;
+using Microsoft.Extensions.Logging;
 
 namespace ArtHubService.Service;
 
@@ -16,12 +17,14 @@ public class PostService : IPostService
     private readonly IPostRepository postRepository;    
     private readonly IDapperQueryService dapperQueryService;
     private readonly IUnitOfWork unitOfWork;
+    private readonly ILogger<PostService> logger;
 
-    public PostService(IPostRepository postRepository, IDapperQueryService dapperQueryService, IUnitOfWork unitOfWork)
+    public PostService(IPostRepository postRepository, IDapperQueryService dapperQueryService, IUnitOfWork unitOfWork, ILogger<PostService> logger)
     {
         this.postRepository = postRepository;
         this.dapperQueryService = dapperQueryService;
-        this.unitOfWork = unitOfWork;        
+        this.unitOfWork = unitOfWork;
+        this.logger = logger;
     }
 
     public async Task<PageResult<PostManagementItem>> GetListPostOrderByDate(
@@ -66,7 +69,8 @@ public class PostService : IPostService
         try
         {
             await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
-            await postRepository.AddAsync(post).ConfigureAwait(false);            
+            await postRepository.AddAsync(post).ConfigureAwait(false);    
+            logger.LogInformation("Image in post service {0}", post.Images.First().ImageUrl);
             await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
             return true;
         }

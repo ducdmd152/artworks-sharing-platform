@@ -4,6 +4,9 @@
     {
         FirstQuery,
         GetListPostOrderByDate,
+        GetListReportByDate,
+        SelectIsReactedForPost,
+        SelectIsBookmarkedForPost,
         SubcribeChartQuery,
     }
 }

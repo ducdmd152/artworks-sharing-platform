@@ -1,0 +1,29 @@
+﻿@using ArtHubBO.Enum
+@model List<ArtHubBO.DTO.ReportManagementItem>
+
+@{
+    Layout = null;
+}
+
+@foreach (var report in @Model.Select((item, index) => (item, index)).ToList())
+{
+    <tr>
+        <td>@report.item.ReportId</td>
+        <td>@report.item.FullName</td>
+        <td>@report.item.Reason</td>
+        @if (report.item.Status == (int)ReportStatus.Reviewed)
+        {
+            <td><span class="badge bg-success">Reviewed</span></td>
+        }
+        else if (report.item.Status == (int)ReportStatus.Pending)
+        {
+            <td><span class="badge bg-info">Pending</span></td>
+        }
+        
+        <td>@report.item.ArtistName</td>
+        
+        <td>@report.item.PostId</td>
+        
+        <td><span type="button" class="btn btn-detail" onclick="showDetailArtwork('@report.item.PostId', '@report.item.ReportId')">Details</span></td>
+    </tr>
+}

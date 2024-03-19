@@ -6,11 +6,11 @@ namespace Admin.Pages
 {
     public class DashboardModel : PageModel
     {
-        private readonly ISubcribersService _isubscribersService;
+        private readonly ISubscriberService _isubscribersService;
         private readonly IAccountService _accountService;
         private readonly ITransactionService _transactionService;
 
-        public DashboardModel(ISubcribersService isubscribersService, IAccountService accountService, ITransactionService transactionService)
+        public DashboardModel(ISubscriberService isubscribersService, IAccountService accountService, ITransactionService transactionService)
         { 
             _isubscribersService = isubscribersService;
             _accountService = accountService;

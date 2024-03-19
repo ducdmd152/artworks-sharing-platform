@@ -2,7 +2,8 @@
 
 namespace ArtHubRepository.Interface
 {
-    public interface IBookmarkRepository : IBaseRepository<Bookmark> 
+    public interface IBookmarkRepository : IBaseRepository<Bookmark>
     {
+        Bookmark GetByCompositeKey(string email, int postId);
     }
 }

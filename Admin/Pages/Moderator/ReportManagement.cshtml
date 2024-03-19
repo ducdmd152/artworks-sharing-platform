@@ -1,0 +1,141 @@
+﻿@page
+@model Admin.Pages.ReportManagement
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Artwork management</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/moderator/artworkmanagement/artwork_management.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <!-- Fontawesome cdn -->
+</head>
+<body>
+
+@await Component.InvokeAsync("Header")
+
+<!-- Header -->
+<div class="container m-4 text-center m-auto">
+    <h1 class="">Report Management</h1>
+</div>
+
+<div class="container text-center">
+    <hr style="padding: 1px; width: 80%; margin: auto"/>
+</div>
+
+<!-- Table -->
+<div class="container mt-5">
+    <div class="d-flex ">
+        <div class="d-flex mb-3 me-2 col-4">
+            <select id="search-key" class="form-select" style="width: fit-content; border-right: none;" aria-label="Default select example">
+                <option selected value="1">Title</option>
+                <option value="2">Artwork ID</option>
+                <option value="3">Date</option>
+                <option value="4">Creator</option>
+            </select>
+            <div class=" d-flex align-items-center">
+                <input type="text" class="form-control" placeholder="Search" aria-label="Search">
+                <div class="input-group-prepend" onclick="getListBySearch(1)" style="cursor: pointer;">
+                    <span class="input-group-text material-symbols-outlined" >search</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="">
+            <!-- Dropdown for Status -->
+            <select id="search-status" class="form-select" aria-label="Default select example" onchange="getListBySearch(2)">
+                <option value="null" selected>Status</option>
+                <option value="1">Pending</option>
+                <option value="2">Approved</option>
+                <option value="3">Rejected</option>
+                <option value="4">Re-pending</option>
+                <!-- ...other statuses... -->
+            </select>
+        </div>
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr style="background-color: #f8f9fa; font-weight: 500;">
+            <td>Report ID</td>
+            <td>Reporter</td>
+            <td>Reason</td>
+            <td>Status</td>
+            <td>Creator</td>
+            <td>Post Id</td>
+            <td></td> <!-- Details column -->
+        </tr>
+        </thead>
+        <tbody id="listPartial">
+        <!-- Repeat for each artwork entry -->
+        <div >
+            <partial name="Shared/_ReportListPartial" model="@Model.PageResult.PageData" />
+        </div>
+        <!-- Additional rows -->
+        </tbody>
+    </table>
+    @* paging *@
+    <div id="pagingPartial">
+        <partial name="Shared/_PagingPartial" model="@Model.PageResult.PageInfo"/>
+    </div>
+
+    <!-- Popup show upload artwork -->
+    <div class="modal fade" id="artworkDetailModal" tabindex="-1" role="dialog" aria-labelledby="artworkDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header m-auto">
+                    <h5 class="modal-title" id="modalArtworkTitle">
+                        <span>Artwork Title</span>
+                    </h5>                        
+                    <button type="button" class="btn closeModalBtn" onclick="onCloseClick()">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Image preview -->
+                    <!-- Bag with green color -->
+                    <div class="bag-icon" id="modelBorderVisibility">
+                        <span id="modalVisibility">Public</span>
+                    </div>
+                    <!-- Image preview -->
+                    <img src="" alt="Artwork" id="modalImagePreview" class="img-fluid rounded" style="width: 760px; height: 430px;">
+                    <div class="d-flex align-items-center">
+                        <span class="me-1 fw-bold">Artist</span>
+                    </div>                        
+                    <div class="d-flex align-items-center">
+                        <div class="avatar mb-3">
+                            <img src=""  id="modelAvatarImage" class="rounded-circle me-2" alt="Avatar" style="width: 40px; height: 40px;">
+                        </div>
+                        <h5 class="text-center" id="modelArtistName">John Doe</h5>
+                    </div>
+                    
+                    <p class="card-text ms-2" id="modalDescription"></p>
+                    
+                    <!-- Buttons -->
+                    <div class="text-center mt-3">
+                        <button type="button" class="btn btn-success me-2" onclick="skipReport()">Skip</button>
+                        <button type="button" class="btn btn-success me-2" onclick="banThePost()">Ban Post</button>
+                        <button type="button" class="btn btn-danger" onclick="banTheArtist()">Ban artist</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <partial name="Shared/Partial/_toastyAnnouncePartial"/>
+</div>
+
+<partial name="Shared/Footer"/>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" ></script>
+<script src="~/js/reportManagement/report-management.js"></script>
+@Html.AntiForgeryToken()
+</body>
+</html>
