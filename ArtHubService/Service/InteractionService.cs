@@ -58,7 +58,7 @@ namespace ArtHubService.Service
 
         public async Task<bool> ReactForPost(string email, int postId)
         {
-            if (this.CheckIsReactedForPost(email, postId) == false)
+            if (this.CheckIsReactedForPost(email, postId))
                 return true;
             Reaction reaction = new Reaction()
             {
@@ -82,7 +82,7 @@ namespace ArtHubService.Service
 
         public async Task<bool> BookmarkForPost(string email, int postId)
         {
-            if (this.CheckIsBookmarkedForPost(email, postId) == false)
+            if (this.CheckIsBookmarkedForPost(email, postId))
                 return true;
             Bookmark bookmark = new Bookmark()
             {
@@ -105,23 +105,63 @@ namespace ArtHubService.Service
         }
 
 
+        public async Task<bool> UnReactForPost(string email, int postId)
+        {
+            if (!this.CheckIsReactedForPost(email, postId))
+                return true;
+            Reaction reaction = this.reactionRepository.GetByCompositeKey(email, postId);
 
-        //public async Task<bool> OneMoreView(int postId)
-        //{
-        //    var entity = postRepository.Get(postId);
-        //    entity.TotalView = entity.TotalView + 1;
-        //    try
-        //    {
-        //        await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
-        //        await postRepository.UpdateAsync(entity).ConfigureAwait(false);
-        //        await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        unitOfWork.RollbackTransaction();
-        //    }
-        //    return false;
-        //}
+            try
+            {
+                await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+                reactionRepository.Remove(reaction);
+                await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                unitOfWork.RollbackTransaction();
+            }
+            return false;
+        }
+
+        public async Task<bool> UnBookmarkForPost(string email, int postId)
+        {
+            if (!this.CheckIsBookmarkedForPost(email, postId))
+                return true;
+            Bookmark bookmark = bookmarkRepository.GetByCompositeKey(email, postId);
+
+            try
+            {
+                await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+                bookmarkRepository.Remove(bookmark);
+                await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                unitOfWork.RollbackTransaction();
+            }
+            return false;
+        }
+
+
+        public async Task<bool> OneMoreView(int postId)
+        {
+            var entity = postRepository.Get(postId);
+            entity.TotalView = entity.TotalView + 1;
+            try
+            {
+                await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+                this.postRepository.Update(entity);
+                await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                unitOfWork.RollbackTransaction();
+            }
+            return false;
+        }
     }
 }

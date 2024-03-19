@@ -347,40 +347,94 @@
             var isReacted = !$(this).hasClass("did");
             var postId = @Model.Post.PostId;
             $(this).toggleClass("did");
-            $.ajax({
-                url: '/Artworks/Details?handler=ReactAsync&postId=' + postId,
-                type: 'POST',
-                success: function (result) {
-                    console.log("Update successful");
-                },
-                error: function (xhr, status, error) {
-                    if (xhr.status === 401) {
-                        window.location.href = '/Login';
-                    } else {
-                        console.error("Error updating post reaction:", error);
-                        $("#love").toggleClass("did");
+
+            if (isReacted) {
+                $.ajax({
+                    url: '/Artworks/Details?handler=React&postId=' + postId,
+                    type: 'POST',
+                    headers: {
+                        RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (result) {
+                        console.log("Update successful");
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.status === 401) {
+                            window.location.href = '/Authenticate/Login';
+                        } else {
+                            console.error("Error updating post reaction:", error);
+                            //$("#love").toggleClass("did");
+                        }
                     }
-                }
-            });
+                });
+            }
+            else {
+                $.ajax({
+                    url: '/Artworks/Details?handler=UnReact&postId=' + postId,
+                    type: 'POST',
+                    headers: {
+                        RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (result) {
+                        console.log("Update successful");
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.status === 401) {
+                            window.location.href = '/Authenticate/Login';
+                        } else {
+                            console.error("Error updating post reaction:", error);
+                            //$("#love").toggleClass("did");
+                        }
+                    }
+                });
+            }
+            
         });
         $("#bookmark").click(function () {
-            var isReacted = !$(this).hasClass("did");
+            var isBookmarked = !$(this).hasClass("did");
+            var postId = @Model.Post.PostId;
             $(this).toggleClass("did");
 
-            // Gửi yêu cầu AJAX đến máy chủ để cập nhật cơ sở dữ liệu
-            //$.ajax({
-            //    url: '/UpdatePostReaction',
-            //    type: 'POST',
-            //    contentType: 'application/json',
-            //    data: JSON.stringify({ postId: postId, isReacted: isReacted }),
-            //    success: function (result) {
-            //        console.log("Update successful");
-            //    },
-            //    error: function (xhr, status, error) {
-            //        console.error("Error updating post reaction:", error);
-            //        $("#" + reactionType).toggleClass("did");
-            //    }
-            //});
+            if (isBookmarked) {
+                $.ajax({
+                    url: '/Artworks/Details?handler=Bookmark&postId=' + postId,
+                    type: 'POST',
+                    headers: {
+                        RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (result) {
+                        console.log("Update successful");
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.status === 401) {
+                            window.location.href = '/Authenticate/Login';
+                        } else {
+                            console.error("Error updating post reaction:", error);
+                            //$("#bookmark").toggleClass("did");
+                        }
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    url: '/Artworks/Details?handler=UnBookmark&postId=' + postId,
+                    type: 'POST',
+                    headers: {
+                        RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (result) {
+                        console.log("Update successful");
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.status === 401) {
+                            window.location.href = '/Authenticate/Login';
+                        } else {
+                            console.error("Error updating post reaction:", error);
+                            //$("#bookmark").toggleClass("did");
+                        }
+                    }
+                });
+            }
         });
     });
     

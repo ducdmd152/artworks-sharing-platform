@@ -29,25 +29,25 @@ namespace User.Pages.Artworks
         public List<Post> OtherSuggestion = default!;
         public bool IsReacted { get; set; }
         public bool IsBookmarked { get; set; }
-        public async Task<IActionResult> OnGetAsync(string id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             if (id == null)
             {
                 return NotFound();
-            }
-            if (!int.TryParse(id, out int postId))
-            {
-                return NotFound();
-            }            
+            } 
 
-            var item = postService.Get(postId);
-            if (item == null)
+            var item = postService.Get(id);
+            if (item == null || (item.Status != (int)PostStatus.Approval))
             {
                 return NotFound();
             }
             else
             {
                 Post = item;
+                var email = this.GetEmailAccountLogin();
+                IsReacted = interactionService.CheckIsReactedForPost(email, id);
+                IsBookmarked = interactionService.CheckIsBookmarkedForPost(email, id);
+                await interactionService.OneMoreView(id).ConfigureAwait(false);
 
                 ArtistSuggestion = await postService.GetAllPostBySearchConditionAsync(new SearchPayload<PostSearchConditionDto>()
                 {
@@ -84,14 +84,49 @@ namespace User.Pages.Artworks
 
         public async Task<IActionResult> OnPostReactAsync(int postId)
         {
-            var userString = HttpContext.Session.GetString("CREDENTIAL");
-            var user = userString != null ? JsonConvert.DeserializeObject<Account>(userString) : null;
-            if (user == null)
+            var email = this.GetEmailAccountLogin();
+            if (email == null)
             {
                 return new UnauthorizedResult();
             }
 
-            interactionService.ReactForPost(user.Email, postId);
+            await interactionService.ReactForPost(email, postId);
+            return new OkResult();
+        }
+
+        public async Task<IActionResult> OnPostUnReactAsync(int postId)
+        {
+            var email = this.GetEmailAccountLogin();
+            if (email == null)
+            {
+                return new UnauthorizedResult();
+            }
+
+            await interactionService.UnReactForPost(email, postId);
+            return new OkResult();
+        }
+
+        public async Task<IActionResult> OnPostBookmarkAsync(int postId)
+        {
+            var email = this.GetEmailAccountLogin();
+            if (email == null)
+            {
+                return new UnauthorizedResult();
+            }
+
+            await interactionService.BookmarkForPost(email, postId);
+            return new OkResult();
+        }
+
+        public async Task<IActionResult> OnPostUnBookmarkAsync(int postId)
+        {
+            var email = this.GetEmailAccountLogin();
+            if (email == null)
+            {
+                return new UnauthorizedResult();
+            }
+
+            await interactionService.UnBookmarkForPost(email, postId);
             return new OkResult();
         }
 

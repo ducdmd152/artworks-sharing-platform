@@ -9,5 +9,7 @@ namespace ArtHubRepository.Repository
         public BookmarkRepository(IBaseDAO<Bookmark> baseDAO) : base(baseDAO)
         {
         }
+
+        public Bookmark GetByCompositeKey(string email, int postId) => this.DbSet.FirstOrDefault(item => item.AccountEmail == email && item.PostId == postId);
     }
 }
