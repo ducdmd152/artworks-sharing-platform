@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ArtHubBO.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,8 @@ namespace ArtHubService.Interface
     public interface ISubcribersService
     {
         public int GetTotalSubscribers();
-    }
+
+        public  Task<IEnumerable<subchart>> GetSubChaartQuery();
+
+	}
 }
