@@ -11,4 +11,5 @@ public class ArtistDataQueryDto
     public int TotalView { get; set; }
     public int TotalBookmark { get; set; }
     public string? PostDetail { get; set; }
+    public int TotalPostCount { get; set; }    
 }

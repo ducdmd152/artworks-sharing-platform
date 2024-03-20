@@ -11,4 +11,5 @@ public class ArtistDataDto
     public int TotalView { get; set; }
     public int TotalBookmark { get; set; }
     public List<PostDetailDto> PostDetailDtos { get; set; } = new List<PostDetailDto>();
+    public int TotalPostCount { get; set; }
 }
