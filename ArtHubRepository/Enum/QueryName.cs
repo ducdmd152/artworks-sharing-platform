@@ -4,5 +4,8 @@
     {
         FirstQuery,
         GetListPostOrderByDate,
+        GetListReportByDate,
+        SelectIsReactedForPost,
+        SelectIsBookmarkedForPost,
     }
 }

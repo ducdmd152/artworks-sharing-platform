@@ -4,11 +4,15 @@ using ArtHubDAO.Interface;
 using ArtHubRepository.DapperService;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Text.Json.Serialization;
+using ArtHubBO.Entities;
 using ArtHubService.Service;
+using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 using User.Pages.Filter;
 using User.Helpers;
-
+using Microsoft.AspNetCore.DataProtection;
+DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -21,37 +25,44 @@ builder.Services.Scan(scan => scan
      type.Name.EndsWith("Repository") || type.Name.EndsWith("Service")))
     .AsImplementedInterfaces()
     .WithScopedLifetime());
-
-// Configure Redis Based Distributed Session
-//var redisConfigurationOptions = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"));
-
-//builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
-//{
-//    redisCacheConfig.ConfigurationOptions = redisConfigurationOptions;
-//});
-
-//builder.Services.AddSession(options =>
-//{
-//    options.Cookie.Name = "ArtworksSharingPlatform_Session";
-//    options.IdleTimeout = TimeSpan.FromMinutes(60 * 24);
-//});
-
-//Add session
-builder.Services.AddSession(options =>
+builder.Services.AddControllers().AddJsonOptions(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
+
+//var redis = ConnectionMultiplexer
+//    .Connect(Environment.GetEnvironmentVariable("REDIS_URL"));
+//// Configure Redis Based Distributed Session
+//var redisConfigurationOptions = builder.Configuration["REDIS_URL"];
+
+//builder.Services.AddDataProtection()
+//    .PersistKeysToStackExchangeRedis(redis, "Secrets-user-data-protection");
+//builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
+//{
+//    redisCacheConfig.ConfigurationOptions = ConfigurationOptions.Parse(redisConfigurationOptions);
+//});
+
+builder.Services.AddSession(options => {
+    options.Cookie.Name = "ArtworksSharingPlatform_Session";
+    options.IdleTimeout = TimeSpan.FromMinutes(60 * 24);
+});
+
+// Logging configuration
+builder.Host.ConfigureLogging(logging =>
+{
+    logging.ClearProviders();
+    logging.AddConsole();
+});
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IBaseDAO<>), typeof(BaseDAO<>));
 builder.Services.AddTransient<IHelper, Helper>();
-
-string connectionString = builder.Configuration.GetConnectionString("DBDefault");
+string connectionString = builder.Configuration["DATABASE_URL"];
 // Register IDbConnection in DI container
 builder.Services.AddScoped<IDbConnection>((sp) => new SqlConnection(connectionString));
+builder.Services.AddDbContext<ArtHubDbContext>(options =>
+    options.UseSqlServer(builder.Configuration["DATABASE_URL"]));
 
 builder.Services.AddMemoryCache();
 
@@ -69,7 +80,7 @@ if (!app.Environment.IsDevelopment())
 app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-//app.UseMiddleware<LoginMiddleware>();
+app.UseMiddleware<LoginMiddleware>();
 
 app.UseRouting();
 

@@ -1,3 +1,4 @@
+using System.Runtime.Serialization;
 using ArtHubBO.Constants;
 using ArtHubBO.DTO;
 using ArtHubBO.Entities;

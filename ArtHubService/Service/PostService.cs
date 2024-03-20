@@ -1,5 +1,6 @@
 ﻿using ArtHubBO.DTO;
 using ArtHubBO.Entities;
+using ArtHubBO.Enum;
 using ArtHubBO.Payload;
 using ArtHubDAO.Data;
 using ArtHubDAO.Interface;
@@ -7,6 +8,7 @@ using ArtHubRepository.Enum;
 using ArtHubRepository.Interface;
 using ArtHubRepository.Repository;
 using ArtHubService.Interface;
+using Microsoft.Extensions.Logging;
 
 namespace ArtHubService.Service;
 
@@ -15,22 +17,40 @@ public class PostService : IPostService
     private readonly IPostRepository postRepository;    
     private readonly IDapperQueryService dapperQueryService;
     private readonly IUnitOfWork unitOfWork;
+    private readonly ILogger<PostService> logger;
 
-    public PostService(IPostRepository postRepository, IDapperQueryService dapperQueryService, IUnitOfWork unitOfWork)
+    public PostService(IPostRepository postRepository, IDapperQueryService dapperQueryService, IUnitOfWork unitOfWork, ILogger<PostService> logger)
     {
         this.postRepository = postRepository;
         this.dapperQueryService = dapperQueryService;
-        this.unitOfWork = unitOfWork;        
+        this.unitOfWork = unitOfWork;
+        this.logger = logger;
     }
 
-    public async Task<IEnumerable<PostManagementItem>> GetListPostOrderByDate(SearchArtworkManagementConditionDto searchCondition)
+    public async Task<PageResult<PostManagementItem>> GetListPostOrderByDate(
+        SearchArtworkManagementConditionDto searchCondition)
     {
-            searchCondition = new SearchArtworkManagementConditionDto();
-            searchCondition.PageNumber = 1;
-            searchCondition.PageSize = 5;
+        try
+        {
             var listPost = this.dapperQueryService
                 .Select<PostManagementItem>(QueryName.GetListPostOrderByDate, searchCondition);
-            return listPost;
+            var result = new PageResult<PostManagementItem>
+            {
+                PageData = listPost.ToList(),
+                PageInfo = new PageInfo
+                {
+                    PageNum = searchCondition.PageNumber,
+                    PageSize = searchCondition.PageSize,
+                    TotalPages = listPost.First().TotalPages,
+                    TotalItems = listPost.First().TotalItems,
+                }
+            };
+            return result;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
     }
 
     public async Task<List<Post>> GetAllPostBySearchConditionAsync(SearchPayload<PostSearchConditionDto> searchPayload)
@@ -49,17 +69,39 @@ public class PostService : IPostService
         try
         {
             await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
-            await postRepository.AddAsync(post).ConfigureAwait(false);            
+            await postRepository.AddAsync(post).ConfigureAwait(false);    
+            logger.LogInformation("Image in post service {0}", post.Images.First().ImageUrl);
             await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
             return true;
         }
         catch (Exception ex)
         {               
-            unitOfWork.RollbackTransaction();
+            
         }
         return false;
     }
 
+    public async Task<Result> UpdateStatusOfPostAsync(int artworkModePostId, int artworkModeMode)
+    {
+        try
+        {
+            await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+            var post = this.postRepository.GetById(artworkModePostId);
+            if (post != default)
+            {
+                post.Status = artworkModeMode;
+            }
+            //await postCategoryRepository.AddRangeAsync(postCategories).ConfigureAwait(false);
+            await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+            return Result.Ok;
+        }
+        catch (Exception e)
+        {
+            unitOfWork.RollbackTransaction();
+            return Result.Error;
+        }
+    }
+    
     public async Task<Post> UpdatePost(PostUpdateDto post)
     {
         try

@@ -16,6 +16,7 @@ public class UploadNewArtworkModel : PageModel
     private readonly IStorageService storageService;
     private readonly ICategoryService categoryService;
     private readonly IPostService postService;
+    private readonly ILogger<UploadNewArtworkModel> logger;
 
     [BindProperty]    
     public IFormFile FileUpload { get; set; }
@@ -33,12 +34,13 @@ public class UploadNewArtworkModel : PageModel
     [BindProperty]
     public PostUpdateDto Post { get; set; }
 
-    public UploadNewArtworkModel(IConfiguration configuration, IStorageService storageService, ICategoryService categoryService, IPostService postService)
+    public UploadNewArtworkModel(IConfiguration configuration, IStorageService storageService, ICategoryService categoryService, IPostService postService, ILogger<UploadNewArtworkModel> logger)
     {
         this.configuration = configuration;
         this.storageService = storageService;
         this.categoryService = categoryService;
         this.postService = postService;
+        this.logger = logger;
     }
 
     public async Task<IActionResult> OnGet()
@@ -127,8 +129,9 @@ public class UploadNewArtworkModel : PageModel
             image
         };
         Post.PostCategories = new List<PostCategory>();
-        postCategories.ForEach(pc => Post.PostCategories.Add(pc));                        
-        await postService.CreateNewPost(ConvertPostUpdateDtoToPost(Post));
+        postCategories.ForEach(pc => Post.PostCategories.Add(pc));     
+        logger.LogInformation("Here is link image {0}", Post.Images.First().ImageUrl);
+        await postService.CreateNewPost(ConvertPostUpdateDtoToPost(Post)).ConfigureAwait(false);
         return RedirectToPage(URIConstant.ArtworkList);
     }
 

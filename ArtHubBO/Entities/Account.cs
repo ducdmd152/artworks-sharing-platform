@@ -11,6 +11,7 @@ namespace ArtHubBO.Entities
         {
             Bookmarks = new HashSet<Bookmark>();
             Reactions = new HashSet<Reaction>();
+            Reports = new HashSet<Report>();
             Subscribers = new HashSet<Subscriber>();
         }
 
@@ -53,6 +54,8 @@ namespace ArtHubBO.Entities
         public virtual ICollection<Bookmark> Bookmarks { get; set; }
         [InverseProperty("AccountEmailNavigation")]
         public virtual ICollection<Reaction> Reactions { get; set; }
+        [InverseProperty("ReporterEmailNavigation")]
+        public virtual ICollection<Report> Reports { get; set; }
         [InverseProperty("EmailUserNavigation")]
         public virtual ICollection<Subscriber> Subscribers { get; set; }
     }

@@ -147,5 +147,8 @@ namespace ArtHubRepository.Repository
         }
 
         public Post Get(int id) => this.DbSet.Include(item => item.Images).Include(item => item.PostCategories).Include(item => item.Artist.Account).FirstOrDefault(item => item.PostId == id);
+
+        public Post GetById(int postId)
+            => this.DbSet.FirstOrDefault(i => i.PostId == postId);
     }
 }

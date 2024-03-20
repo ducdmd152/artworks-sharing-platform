@@ -17,7 +17,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <!-- Fontawesome cdn -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 
@@ -36,7 +35,7 @@
 <div class="container mt-5">
     <div class="d-flex ">
         <div class="d-flex mb-3 me-2 col-4">
-            <select class="form-select" style="width: fit-content; border-right: none;" aria-label="Default select example">
+            <select id="search-key" class="form-select" style="width: fit-content; border-right: none;" aria-label="Default select example">
                 <option selected value="1">Title</option>
                 <option value="2">Artwork ID</option>
                 <option value="3">Date</option>
@@ -44,16 +43,16 @@
             </select>
             <div class=" d-flex align-items-center">
                 <input type="text" class="form-control" placeholder="Search" aria-label="Search">
-                 <div class="input-group-prepend">
-                    <span class="input-group-text material-symbols-outlined">search</span>
+                <div class="input-group-prepend" onclick="getListBySearch(1)" style="cursor: pointer;">
+                    <span class="input-group-text material-symbols-outlined" >search</span>
                 </div>
             </div>
         </div>
         
         <div class="">
             <!-- Dropdown for Status -->
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Status</option>
+            <select id="search-status" class="form-select" aria-label="Default select example" onchange="getListBySearch(2)">
+                <option value="null" selected>Status</option>
                 <option value="1">Pending</option>
                 <option value="2">Approved</option>
                 <option value="3">Rejected</option>
@@ -62,7 +61,6 @@
             </select>
         </div>
     </div>
-    
     <table class="table table-hover">
         <thead>
         <tr style="background-color: #f8f9fa; font-weight: 500;">
@@ -75,37 +73,68 @@
             <td></td> <!-- Details column -->
         </tr>
         </thead>
-        <tbody>
+        <tbody id="listPartial">
         <!-- Repeat for each artwork entry -->
-        <partial name="Shared/_ArtWorkListPartial" model="@Model.ListPost" />
+        <div >
+            <partial name="Shared/_ArtWorkListPartial" model="@Model.PageResult.PageData" />
+        </div>
         <!-- Additional rows -->
         </tbody>
     </table>
-    <div class="float-end mt-4">
-        <nav aria-label="Page navigation example">
-          <ul class="pagination">
-            <li class="page-item">
-              <a class="page-link text-dark" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-            <li class="page-item"><a class="page-link text-dark" href="#">1</a></li>
-            <li class="page-item"><a class="page-link text-dark" href="#">2</a></li>
-            <li class="page-item"><a class="page-link text-dark" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link text-dark" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
+    @* paging *@
+    <div id="pagingPartial">
+        <partial name="Shared/_PagingPartial" model="@Model.PageResult.PageInfo"/>
     </div>
+
+    <!-- Popup show upload artwork -->
+    <div class="modal fade" id="artworkDetailModal" tabindex="-1" role="dialog" aria-labelledby="artworkDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header m-auto">
+                    <h5 class="modal-title" id="modalArtworkTitle">
+                        <span>Artwork Title</span>
+                    </h5>                        
+                    <button type="button" class="btn closeModalBtn" onclick="onCloseClick()">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Image preview -->
+                    <!-- Bag with green color -->
+                    <div class="bag-icon" id="modelBorderVisibility">
+                        <span id="modalVisibility">Public</span>
+                    </div>
+                    <!-- Image preview -->
+                    <img src="" alt="Artwork" id="modalImagePreview" class="img-fluid rounded" style="width: 760px; height: 430px;">
+                    <div class="d-flex align-items-center">
+                        <span class="me-1 fw-bold">Artist</span>
+                    </div>                        
+                    <div class="d-flex align-items-center">
+                        <div class="avatar mb-3">
+                            <img src=""  id="modelAvatarImage" class="rounded-circle me-2" alt="Avatar" style="width: 40px; height: 40px;">
+                        </div>
+                        <h5 class="text-center" id="modelArtistName">John Doe</h5>
+                    </div>
+                    
+                    <p class="card-text ms-2" id="modalDescription"></p>
+                    
+                    <!-- Buttons -->
+                    <div class="text-center mt-3">
+                        <button type="button" class="btn btn-success me-2" onclick="approveArtwork()">Approved</button>
+                        <button type="button" class="btn btn-danger" onclick="rejectArtwork()">Reject</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <partial name="Shared/Partial/_toastyAnnouncePartial"/>
 </div>
 
 <partial name="Shared/Footer"/>
-
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/js/site.js" ></script>
+<script src="~/js/artworkManagement/artworkmanagement.js"></script>
+@Html.AntiForgeryToken()
 </body>
 </html>

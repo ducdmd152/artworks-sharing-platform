@@ -9,7 +9,8 @@ public static class URIConstant
     };
 
     public static readonly string[] ModeratorListUris = {
-        "/Moderator/ArtWorksManagement"
+        "/Moderator/ArtWorksManagement",
+        "/Moderator/ReportManagement",
     };
 
     public static readonly string[] AdminListUris = {
