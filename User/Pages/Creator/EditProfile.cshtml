@@ -1,0 +1,148 @@
+﻿@page
+@model User.Pages.Creator.EditProfileModel
+@{
+}
+<style>
+    .profile-sidebar {
+        border-right: 1px solid #dddddd;
+    }
+
+    .profile-main {
+        padding: 20px;
+    }
+
+        .profile-main .btn {
+            border-radius: 20px;
+        }
+
+    .profile-img {
+        width: 60px;
+        height: 60px;
+        border-radius: 100%;
+        overflow: hidden;
+        margin: 0 10px 0 0;
+    }
+
+        .profile-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .btn-profile-picture {
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="container pt-5">
+    <div class="d-flex">
+        <div class="profile-sidebar" style="width:30%;">
+            <div class="d-flex align-items-centerm mb-3">
+                <div class="profile-img">
+                    <img src="https://bird-trading-platform.s3.ap-southeast-1.amazonaws.com//Artwork0e401745-491a-44dd-99ff-a71627dfdf80.jpg" alt="Profile Image">
+                </div>
+                <div class="d-flex align-items-center">
+                    <h3 class="m-0 me-1 fs-4">Jeffrey David /</h3>
+                    <small class="fs-5">Edit profile</small>
+                    
+                </div>
+            </div>
+            <div class="nav flex-column">
+                <a href="#" class="nav-link ps-0">Edit profile</a>
+                <a href="#" class="nav-link ps-0">Password</a>
+                <a href="#" class="nav-link ps-0">Subscribe fee</a>
+                <a href="#" class="nav-link ps-0 text-danger">Delete account</a>
+            </div>
+        </div>
+        <div class="ms-4" style="width:70%;">
+            <div class="d-flex justify-content-start align-items-center">
+                <div class="profile-img">
+                    <img id="profileImage" src="https://bird-trading-platform.s3.ap-southeast-1.amazonaws.com//Artwork0e401745-491a-44dd-99ff-a71627dfdf80.jpg" alt="Profile Image">
+                </div>
+                <input type="file" id="uploadImage" class="d-none">
+                <button id="uploadBtn" class="btn position-relative me-3">Upload new</button>
+                <button id="deleteBtn" class="btn position-relative">Delete picture</button>
+            </div>
+            
+            <form class="mt-4">
+                <div class="form-group mt-3 col-md-5">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" disabled placeholder="example@gmail.com">
+                </div>
+                <div class="d-flex justify-content-between form-row">
+                    <div class="form-group mt-3 col-md-5">
+                        <label for="firstName">First Name <small class="text-danger">*</small></label>
+                        <input type="text" class="form-control" id="firstName" placeholder="First Name">
+                    </div>
+                    <div class="form-group mt-3 col-md-6">
+                        <label for="lastName">Last Name <small class="text-danger">*</small></label>
+                        <input type="text" class="form-control" id="lastName" placeholder="Last Name">
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between mt-3">
+                    <div class="form-group mt-3 col-md-5">
+                        <label for="firstName">Artist Name <small class="text-danger">*</small></label>
+                        <input type="text" class="form-control" id="firstName" placeholder="First Name">
+                    </div>
+                    <div class="d-flex align-items-end mb-2 col-md-6">
+                        <div class="me-3" style="margin-bottom:1px;">
+                            <label for="gender">Gender:</label>
+                        </div>
+                        <div class="form-group form-check me-3 mb-0">
+                            <input type="radio" class="form-check-input" id="public" name="Gender">
+                            <label class="form-check-label" for="public">Male</label>
+                        </div>
+                        <div class="form-group form-check  mb-0">
+                            <input type="radio" class="form-check-input" id="subscriberOnly" name="Gender">
+                            <label class="form-check-label" for="subscriberOnly">Female</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group  mt-3">
+                    <label for="bio">Bio</label>
+                    <textarea class="form-control" id="bio" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-dark  mt-3">Save Profile</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get references to elements
+        const profileImage = document.getElementById('profileImage');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const uploadInput = document.getElementById('uploadImage');
+        const deleteBtn = document.getElementById('deleteBtn');
+
+        // Add event listener to the upload button
+        uploadBtn.addEventListener('click', function () {
+            // Trigger file input click
+            uploadInput.click();
+        });
+
+        // Add event listener to the file input
+        uploadInput.addEventListener('change', function () {
+            // Check if a file is selected
+            if (uploadInput.files && uploadInput.files[0]) {
+                const reader = new FileReader();
+
+                // Read the uploaded file as a data URL
+                reader.readAsDataURL(uploadInput.files[0]);
+
+                // Once the file is loaded, set the src attribute of the profile image
+                reader.onload = function (e) {
+                    profileImage.src = e.target.result;
+                };
+            }
+        });
+
+        // Add event listener to the delete button
+        deleteBtn.addEventListener('click', function () {
+            // Set the src attribute of the profile image to the placeholder image
+            profileImage.src = 'https://placehold.it/60x60'; // Set the URL of your placeholder image
+        });
+    });
+</script>

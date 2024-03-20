@@ -2,6 +2,68 @@
 @model User.Pages.Creator.ProfileModel
 @{
 }
+<style>
+    .gallery-item-info {
+        padding: 4px;
+        text-align: center;
+    }
+
+    .user-item {
+        padding: 0;
+        display: flex;
+        align-items: center;
+        border-radius: 8px; /* Rounded corners for the container */
+    }
+
+    .artist-profile-pic-suggest {
+        width: 40px; /* Profile picture size */
+        height: 40px; /* Profile picture size */
+        border-radius: 50%; /* Make the image round */
+        margin-right: 4px; /* Space between the image and the name */
+        object-fit: cover; /* Ensures the image covers the area */
+    }
+
+    .artist-name-suggest {
+        font-size: 18px; /* Adjust as needed */
+        color: #333; /* Dark grey color for the text */
+        font-weight: 600; /* Bold font for the artist's name */
+    }
+
+    .gallery-item-stats {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 14px;
+    }
+
+        .gallery-item-stats span {
+            margin: 0 4px;
+        }
+
+    .likes,
+    .comments {
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+    }
+
+        .likes i,
+        .comments i {
+            margin-right: 4px;
+            font-size: 18px;
+        }
+
+    .artwork-status,
+    .artwork-scope {
+        font-weight: normal;
+    }
+
+        .artwork-status b,
+        .artwork-scope b {
+            font-weight: bold;
+        }
+
+</style>
 <div class="container mb-4 pt-3">
     <div class="profile-pic">
         <img src="@Model.ArtistData.PageData.First().Avatar" alt="Profile Picture">
@@ -39,4 +101,75 @@
     {
         <span>You haven't made any posts yet.</span>
     }        
+    <!-- Popup show detail artwork -->
+    <div class="modal fade" id="artworkDetailModal" tabindex="-1" role="dialog" aria-labelledby="artworkDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="artworkDetailModalLabel">Artwork Title</h5>
+                    <button type="button" class="btn closeModalBtn">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary closeModalBtn" data-dismiss="modal">Cancel</button>
+                    <div class="edit-post">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script>
+    $(document).ready(function () {
+        $(document).on('click', '.art-item', function () {
+            // Get the index of the clicked artwork item
+            var index = $('.art-item').index(this);
+
+            // Populate the modal with post details dynamically based on the index
+            var title = $('#artwork' + index + 'Title').val();
+            var imageUrl = $('#artwork' + index + 'ImageUrl').val();
+            var description = $('#artwork' + index + 'Description').val();
+            var imageProfile = $('#artwork' + index + 'ArtistProfile').val();
+            var artistName = $('#artwork' + index + 'ArtistName').val();
+            var artworkLike = $('#artwork' + index + 'Like').val();
+            var artworkBookmark = $('#artwork' + index + 'Bookmark').val();
+            var artworkScope = $('#artwork' + index + 'Scope').val();
+            if (artworkScope == 1) {
+                artworkScope = "Public";
+            } else if (artworkScope == 2) {
+                artworkScope = "Subscriber";
+            } else {
+                artworkScope = "Private";
+            }
+
+            var artworkStatus = $('#artwork' + index + 'Status').val();
+            if (artworkStatus == 1) {
+                artworkStatus = "Pending";
+            } else if (artworkStatus == 2) {
+                artworkStatus = "Approval";
+            } else if (artworkStatus == 3) {
+                artworkStatus = "Reject";
+            } else {
+                artworkStatus = "Repending";
+            }
+
+            var id = $('#artwork' + index + 'Id').val();
+
+            $('#artworkDetailModalLabel').text(title);
+            $('.modal-body').html('<img src="' + imageUrl + '" alt="Artwork" class="artwork-item-img"> <div class="gallery-item-info d-flex justify-content-between mt-2"> <div class="user-item"> <img src="' + imageProfile + '" class="artist-profile-pic-suggest" /> <span class="artist-name-suggest">' + artistName + '</span> </div> <div class="gallery-item-stats ml-1"> <span class="likes me-3"><i class="far fa-heart"></i>' + artworkLike + '</span> <span class="comments"><i class="far fa-bookmark"></i>' + artworkBookmark + '</span> </div> </div><div class="d-flex justify-content-start my-2"><span class="me-4"><b>Status:</b> <span class="artwork-status">' + artworkStatus + '</span></span><span><b>Scope:</b> <span class="artwork-scope">' + artworkScope + '</span></span></div> <p>' + description + '</p>');
+            $('.edit-post').html('<a href="/Creator/EditPost?postId=' + id + '" class="btn btn-secondary">Edit</a>');
+            // Show the modal
+            $('#artworkDetailModal').modal('show');
+        });
+
+        $('.closeModalBtn').on('click', function () {
+            $('#artworkDetailModal').modal('hide');
+        });
+    });
+</script>
