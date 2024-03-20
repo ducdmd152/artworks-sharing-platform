@@ -18,7 +18,7 @@ public class LoginMiddleware
     {
         var path = httpContext.Request.Path.ToString().ToLower();
         var userString = httpContext.Session.GetString("CREDENTIAL");
-        if (!URIConstant.WhiteListUris.Any(uri => uri.ToLower().Equals(path)))
+        if (!URIConstant.WhiteListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
         {
             if (userString != null)
             {

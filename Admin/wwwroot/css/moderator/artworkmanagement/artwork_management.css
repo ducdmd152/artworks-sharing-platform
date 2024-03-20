@@ -38,3 +38,15 @@ td span.dot-danger {
     color: #fff;
     border-radius: 10px;
 }
+
+.bag-icon {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 3px;
+    z-index: 2;
+    border-radius: 30px;
+}
+.bg-purple{
+    background-color: var(--purple-color-bold);
+}

@@ -10,11 +10,13 @@ namespace User.Pages
     {
         private readonly IAccountService accountService;
         private IDapperQueryService dapperQueryService;
+        private readonly ILogger<SampleModel> logger;
 
-        public SampleModel(IAccountService accountService, IDapperQueryService dapperQueryService)
+        public SampleModel(IAccountService accountService, IDapperQueryService dapperQueryService, ILogger<SampleModel> logger)
         {
             this.accountService = accountService;
             this.dapperQueryService = dapperQueryService;
+            this.logger = logger;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -34,6 +36,7 @@ namespace User.Pages
             // remove
             var temp3 = await this.accountService.RemoveAccountAsync().ConfigureAwait(false);
             
+            logger.LogInformation("Verion : 1.2");
             return this.Page();
         }
     }

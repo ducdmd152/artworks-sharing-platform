@@ -1,4 +1,6 @@
-﻿namespace ArtHubBO.DTO;
+﻿using System.ComponentModel;
+
+namespace ArtHubBO.DTO;
 
 public class SearchArtworkManagementConditionDto
 {
@@ -8,5 +10,6 @@ public class SearchArtworkManagementConditionDto
     public string ArtworkName { get; set; }
     public string Status { get; set; }
     public int PageNumber { get; set; }
+    [DefaultValue(10)]
     public int PageSize { get; set; } 
 }

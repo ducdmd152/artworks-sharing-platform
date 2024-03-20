@@ -23,6 +23,7 @@ namespace ArtHubBO.Entities
         public virtual DbSet<Post> Posts { get; set; } = null!;
         public virtual DbSet<PostCategory> PostCategories { get; set; } = null!;
         public virtual DbSet<Reaction> Reactions { get; set; } = null!;
+        public virtual DbSet<Report> Reports { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<Subscriber> Subscribers { get; set; } = null!;
         public virtual DbSet<SystemConfig> SystemConfigs { get; set; } = null!;
@@ -60,13 +61,14 @@ namespace ArtHubBO.Entities
 
         private string GetConnectionString()
         {
-            IConfiguration config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true)
-                .Build();
-            var strConn = config.GetConnectionString("DBDefault");
-
-            return strConn;
+            // IConfiguration config = new ConfigurationBuilder()
+            //     .SetBasePath(Directory.GetCurrentDirectory())
+            //     .AddJsonFile("appsettings.json", true, true)
+            //     .Build();
+            // var strConn = config.GetConnectionString("DBDefault");
+            //
+            // return strConn;
+            return Environment.GetEnvironmentVariable("DATABASE_URL");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -181,6 +183,21 @@ namespace ArtHubBO.Entities
                     .HasForeignKey(d => d.PostId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("reaction_post_FK");
+            });
+            
+            modelBuilder.Entity<Report>(entity =>
+            {
+                entity.HasOne(d => d.Post)
+                    .WithMany(p => p.Reports)
+                    .HasForeignKey(d => d.PostId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("report_post_FK");
+
+                entity.HasOne(d => d.ReporterEmailNavigation)
+                    .WithMany(p => p.Reports)
+                    .HasForeignKey(d => d.ReporterEmail)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("report_account_FK");
             });
 
             modelBuilder.Entity<Subscriber>(entity =>

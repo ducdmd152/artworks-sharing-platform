@@ -18,7 +18,7 @@ public static class URIConstant
     };
 
     public static readonly string[] AudienceListUris = {
-
+        "/Artworks/"
     };
 
     public static readonly string HomePage = "../Index";

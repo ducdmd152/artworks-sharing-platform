@@ -15,5 +15,7 @@ namespace ArtHubRepository.Repository
         {
             return this.DbSet.AsNoTracking().ToList();
         }
+
+        public Reaction GetByCompositeKey(string email, int postId) => this.DbSet.FirstOrDefault(item => item.AccountEmail == email && item.PostId == postId);
     }
 }
