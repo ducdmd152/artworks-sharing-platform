@@ -6,12 +6,12 @@
     @for (var i = 0; i < Model.PageData.Count; i++)
     {
         var post = Model.PageData[i];
-        <div class="artwork-item">
-            <img src="@post.Images.First().ImageUrl" alt="Artwork" class="img-fluid">
-            <div class="d-flex justify-content-between ms-2 me-2">
+        <div class="artwork-item d-flex flex-column justify-content-between">
+            <img src="@post.Images.First().ImageUrl" alt="Artwork" class="img-fluid" style="width: 100%; ">
+            <div class="d-flex justify-content-between ms-2 me-2 mb-3">
                 <div class="d-flex align-items-center">
                     <div class="artwork-item-creator-img me-3">
-                        <img src="@post.Artist.Account.Avatar" alt="Profile Picture">
+                        <img class="m-0" src="@post.Artist.Account.Avatar" alt="Profile Picture">
                     </div>
                     <span style="color: white;">@post.Artist.ArtistName</span>
                 </div>

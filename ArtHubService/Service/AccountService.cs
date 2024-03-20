@@ -1,7 +1,9 @@
-﻿using ArtHubBO.Entities;
+﻿using ArtHubBO.DTO;
+using ArtHubBO.Entities;
 using ArtHubBO.Enum;
 using ArtHubDAO.Interface;
 using ArtHubRepository.Interface;
+using ArtHubRepository.Repository;
 using ArtHubService.Interface;
 using ArtHubService.Utils;
 
@@ -137,6 +139,43 @@ namespace ArtHubService.Service
             }
 
             return false;
+        }
+
+        public Account GetAccountIncludeArtistByEmail(string email)
+        {
+            return accountRepository.GetAccountIncludeArtistByEmail(email);
+        }
+
+        public async Task<Account?> UpdateArtistProfile(AccountUpdateDto accountUpdate)
+        {
+            try
+            {
+                await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+                var dataUpdate = accountRepository.GetAccountIncludeArtistByEmail(accountUpdate.Email);
+                dataUpdate.FirstName = accountUpdate.FirstName;
+                dataUpdate.LastName = accountUpdate.LastName;
+                dataUpdate.Gender = accountUpdate.Gender;
+                if (accountUpdate.Avatar != null)
+                {
+                    dataUpdate.Avatar = accountUpdate.Avatar;
+                } else
+                {
+                    dataUpdate.Avatar = null;
+                }
+                dataUpdate.Artist!.ArtistName = accountUpdate.ArtistName;
+                if (accountUpdate.Bio != null)
+                {
+                    dataUpdate.Artist!.Bio = accountUpdate.Bio;
+                }                
+                var updatedArtist = accountRepository.Update(dataUpdate);
+                await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+                return updatedArtist;
+            }
+            catch (Exception ex)
+            {
+                unitOfWork.RollbackTransaction();
+            }
+            return null;
         }
     }
 }

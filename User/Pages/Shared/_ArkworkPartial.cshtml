@@ -125,7 +125,7 @@
     {
         var postDetail = @Model.PostDetailDtos[@i];
         var imageUrls = postDetail.ImageUrls.Split(',');
-        <div class="gallery-item">
+        <div class="gallery-item art-item">
             <img src="@(imageUrls[0] ?? "https://placehold.co/300")" class="gallery-image" />
             <div class="gallery-item-title">@postDetail.Title</div>
             <div class="gallery-item-info d-flex justify-content-between">
@@ -139,6 +139,16 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" id="artwork@(i)Id" value="@postDetail.PostId" />
+        <input type="hidden" id="artwork@(i)Title" value="@postDetail.Title" />
+        <input type="hidden" id="artwork@(i)ImageUrl" value="@(imageUrls[0] ?? "https://placehold.co/300")" />
+        <input type="hidden" id="artwork@(i)Description" value="@postDetail.Description" />
+        <input type="hidden" id="artwork@(i)ArtistProfile" value="@Model.Avatar" />
+        <input type="hidden" id="artwork@(i)ArtistName" value="@Model.ArtistName" />
+        <input type="hidden" id="artwork@(i)Like" value="@postDetail.TotalReact" />
+        <input type="hidden" id="artwork@(i)Bookmark" value="@postDetail.TotalBookmark" />
+        <input type="hidden" id="artwork@(i)Scope" value="@postDetail.Scope" />
+        <input type="hidden" id="artwork@(i)Status" value="@postDetail.Status" />
     }
 </div>
 
