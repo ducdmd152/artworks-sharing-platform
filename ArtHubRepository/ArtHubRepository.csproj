@@ -28,6 +28,9 @@
     <EmbeddedResource Include="Queries\SelectAllPostListForAuthenticatedAudience.sql" />
     <EmbeddedResource Include="Queries\SelectIsBookmarkedForPost.sql" />
     <EmbeddedResource Include="Queries\SelectIsReactedForPost.sql" />
+    <EmbeddedResource Include="Queries\GetArtistInfoByCondition.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Queries\GetListPostOrderByDate.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
