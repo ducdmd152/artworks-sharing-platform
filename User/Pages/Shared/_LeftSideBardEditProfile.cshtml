@@ -1,0 +1,22 @@
+﻿@model ArtHubBO.DTO.AccountUpdateTypeDto
+@{
+    Layout = null;
+}
+<div class="profile-sidebar" style="width:30%;">
+    <div class="d-flex align-items-centerm mb-3">
+        <div class="profile-img">
+            <img src="@(Model.Avatar ?? "https://placehold.co/300")" alt="Profile Image">
+        </div>
+        <div class="d-flex align-items-center">
+            <h3 class="m-0 me-1 fs-4">@Model.Name /</h3>
+            <small class="fs-5">@Model.NameTypeUpdate</small>
+
+        </div>
+    </div>
+    <div class="nav flex-column">
+        <a asp-page="/Creator/EditProfile" asp-route-typeUpdate="1" class="nav-link ps-0">Edit profile</a>
+        <a asp-page="/Creator/EditProfile" asp-route-typeUpdate="2" class="nav-link ps-0">Password</a>
+        <a asp-page="/Creator/EditProfile" asp-route-typeUpdate="3" class="nav-link ps-0">Subscribe fee</a>
+        <a asp-page="/Creator/EditProfile" asp-route-typeUpdate="4" class="nav-link ps-0 text-danger">Delete account</a>
+    </div>
+</div>

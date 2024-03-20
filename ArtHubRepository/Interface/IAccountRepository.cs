@@ -7,5 +7,6 @@ namespace ArtHubRepository.Interface
         IEnumerable<Account> GetAccounts();
         Account? GetAccountsIncludeRoleByEmailPassword(string username, string password);
         Account GetAccount(string postArtistEmail);
+        Account GetAccountIncludeArtistByEmail(string email);
     }
 }

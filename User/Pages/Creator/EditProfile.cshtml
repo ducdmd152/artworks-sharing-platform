@@ -36,113 +36,172 @@
 
 <div class="container pt-5">
     <div class="d-flex">
-        <div class="profile-sidebar" style="width:30%;">
-            <div class="d-flex align-items-centerm mb-3">
-                <div class="profile-img">
-                    <img src="https://bird-trading-platform.s3.ap-southeast-1.amazonaws.com//Artwork0e401745-491a-44dd-99ff-a71627dfdf80.jpg" alt="Profile Image">
-                </div>
-                <div class="d-flex align-items-center">
-                    <h3 class="m-0 me-1 fs-4">Jeffrey David /</h3>
-                    <small class="fs-5">Edit profile</small>
-                    
-                </div>
-            </div>
-            <div class="nav flex-column">
-                <a href="#" class="nav-link ps-0">Edit profile</a>
-                <a href="#" class="nav-link ps-0">Password</a>
-                <a href="#" class="nav-link ps-0">Subscribe fee</a>
-                <a href="#" class="nav-link ps-0 text-danger">Delete account</a>
-            </div>
-        </div>
-        <div class="ms-4" style="width:70%;">
-            <div class="d-flex justify-content-start align-items-center">
-                <div class="profile-img">
-                    <img id="profileImage" src="https://bird-trading-platform.s3.ap-southeast-1.amazonaws.com//Artwork0e401745-491a-44dd-99ff-a71627dfdf80.jpg" alt="Profile Image">
-                </div>
-                <input type="file" id="uploadImage" class="d-none">
-                <button id="uploadBtn" class="btn position-relative me-3">Upload new</button>
-                <button id="deleteBtn" class="btn position-relative">Delete picture</button>
-            </div>
-            
-            <form class="mt-4">
-                <div class="form-group mt-3 col-md-5">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" disabled placeholder="example@gmail.com">
-                </div>
-                <div class="d-flex justify-content-between form-row">
+        <partial name="Shared/_LeftSideBardEditProfile" model="Model.AccountUpdateType" />
+        @if (Model.AccountUpdateType.TypeUpdate == 1)
+        {
+            <div class="ms-4" style="width:70%;">
+                <form class="mt-4" id="updateProfileInfo">
+                    <input asp-for="@Model.AccountUpdate.Email" type="hidden" class="form-control">
+                    <div class="d-flex justify-content-start align-items-center">
+                        <div class="profile-img">
+                            <img id="profileImage" src="@(Model.AccountUpdate.Avatar ?? "https://placehold.it/60x60")" alt="Profile Image">
+                        </div>
+                        <input type="file" asp-for="@Model.FileUpload" id="uploadImage" class="d-none">
+                        <input asp-for="@Model.AccountUpdate.Avatar" type="hidden" class="form-control" id="avatar">
+                        <button type="button" id="uploadBtn" class="btn position-relative me-3">Upload new</button>
+                        <button type="button" id="deleteBtn" class="btn position-relative">Delete picture</button>
+                    </div>
                     <div class="form-group mt-3 col-md-5">
-                        <label for="firstName">First Name <small class="text-danger">*</small></label>
-                        <input type="text" class="form-control" id="firstName" placeholder="First Name">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" disabled placeholder="@Model.AccountUpdate.Email">
                     </div>
-                    <div class="form-group mt-3 col-md-6">
-                        <label for="lastName">Last Name <small class="text-danger">*</small></label>
-                        <input type="text" class="form-control" id="lastName" placeholder="Last Name">
+                    <div class="d-flex justify-content-between form-row">
+                        <div class="form-group mt-3 col-md-5">
+                            <label for="firstName">First Name <small class="text-danger">*</small></label>
+                            <input asp-for="@Model.AccountUpdate.FirstName" type="text" class="form-control" id="firstName" placeholder="First Name">
+                            <span asp-validation-for="@Model.AccountUpdate.FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-3 col-md-6">
+                            <label for="lastName">Last Name <small class="text-danger">*</small></label>
+                            <input asp-for="@Model.AccountUpdate.LastName" type="text" class="form-control" id="lastName" placeholder="Last Name">
+                            <span asp-validation-for="@Model.AccountUpdate.LastName" class="text-danger"></span>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="d-flex justify-content-between mt-3">
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <div class="form-group mt-3 col-md-5">
+                            <label for="artistName">Artist Name <small class="text-danger">*</small></label>
+                            <input asp-for ="@Model.AccountUpdate.ArtistName" type="text" class="form-control" id="artistName" placeholder="Artist Name">
+                            <span asp-validation-for="@Model.AccountUpdate.ArtistName" class="text-danger"></span>
+                        </div>
+                        <div class="d-flex align-items-end mb-2 col-md-6">
+                            <div class="me-3" style="margin-bottom:1px;">
+                                <label for="gender">Gender:</label>
+                            </div>
+                            <div class="form-group form-check me-3 mb-0">
+                                <input type="radio" class="form-check-input" id="male" name="Gender" value="Male" checked="@Model.AccountUpdate.Gender.Equals("Male")">
+                                <label class="form-check-label" for="male">Male</label>
+                            </div>
+                            <div class="form-group form-check  mb-0">
+                                <input type="radio" class="form-check-input" id="female" name="Gender" value="Female" checked="@Model.AccountUpdate.Gender.Equals("Female")">
+                                <label class="form-check-label" for="female">Female</label>
+                            </div>
+                        </div>
+                        <span id="errorMessageGender" class="text-danger">@ViewData["ErrorMessageGender"]</span>
+                    </div>
+
+                    <div class="form-group  mt-3">
+                        <label for="bio">Bio</label>
+                        <textarea asp-for="@Model.AccountUpdate.Bio" class="form-control" id="bio" rows="3"></textarea>
+                        <span asp-validation-for="@Model.AccountUpdate.Bio" class="text-danger"></span>
+                    </div>
+                    <button type="button" onclick="updateProfileInfo()" id="saveProfile" class="btn btn-dark  mt-3">Save Profile</button>
+                </form>
+            </div>
+        } else if (Model.AccountUpdateType.TypeUpdate == 2)
+        {
+            <div class="ms-4" style="width:70%;">
+                <form class="mt-4">
                     <div class="form-group mt-3 col-md-5">
-                        <label for="firstName">Artist Name <small class="text-danger">*</small></label>
-                        <input type="text" class="form-control" id="firstName" placeholder="First Name">
+                        <label for="oldPassword">Old Password</label>
+                        <input type="password" class="form-control" id="oldPassword" placeholder="Old Password">
                     </div>
-                    <div class="d-flex align-items-end mb-2 col-md-6">
-                        <div class="me-3" style="margin-bottom:1px;">
-                            <label for="gender">Gender:</label>
-                        </div>
-                        <div class="form-group form-check me-3 mb-0">
-                            <input type="radio" class="form-check-input" id="public" name="Gender">
-                            <label class="form-check-label" for="public">Male</label>
-                        </div>
-                        <div class="form-group form-check  mb-0">
-                            <input type="radio" class="form-check-input" id="subscriberOnly" name="Gender">
-                            <label class="form-check-label" for="subscriberOnly">Female</label>
-                        </div>
+                    <div class="form-group mt-3 col-md-5">
+                        <label for="newPasword">New password</label>
+                        <input type="password" class="form-control" id="newPasword" placeholder="New password">
                     </div>
-                </div>
-                
-                <div class="form-group  mt-3">
-                    <label for="bio">Bio</label>
-                    <textarea class="form-control" id="bio" rows="3"></textarea>
-                </div>
-                <button type="submit" class="btn btn-dark  mt-3">Save Profile</button>
+                    <div class="form-group mt-3 col-md-5">
+                        <label for="confirmPassword">Confirm password</label>
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm password">
+                    </div>
+                    <button type="button" class="btn btn-dark  mt-3">Save New Password</button>
+                </form>
+            </div>
+        } else if (Model.AccountUpdateType.TypeUpdate == 3)
+        {
+            <form class="ms-4">
+                <div class="form-group mt-3 col-md-12">
+                    <label for="subscribeFee">Subscribe Fee</label>
+                    <input type="number" class="form-control" id="subscribeFee" placeholder="Subscribe Fee">
+                </div>                
+                <button type="button" class="btn btn-dark  mt-3">Save</button>
             </form>
-        </div>
+        } else if (Model.AccountUpdateType.TypeUpdate == 4)
+        {
+            
+        }
     </div>
 </div>
+@Html.AntiForgeryToken()
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Get references to elements
-        const profileImage = document.getElementById('profileImage');
-        const uploadBtn = document.getElementById('uploadBtn');
-        const uploadInput = document.getElementById('uploadImage');
-        const deleteBtn = document.getElementById('deleteBtn');
-
-        // Add event listener to the upload button
-        uploadBtn.addEventListener('click', function () {
-            // Trigger file input click
-            uploadInput.click();
+    $(document).ready(function () {
+        // Trigger file input when 'Upload new' is clicked
+        $('#uploadBtn').on('click', function (e) {
+            e.preventDefault(); // Prevent any default button action
+            $('#uploadImage').trigger('click');
         });
 
-        // Add event listener to the file input
-        uploadInput.addEventListener('change', function () {
-            // Check if a file is selected
-            if (uploadInput.files && uploadInput.files[0]) {
-                const reader = new FileReader();
-
-                // Read the uploaded file as a data URL
-                reader.readAsDataURL(uploadInput.files[0]);
-
-                // Once the file is loaded, set the src attribute of the profile image
+        // Update profile image when a new image file is selected
+        $('#uploadImage').change(function (event) {
+            if (event.target.files && event.target.files[0]) {
+                var reader = new FileReader();
                 reader.onload = function (e) {
-                    profileImage.src = e.target.result;
+                    $('#profileImage').attr('src', e.target.result);
                 };
+                reader.readAsDataURL(event.target.files[0]);
             }
         });
 
-        // Add event listener to the delete button
-        deleteBtn.addEventListener('click', function () {
-            // Set the src attribute of the profile image to the placeholder image
-            profileImage.src = 'https://placehold.it/60x60'; // Set the URL of your placeholder image
+        // Delete the profile picture and set it to the placeholder
+        $('#deleteBtn').on('click', function (e) {
+            e.preventDefault(); // Prevent any default button action
+            $('#profileImage').attr('src', 'https://placehold.it/60x60?t=' + new Date().getTime());
+            $('#uploadImage').val(''); // Clear the file input
+            $('#avatar').val('');
         });
     });
+
+
+    document.querySelector('#saveProfile').addEventListener('click', function () {
+        document.querySelector('#errorMessageGender').textContent = '';        
+    });
+
+    function updateProfileInfo() {
+        var form = document.forms.namedItem("updateProfileInfo");
+        var $form = $(form);
+
+        // Trigger validation
+        $form.validate();
+
+        if ($form.valid()) {
+            var data = new FormData(form);
+
+            $.ajax({
+                url: '/Creator/EditProfile?handler=UpdateProfileInfo',
+                type: 'POST',
+                headers: {
+                    RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                data: data,
+                processData: false,  // Don't process the data (already FormData)
+                contentType: false,  // Don't set contentType (let jQuery handle it)
+                success: function (partialHtml) {
+                    window.location.href = '/Creator/EditProfile';
+                },
+                error: function (error) {
+                    console.error('Error loading partial:', error);
+                }
+            });
+        } else {
+            console.error('Client-side validation failed.');
+        }
+    }
 </script>
