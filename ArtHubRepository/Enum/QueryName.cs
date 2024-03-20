@@ -4,6 +4,7 @@
     {
         FirstQuery,
         GetListPostOrderByDate,
+        GetArtistInfoByCondition,
         GetListReportByDate,
         SelectIsReactedForPost,
         SelectIsBookmarkedForPost,

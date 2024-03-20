@@ -2,12 +2,16 @@
 using ArtHubDAO.Interface;
 using ArtHubRepository.Interface;
 
-namespace ArtHubRepository.Repository
+namespace ArtHubRepository.Repository;
+
+public class ArtistRepository : BaseRepository<Artist>, IArtistRepository
 {
-    public class ArtistRepository : BaseRepository<Artist>, IArtistRepository
+    public ArtistRepository(IBaseDAO<Artist> baseDAO) : base(baseDAO)
+    { 
+    }
+
+    public Artist GetArtistByArtistEmail(string email)
     {
-        public ArtistRepository(IBaseDAO<Artist> baseDAO) : base(baseDAO)
-        { 
-        }
+        return this.DbSet.First(at => at.Email == email);
     }
 }
