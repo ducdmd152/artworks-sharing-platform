@@ -33,8 +33,8 @@ public class ProfileModel : PageModel
         {
             IsGetDataPost = true,
             Email = accountEmail ?? "",
-            PostScope = new int[] { (int) PostScope.Public, (int) PostScope.Subscriber, (int) PostScope.Private },
-            PostStatus = new int[] { (int) PostStatus.Pending, (int)PostStatus.Approval, (int)PostStatus.Reject, (int)PostStatus.Repending },
+            PostScope = new int[] { (int)PostScope.Public, (int)PostScope.Subscriber, (int)PostScope.Private },
+            PostStatus = new int[] { (int)PostStatus.Pending, (int)PostStatus.Approval, (int)PostStatus.Reject, (int)PostStatus.Repending },
             IsOrderByReact = true,
             IsOrderByView = false,
             IsOrderByTitle = false,
