@@ -3,15 +3,17 @@
     Date: 19/03/2024
     
     @AudienceEmail string
+    @CreatorEmail string
 */
 
 WITH SubscribedCreators AS (
     SELECT email_artist
     FROM subscriber
     WHERE 
-        email_user = @AudienceEmail
+        @AudienceEmail IS NOT NULL
+        AND email_user = @AudienceEmail
         AND status = 1 
-        AND GETDATE() <= expired_date 
+        AND GETDATE() <= expired_date       
 ),
 AuthenticatedPosts AS (
     SELECT post_id
@@ -22,10 +24,20 @@ AuthenticatedPosts AS (
 )
     
 SELECT
-    *
+    p.post_id AS PostId,
+    p.title AS Title,
+    p.description AS Description,
+    p.status AS Status,
+    p.scope AS Scope,
+    p.total_react AS TotalReact,
+    p.total_view AS TotalView,
+    p.total_bookmark AS TotalBookmark,
+    p.artist_email AS ArtistEmail,
+    a.artist_name AS ArtistName
 FROM post p
 LEFT JOIN post_category pc ON p.post_id = pc.post_id
-WHERE post_id IN (SELECT post_id FROM AuthenticatedPosts) OR @AudienceEmail IS NULL
+LEFT JOIN artist a ON p.artist_email = a.artist_email
+WHERE post_id IN (SELECT post_id FROM AuthenticatedPosts)
 ORDER BY 
     CASE 
         WHEN pc.category_id IN (SELECT CategoryId FROM @Categories) THEN 0
