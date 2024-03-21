@@ -101,20 +101,23 @@
         } else if (Model.AccountUpdateType.TypeUpdate == 2)
         {
             <div class="ms-4" style="width:70%;">
-                <form class="mt-4">
+                <form class="mt-4" id="changePassword">
                     <div class="form-group mt-3 col-md-5">
-                        <label for="oldPassword">Old Password</label>
-                        <input type="password" class="form-control" id="oldPassword" placeholder="Old Password">
+                        <label for="oldPassword">Old Password</label>                        
+                        <input asp-for="PasswordConfirm.OldPassword" type="password" class="form-control" id="oldPassword" placeholder="Old Password">
+                        <span asp-validation-for="PasswordConfirm.OldPassword" class="text-danger"></span>
                     </div>
                     <div class="form-group mt-3 col-md-5">
                         <label for="newPasword">New password</label>
-                        <input type="password" class="form-control" id="newPasword" placeholder="New password">
+                        <input asp-for="PasswordConfirm.NewPassword" type="password" class="form-control" id="newPasword" placeholder="New password">
+                        <span asp-validation-for="PasswordConfirm.NewPassword" class="text-danger"></span>
                     </div>
                     <div class="form-group mt-3 col-md-5">
                         <label for="confirmPassword">Confirm password</label>
-                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm password">
+                        <input asp-for="PasswordConfirm.ConfirmPassword" type="password" class="form-control" id="confirmPassword" placeholder="Confirm password">
+                        <span asp-validation-for="PasswordConfirm.ConfirmPassword" class="text-danger"></span>
                     </div>
-                    <button type="button" class="btn btn-dark  mt-3">Save New Password</button>
+                    <button type="button" class="btn btn-dark mt-3" onclick="changePassword()">Save New Password</button>
                 </form>
             </div>
         } else if (Model.AccountUpdateType.TypeUpdate == 3)
@@ -128,9 +131,13 @@
             </form>
         } else if (Model.AccountUpdateType.TypeUpdate == 4)
         {
-            
+            <form class="mt-4" id="deleteAccount">
+                <button type="button" class="btn btn-dark ms-3" onclick="deleteAccount()">Delete Account</button>
+            </form>            
         }
     </div>
+
+    <partial name="Shared/Partial/_toastyAnnouncePartial" />
 </div>
 @Html.AntiForgeryToken()
 @section Scripts {
@@ -193,13 +200,100 @@
                 data: data,
                 processData: false,  // Don't process the data (already FormData)
                 contentType: false,  // Don't set contentType (let jQuery handle it)
-                success: function (partialHtml) {
-                    window.location.href = '/Creator/EditProfile';
+                success: function (response) {
+                    if (response.result === 'Error') {                        
+                        showOutOfStockToastDanger('Fail', response.data);
+                    } else {                        
+                        showOutOfStockToastSuccess('Upload', response.data);
+                        setTimeout(function () {
+                            window.location.href = '/Creator/EditProfile';
+                        }, 2000);
+                    }                                       
                 },
                 error: function (error) {
                     console.error('Error loading partial:', error);
                 }
             });
+        } else {
+            console.error('Client-side validation failed.');
+        }
+    }
+
+    function changePassword() {
+        var form = document.forms.namedItem("changePassword");
+        var $form = $(form);
+
+        // Trigger validation
+        $form.validate();
+
+        if ($form.valid()) {
+            var data = new FormData(form);
+
+            $.ajax({
+                url: '/Creator/EditProfile?handler=ChangePassword',
+                type: 'POST',
+                headers: {
+                    RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                data: data,
+                processData: false,  // Don't process the data (already FormData)
+                contentType: false,  // Don't set contentType (let jQuery handle it)
+                success: function (response) {
+                    if (response.result === 'Error') {
+                        showOutOfStockToastDanger('Fail', response.data);
+                    } else {
+                        showOutOfStockToastSuccess('Success', response.data);
+                        setTimeout(function () {
+                            window.location.href = '/Authenticate/Login';
+                        }, 2000);
+                    }                    
+                },
+                error: function (error) {
+                    console.error('Error loading partial:', error);
+                }
+            });
+        } else {
+            console.error('Client-side validation failed.');
+        }
+    }
+
+    function deleteAccount() {
+        var form = document.forms.namedItem("deleteAccount");
+        var $form = $(form);
+
+        // Trigger validation
+        $form.validate();
+
+        if ($form.valid()) {
+            var data = new FormData(form);
+            var confirmReject = confirm("Are you sure to delete your account?");
+
+            // If user confirms, proceed with rejection
+            if (confirmReject) {
+                $.ajax({
+                    url: '/Creator/EditProfile?handler=DeleteAccount',
+                    type: 'POST',
+                    headers: {
+                        RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    data: data,
+                    processData: false,  // Don't process the data (already FormData)
+                    contentType: false,  // Don't set contentType (let jQuery handle it)
+                    success: function (response) {
+                        if (response.result === 'Error') {
+                            showOutOfStockToastDanger('Fail', response.data);
+                        } else {
+                            showOutOfStockToastSuccess('Success', response.data);
+                            setTimeout(function () {
+                                window.location.href = '/';
+                            }, 2000);
+                        }
+                    },
+                    error: function (error) {
+                        console.error('Error loading partial:', error);
+                    }
+                });
+            }            
         } else {
             console.error('Client-side validation failed.');
         }

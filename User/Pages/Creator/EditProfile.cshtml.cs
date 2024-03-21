@@ -5,6 +5,8 @@ using ArtHubBO.Enum;
 using ArtHubBO.Models;
 using ArtHubService.Interface;
 using ArtHubService.Service;
+using ArtHubService.Utils;
+using InventoryManagementGUI.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -27,6 +29,8 @@ public class EditProfileModel : PageModel
     public AccountUpdateTypeDto AccountUpdateType { get; set; }
     [BindProperty]
     public IFormFile FileUpload { get; set; }
+    [BindProperty]
+    public PasswordConfirmDto PasswordConfirm { get; set; }
 
     public EditProfileModel(IAccountService accountService, IConfiguration configuration, IStorageService storageService)
     {
@@ -40,8 +44,8 @@ public class EditProfileModel : PageModel
         if (typeUpdate > 0) { 
             TypeUpdate = typeUpdate;
         }
-        var accountEmail = HttpContext.Session.GetString("ACCOUNT_EMAIL");
-        if (accountEmail != null ) {
+        var accountEmail = HttpContext.Session.GetString("ACCOUNT_EMAIL");        
+        if (accountEmail != null ) {            
             var account = accountService.GetAccountIncludeArtistByEmail(accountEmail);
             AccountUpdate = AccountToAccountUpdateDto(account);
             AccountUpdateType = AccountToAccountUpdateTypeDto(account, TypeUpdate);
@@ -82,13 +86,25 @@ public class EditProfileModel : PageModel
             var responseUploadImage = await storageService.UploadFileAsync(s3Obj, credential);
             if (responseUploadImage.StatusCode != (int)HttpStatusCode.OK)
             {
-                //todo
+                return new JsonResult(new PostResult()
+                {
+                    Result = Result.Error,
+                    Data = "Fail to upload image!",
+                });
             } else
             {
                 AccountUpdate.Avatar = responseUploadImage.LinkSource;
             }            
         }
         Account? updatedAccount = await accountService.UpdateArtistProfile(AccountUpdate);
+        if (updatedAccount == null)
+        {
+            return new JsonResult(new PostResult()
+            {
+                Result = Result.Error,
+                Data = "Fail to update profile!",
+            });
+        }
         // Configure JsonSerializerSettings to handle reference loops
         var settings = new JsonSerializerSettings
         {
@@ -97,10 +113,71 @@ public class EditProfileModel : PageModel
 
         var accountJson = JsonConvert.SerializeObject(updatedAccount, settings);
         HttpContext.Session.SetString("CREDENTIAL", accountJson);
-        return Page();
+        return new JsonResult(new PostResult()
+        {
+            Result = Result.Ok,
+            Data = "Update profile successfully!",
+        });
     }
 
-        private AccountUpdateDto AccountToAccountUpdateDto(Account account)
+    public async Task<IActionResult> OnPostChangePasswordAsync()
+    {
+        PasswordConfirm.OldPassword = Encryption.Encrypt(PasswordConfirm.OldPassword);
+        var accountEmail = HttpContext.Session.GetString("ACCOUNT_EMAIL")!;
+        if (!accountService.CheckCorrectPassword(accountEmail, PasswordConfirm.OldPassword))
+        {
+            return new JsonResult(new PostResult()
+            {
+                Result = Result.Error,
+                Data = "Your old password not correct!",
+            });
+        } else
+        {
+            PasswordConfirm.NewPassword = Encryption.Encrypt(PasswordConfirm.NewPassword);
+            bool isUpdate = await accountService.ChangePassword(PasswordConfirm, accountEmail);
+            if (isUpdate)
+            {
+                HttpContext.Session.Clear();
+                return new JsonResult(new PostResult()
+                {
+                    Result = Result.Ok,
+                    Data = "Change password successfully!",
+                });
+            } else
+            {
+                return new JsonResult(new PostResult()
+                {
+                    Result = Result.Error,
+                    Data = "Fail to change password!",
+                });
+            }            
+        }
+    }
+
+    public async Task<IActionResult> OnPostDeleteAccountAsync()
+    {
+        var accountEmail = HttpContext.Session.GetString("ACCOUNT_EMAIL")!;
+        bool isUpdate = await accountService.UpdateAccountEnable(accountEmail, false);
+        if (isUpdate)
+        {
+            HttpContext.Session.Clear();
+            return new JsonResult(new PostResult()
+            {
+                Result = Result.Ok,
+                Data = "Delete account successfully!",
+            });
+        } else
+        {
+            return new JsonResult(new PostResult()
+            {
+                Result = Result.Error,
+                Data = "Fail to delete account!",
+            });
+        }
+        
+    }
+
+    private AccountUpdateDto AccountToAccountUpdateDto(Account account)
     {
         return new AccountUpdateDto
         {
