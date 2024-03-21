@@ -1,8 +1,12 @@
+using ArtHubBO.Entities;
 using ArtHubRepository.Interface;
 using ArtHubService.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using System.Net.Http;
+using User.Pages.Filter;
 using User.Pages.Resources;
 
 namespace User.Pages.Authenticate
@@ -20,6 +24,13 @@ namespace User.Pages.Authenticate
         public LoginModel(IAccountService accountService)
         {
             this.accountService = accountService;
+            if (HttpContext != null && HttpContext.Session != null)
+            {
+                var userString = HttpContext.Session.GetString("CREDENTIAL");
+                var userConvert = userString != null ? JsonConvert.DeserializeObject<Account>(userString) : null;
+                if (userConvert != null)
+                    HttpContext.Response.Redirect(URIConstant.HomePage);
+            }                
         }
 
 

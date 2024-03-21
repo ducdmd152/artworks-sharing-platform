@@ -33,7 +33,7 @@
     <header class="header">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
             <div class="container-fluid d-flex justify-content-between align-items-center">
-                <div class="collapse d-sm-inline-flex justify-content-between">
+                <div class="d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav">
                         @if (user != null && user.Role.RoleName == "Creator")
                         {
@@ -58,7 +58,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Artworks/Index">Artworks</a>
                             </li>
                             <li class="nav-item me-3 fs-5">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Creators</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/CreatorExploration/Index">Creators</a>
                             </li>
                             <li class="nav-item me-3 fs-5">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Contact</a>
@@ -67,8 +67,8 @@
                     </ul>
                 </div>
                 <div class="text-center">
-                    <img src="../images/ArtHub.png"
-                         class="w-50 rounded-t-5 rounded-tr-lg-0 rounded-bl-lg-5" />
+                    <img src="~/images/ArtHub.png"
+                         class="m-auto w-50 rounded-t-5 rounded-tr-lg-0 rounded-bl-lg-5" />
                 </div>
                 <form class="form-inline my-2 my-lg-0">
                     <div class="d-flex align-items-center">
@@ -96,7 +96,7 @@
                                         <span class="user-name my-1">@ViewBag.FirstName</span>
                                         <ul class="user-menu list-unstyled me-3">
                                             <li class="user-menu-item">
-                                                <a asp-page="/Audience/Profile" class="text-decoration-none text-dark">My Profile</a>
+                                                <a asp-page="/Audience/Profile/Index" class="text-decoration-none text-dark">My Profile</a>
                                             </li>
                                             <li class="user-menu-item">
                                                 <a asp-page="/Audience/ArtworkInteration" class="text-decoration-none text-dark">Interation</a>
@@ -219,8 +219,7 @@
                 </ul>
             </div>
         </div>           
-    </footer>
-    <h6> v1.1  </h6>
+    </footer>    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

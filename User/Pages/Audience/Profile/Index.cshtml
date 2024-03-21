@@ -1,17 +1,9 @@
 ﻿@page
-@model User.Pages.Audience.IndexModel
+@model User.Pages.Audience.Profile.IndexModel
 @{
-    ViewData["Title"] = "ArtHub";
+    ViewData["Title"] = "My Profile";
 }
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ArtHub - Unleash Your Creativity</title>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700"
-          rel="stylesheet" />
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <style>
         * {
             box-sizing: border-box;
@@ -39,6 +31,8 @@
             text-align: center;
             color: white;
             padding: 4rem 0;
+            height: 50vh;
+            display: flex;
         }
 
         nav {
@@ -79,7 +73,7 @@
 
         .gallery {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 24px;
         }
 
@@ -94,7 +88,7 @@
         .gallery-image {
             width: 100%;
             display: block;
-            height: 180px;
+            height: 240px;
             object-fit: cover;
             object-position: center;
         }
@@ -117,15 +111,14 @@
             font-size: 14px;
         }
 
-        .gallery-item-stats span {
-        margin: 0 8px;
-        }
+            .gallery-item-stats span {
+                margin: 0 8px;
+            }
 
         .likes,
         .comments {
-            margin: 0;
-        display: flex;
-        align-items: center;
+            display: flex;
+            align-items: center;
         }
 
             .likes i,
@@ -174,12 +167,13 @@
             cursor: pointer;
         }
 
-        .gallery-item:hover .gallery-image {
-            opacity: 0.6;            
-        }
-        .gallery-item:hover .gallery-item-title {
-            opacity: 1;
-        }
+            .gallery-item:hover .gallery-image {
+                opacity: 0.6;
+            }
+
+            .gallery-item:hover .gallery-item-title {
+                opacity: 1;
+            }
         /* Add responsiveness */
         @@media (max-width: 768px) {
             .gallery {
@@ -192,64 +186,94 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .btn-primary-local {
+            background-color: #fff;
+            color: rgb(85, 85, 85);
+            padding: 10px 28px;
+            border-radius: 25px;
+            border: 1px solid rgb(85, 85, 85);
+        }
+
+            .btn-primary-local:hover {
+                background-color: #333;
+                color: #fff;
+            }
+
+        .btn-nav-local {
+            background-color: #fff;
+            color: rgb(85, 85, 85);
+            padding: 10px;
+            border-radius: 25px;
+            border: 1px solid rgb(85, 85, 85);
+        }
+
+            .btn-nav-local.active {
+                background-color: rgba(0,0,0,0.3);
+                color: #fff;
+            }
+
+            .btn-nav-local:hover {
+                background-color: rgba(0,0,0,0.3);
+                color: #fff;
+            }
+
+        .profile-nav {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr);
+            grid-column-gap: 4px;
+        }
+
+        nav a {
+            display: block;
+        }
     </style>
 </head>
-<body>
-    <div class="container mt-4 p-5">
-        @await Component.InvokeAsync("ArtworkFiltering")
+
+<div class="container d-flex flex-column justify-content-center align-items-center" style="padding-top: 50px;">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <img style="width: 220px; height: 220px; border-radius: 9999px" src="https://via.placeholder.com/320x320" />
+        <div style="width: 460px; height: 64px; text-align: center; color: black; font-size: 42px; font-family: Playfair Display; font-weight: 700; word-wrap: break-word">Martin Deli</div>
     </div>
-    <div class="gallery container p-5 mb-2" style="margin-top: -60px;">
-        @foreach (var item in Model.Posts)
+    <div class="d-flex justify-content-center gap-2 mt-1">
+        <button class="btn-primary-local" style="font-size: 20px; padding: 8px 28px;">Edit Profile</button>
+        <button class="btn-primary-local" style="height: 52px; width: 52px; padding: 0; border-radius: 100rem;"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+    </div>
+
+    <div class="flex justify-center gap-3 mt-5 border-1 border-secondary border-bottom ps-4 pe-4 pb-2">
+        <nav class="profile-nav d-flex justify-content-around pb-0" style="width: 40vw;">
+            <a class="flex-sm-fill text-sm-center">
+                <button class="btn-nav-local w-100 border-0 fs-5 active">Subcribing</button>
+            </a>
+
+            <a asp-page="./Loved" class="flex-sm-fill text-sm-center">
+                <button class="btn-nav-local w-100 border-0 fs-5 ">Loved</button>
+            </a>
+
+            <a asp-page="./Saved" class="flex-sm-fill text-sm-center">
+                <button class="btn-nav-local w-100 border-0 fs-5">Saved</button>
+            </a>
+        </nav>
+    </div>
+
+    <div class="gallery container p-3 mb-2">
+        @for (var i = 1; i <= 12; i++)
         {
-            <a class="gallery-item" asp-page="./Details" asp-route-id="@item.PostId" style="color: black; text-decoration: none;">
-                <img src="@(item.Images.FirstOrDefault()?.ImageUrl ?? "https://placehold.co/300")"
+            <a class="gallery-item" asp-page="./Details" asp-route-id="10" style="color: black; text-decoration: none;">
+                <img src="@("https://placehold.co/300")"
                  class="gallery-image" />
-                <div class="gallery-item-title">@item.Title</div>
+                <div class="gallery-item-title">Title</div>
                 <div class="gallery-item-info d-flex justify-content-between">
                     <div class="user-short-item" style="flex: 2">
-                            <img src="@(item.Artist?.Account?.Avatar ?? "https://placehold.co/300")" class="artist-profile-pic" />
-                            <span class="artist-name">@item.Artist?.ArtistName</span>
+                        <img src="https://placehold.co/300" class="artist-profile-pic" />
+                        <span class="artist-name">ArtistName</span>
                     </div>
                     <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
-                            <span class="likes"><i class="fa-solid fa-heart"></i> @item.TotalReact</span>
-                        <span class="comments"><i class="fa-solid fa-eye"></i> @item.TotalView</span>
+                        <span class="likes"><i class="far fa-heart"></i>10k</span>
+                        <span class="comments"><i class="far fa-bookmark"></i>2k</span>
                     </div>
                 </div>
             </a>
         }
     </div>
-    
-    <nav aria-label="Page navigation" style="display: flex; justify-content: center; width: 100%;">
-        <ul class="pagination">
-            @for (var i = 1; i <= @Model.SearchPayload.PageInfo.TotalPages; i++)
-            {
-                <li class="page-item @(Model.SearchPayload.PageInfo.PageNum == i ? "active" : "")">
-                    <a class="page-link" style="font-size: 20px; padding: 8px 16px;" href="?pageIndex=@i">@i</a>
-                </li>
-            }
-        </ul>
-    </nav>
-</body>
-
-@section Scripts {
-    <script type="text/javascript">
-        function getURL() {
-            var keyword = document.getElementById('searchInput').value.trim();
-            var orderSelect = document.getElementById('order-select').value;
-            console.log(orderSelect);
-            return '../Artworks?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect;
-        }
-        function handleOrderChange() {
-            window.location.href = getURL();
-        }
-
-        function filterByCategory(category) {
-            console.log("Filter by category: " + category);
-        }
-
-        function performSearch() {
-            event.preventDefault();
-            window.location.href = getURL();
-        }
-    </script>
-}
+</div>

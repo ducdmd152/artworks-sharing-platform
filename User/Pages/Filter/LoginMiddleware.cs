@@ -17,42 +17,43 @@ public class LoginMiddleware
     public async Task Invoke(HttpContext httpContext)
     {
         var path = httpContext.Request.Path.ToString().ToLower();
-        var userString = httpContext.Session.GetString("CREDENTIAL");
-        if (!URIConstant.WhiteListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
+        if (path == "" || path == "/" || URIConstant.WhiteListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
         {
-            if (userString != null)
-            {
-                var userConvert = JsonConvert.DeserializeObject<Account>(userString);
-                if (userConvert != null)
-                {
-                    if (userConvert.Role.RoleName.Equals(RoleEnum.Audience.ToString()) && URIConstant.AudienceListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
-                    {
-                        await _next(httpContext);
-                        return;
-                    }
-                    else if (userConvert.Role.RoleName.Equals(RoleEnum.Creator.ToString()) && URIConstant.CreatorListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
-                    {
-                        await _next(httpContext);
-                        return;
-                    }
-                    else
-                    {
-                        httpContext.Response.Redirect(URIConstant.Login);
-                        return;
-                    }
-                }
-            }            
-            else
-            {
-                httpContext.Response.Redirect(URIConstant.Login);
-                return;
-            }
-        }
-        else if (URIConstant.Login.Equals(path) && userString != null)
-        {
-            httpContext.Response.Redirect(URIConstant.HomePage);
+            await _next(httpContext);
             return;
         }
-        await _next(httpContext);
+
+        var userString = httpContext.Session.GetString("CREDENTIAL");
+        var userConvert = userString != null ? JsonConvert.DeserializeObject<Account>(userString) : null;
+
+        if (userConvert == null)
+        {
+            httpContext.Response.Redirect(URIConstant.Login);
+            return;
+        }
+
+        if (userConvert.Role.RoleName.Equals(RoleEnum.Audience.ToString()) && URIConstant.AudienceListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
+        {
+            await _next(httpContext);
+            return;
+        }
+        else if (userConvert.Role.RoleName.Equals(RoleEnum.Creator.ToString()) && URIConstant.CreatorListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
+        {
+            await _next(httpContext);
+            return;
+        }
+
+        if (userConvert.RoleId == (int)RoleEnum.Audience && URIConstant.AudienceListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
+        {
+            await _next(httpContext);
+            return;
+        }
+        else if (userConvert.RoleId == (int)RoleEnum.Creator && URIConstant.CreatorListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
+        {
+            await _next(httpContext);
+            return;
+        }
+
+        httpContext.Response.Redirect(URIConstant.HomePage);
     }
 }

@@ -10,12 +10,13 @@ WITH SubscribedCreators AS (
     SELECT email_artist
     FROM subscriber
     WHERE 
-        email_user = @AudienceEmail
+        @AudienceEmail IS NOT NULL
+        AND email_user = @AudienceEmail
         AND status = 1 
-        AND GETDATE() <= expired_date 
+        AND GETDATE() <= expired_date       
 )
 
-SELECT * 
+SELECT post_id
 FROM post
 WHERE
     status = 2
