@@ -3,7 +3,7 @@
 public static class URIConstant
 {    
     public static readonly string[] WhiteListUris = {         
-        "/",
+        "/Index",
         "/Authenticate/Login",
         "/Authenticate/Logout",
         "/Authenticate/Register",
@@ -19,7 +19,7 @@ public static class URIConstant
     };
 
     public static readonly string[] AudienceListUris = {
-        "/Artworks/"
+        "/Audience/"
     };
 
     public static readonly string HomePage = "../Index";

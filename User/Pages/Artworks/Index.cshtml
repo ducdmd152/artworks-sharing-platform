@@ -117,14 +117,15 @@
             font-size: 14px;
         }
 
-            .gallery-item-stats span {
-                margin: 0 8px;
-            }
+        .gallery-item-stats span {
+        margin: 0 8px;
+        }
 
         .likes,
         .comments {
-            display: flex;
-            align-items: center;
+            margin: 0;
+        display: flex;
+        align-items: center;
         }
 
             .likes i,
@@ -195,7 +196,7 @@
 </head>
 <body>
     <div class="container mt-4 p-5">
-        
+        @await Component.InvokeAsync("ArtworkFiltering")
     </div>
     <div class="gallery container p-5 mb-2" style="margin-top: -60px;">
         @foreach (var item in Model.Posts)
@@ -210,8 +211,8 @@
                             <span class="artist-name">@item.Artist?.ArtistName</span>
                     </div>
                     <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
-                            <span class="likes"><i class="far fa-heart"></i> @item.TotalReact</span>
-                            <span class="comments"><i class="far fa-bookmark"></i> @item.TotalBookmark</span>
+                            <span class="likes"><i class="fa-solid fa-heart"></i> @item.TotalReact</span>
+                        <span class="comments"><i class="fa-solid fa-eye"></i> @item.TotalView</span>
                     </div>
                 </div>
             </a>
