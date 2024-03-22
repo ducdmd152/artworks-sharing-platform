@@ -8,5 +8,6 @@
         SelectIsReactedForPost,
         SelectIsBookmarkedForPost,
         SubcribeChartQuery,
+        TopCreatorQuery, 
     }
 }

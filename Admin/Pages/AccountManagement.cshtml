@@ -1,0 +1,41 @@
+﻿@page
+@model Admin.Pages.AccountManagementModel
+@{
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.account.FirstOrDefault().Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.account.FirstOrDefault().FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.account.FirstOrDefault().CreatedDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.account)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Email">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Email">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Email">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
