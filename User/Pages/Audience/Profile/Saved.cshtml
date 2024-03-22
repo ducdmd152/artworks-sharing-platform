@@ -257,23 +257,34 @@
     </div>
 
     <div class="gallery container p-3 mb-2">
-        @for (var i = 1; i <= 12; i++)
+        @foreach (var item in Model.Posts)
         {
-            <a class="gallery-item" asp-page="./Details" asp-route-id="10" style="color: black; text-decoration: none;">
-                <img src="@("https://placehold.co/300")"
+            <a class="gallery-item" href="/Artworks/Details?id=@item.PostId" style="color: black; text-decoration: none;">
+                <img src="@(item.Image ?? "https://placehold.co/300")"
                  class="gallery-image" />
-                <div class="gallery-item-title">Title</div>
+                <div class="gallery-item-title">@item.Title</div>
                 <div class="gallery-item-info d-flex justify-content-between">
                     <div class="user-short-item" style="flex: 2">
-                        <img src="https://placehold.co/300" class="artist-profile-pic" />
-                        <span class="artist-name">ArtistName</span>
+                        <img src="@(item.ArtistAvatar ?? "https://placehold.co/300")" class="artist-profile-pic" />
+                        <span class="artist-name">@item.ArtistName</span>
                     </div>
                     <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
-                        <span class="likes"><i class="far fa-heart"></i>10k</span>
-                        <span class="comments"><i class="far fa-bookmark"></i>2k</span>
+                        <span class="likes"><i class="fa-solid fa-heart"></i> @item.TotalReact</span>
+                        <span class="comments"><i class="fa-solid fa-eye"></i> @item.TotalView</span>
                     </div>
                 </div>
             </a>
         }
     </div>
+
+    <nav aria-label="Page navigation" style="display: flex; justify-content: center; width: 100%;">
+        <ul class="pagination">
+            @for (var i = 1; i <= @Model.PageInfo.TotalPages; i++)
+            {
+                <li class="page-item @(Model.PageInfo.PageNum == i ? "active" : "")">
+                    <a class="page-link" style="font-size: 20px; padding: 8px 16px;" href="?pageIndex=@i">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
 </div>

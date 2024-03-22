@@ -7,13 +7,6 @@
     @PageSize int
 */
 
--- Get the total number of items
-DECLARE @TotalItems INT;
-SELECT @TotalItems = COUNT(*) 
-FROM post p
-INNER JOIN reaction r ON p.post_id = r.post_id
-WHERE r.user_email = @AudienceEmail;
-
 -- Get the total number of bookmarked posts
 DECLARE @TotalItems INT;
 SELECT @TotalItems = COUNT(b.bookmark_id) 
