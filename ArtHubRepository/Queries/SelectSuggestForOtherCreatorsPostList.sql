@@ -4,6 +4,9 @@
     
     @AudienceEmail string
     @CreatorEmail string
+    @Categories List<int>
+    @PageIndex int
+    @PageSize int
 */
 
 WITH SubscribedCreators AS (
@@ -36,10 +39,13 @@ SELECT
     a.artist_name AS ArtistName
 FROM post p
 LEFT JOIN post_category pc ON p.post_id = pc.post_id
-LEFT JOIN artist a ON p.artist_email = a.artist_email
-WHERE post_id IN (SELECT post_id FROM AuthenticatedPosts)
+LEFT JOIN artist a ON p.artist_email = a.email
+WHERE p.post_id IN (SELECT post_id FROM AuthenticatedPosts) AND p.artist_email != @CreatorEmail
 ORDER BY 
     CASE 
-        WHEN pc.category_id IN (SELECT CategoryId FROM @Categories) THEN 0
+        WHEN pc.category_id IN @Categories THEN 0
         ELSE 1
-    END;
+    END
+OFFSET (@PageIndex - 1) * @PageSize ROWS
+FETCH NEXT @PageSize ROWS ONLY;
+
