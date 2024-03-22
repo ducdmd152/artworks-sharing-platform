@@ -261,18 +261,17 @@
         @for (var i = 1; i <= 12; i++)
         {
             <a class="gallery-item" asp-page="./Details" asp-route-id="10" style="color: black; text-decoration: none;">
-                <img src="@("https://placehold.co/300")"
-                 class="gallery-image" />
-                <div class="gallery-item-title">Title</div>
-                <div class="gallery-item-info d-flex justify-content-between">
-                    <div class="user-short-item" style="flex: 2">
-                        <img src="https://placehold.co/300" class="artist-profile-pic" />
-                        <span class="artist-name">ArtistName</span>
-                    </div>
-                    <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
-                        <span class="likes"><i class="far fa-heart"></i>10k</span>
-                        <span class="comments"><i class="far fa-bookmark"></i>2k</span>
-                    </div>
+                <div class="bg-white p-3 rounded-lg shadow-lg">
+                    <div class="d-flex align-items-center gap-1 flex-column">
+                        <div class="rounded-circle overflow-hidden" style="width: 56px; height: 56px;">
+                            <img src="https://placehold.co/56x56" alt="Placeholder image for Martin Deavin" class="w-100">
+                        </div>
+                        <p class="text-sm fw-bold text-gray-900 overflow-hidden" style="margin-bottom: 0;">Martin Deavin</p>
+                        <p class="text-sm text-gray-500 overflow-hidden" style="text-overflow: ellipsis; white-space: nowrap;">I'm an artist from UK</p>
+                        <div class="mt-6">
+                            <button class="btn btn-light px-2 py-1 text-sm">Subscribed</button>
+                        </div>
+                    </div>                    
                 </div>
             </a>
         }
