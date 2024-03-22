@@ -4,7 +4,7 @@
         CONVERT(date, created_date) AS RegistrationDate,
         ROW_NUMBER() OVER (PARTITION BY email_user ORDER BY created_date) AS RowNum
     FROM
-        ArtHub.dbo.subscriber
+        subscriber
     WHERE
         CONVERT(date, created_date) BETWEEN @StartDate AND @EndDate
 )

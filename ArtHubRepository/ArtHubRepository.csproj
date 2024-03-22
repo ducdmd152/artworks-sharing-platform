@@ -11,6 +11,13 @@
     <None Remove="Queries\SelectIsBookmarkedForPost.sql" />
     <None Remove="Queries\SelectIsReactedForPost.sql" />
     <None Remove="Queries\SelectSuggestPostList.sql" />
+    <None Remove="Queries\SubcribeChartQuery.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Queries\SubcribeChartQuery.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

@@ -9,26 +9,32 @@ namespace ArtHubService.Service;
 public class SubscriberService : ISubscriberService
 {
 	private readonly ISubscriberRepository _subcribersRepository;
-	private readonly DapperQueryService _dapperQueryService;
+	private readonly IDapperQueryService _dapperQueryService;
 
-	public SubscriberService(ISubscriberRepository subcribersRepository, DapperQueryService dapperQueryService)
+	public SubscriberService(ISubscriberRepository subcribersRepository, IDapperQueryService dapperQueryService)
 	{
 		_subcribersRepository = subcribersRepository;
-		_dapperQueryService = dapperQueryService;
+		this._dapperQueryService = dapperQueryService;
 	}
 
-	public async Task<IEnumerable<subchart>> GetSubChaartQuery()
+	public async Task<IEnumerable<Subchart>> GetSubChaartQuery()
 	{
-		var queryName = QueryName.SubcribeChartQuery;
-		var queryParams = new
+		try
 		{
-			StartDate = "2024-05-05",
-			EndDate = "2024-06-06"
-		};
+			var queryName = QueryName.SubcribeChartQuery;
+			var queryParams = new
+			{
+				StartDate = DateTime.Parse("2024-03-18"),
+				EndDate = DateTime.Parse("2024-03-20")
+			};
 
-		var result = await _dapperQueryService.SelectAsync<subchart>(queryName, queryParams);
+			var result = _dapperQueryService.Select<Subchart>(queryName, queryParams);
 
-		return result.ToList();
+			return result;
+		}catch(Exception ex)
+		{
+			return null;
+		}
 	}
 
 	public int GetTotalSubscribers()

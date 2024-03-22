@@ -6,5 +6,5 @@ public interface ISubscriberService
 {
 	public int GetTotalSubscribers();
 
-	public Task<IEnumerable<subchart>> GetSubChaartQuery();
+	public Task<IEnumerable<Subchart>> GetSubChaartQuery();
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ArtHubBO.DTO
 {
-    public class subchart
+    public class Subchart
     {
         public DateTime RegistrationDate { get; set; }
         public int TotalUniqueSubscribers { get; set; }
