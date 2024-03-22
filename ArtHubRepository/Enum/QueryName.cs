@@ -8,5 +8,7 @@
         GetListReportByDate,
         SelectIsReactedForPost,
         SelectIsBookmarkedForPost,
+        SelectReactedPostList,
+        SelectBookmarkedPostList,
     }
 }
