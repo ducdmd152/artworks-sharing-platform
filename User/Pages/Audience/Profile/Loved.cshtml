@@ -257,7 +257,7 @@
     <div class="gallery container p-3 mb-2">
         @foreach (var item in Model.Posts)
         {
-            <a class="gallery-item" asp-page="./Details" asp-route-id="@item.PostId" style="color: black; text-decoration: none;">
+            <a class="gallery-item" href="/Artworks/Details?id=@item.PostId" style="color: black; text-decoration: none;">
                 <img src="@(item.Image ?? "https://placehold.co/300")"
                  class="gallery-image" />
                 <div class="gallery-item-title">@item.Title</div>
