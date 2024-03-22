@@ -2,235 +2,287 @@
 @model User.Pages.CreatorExploration.DetailsModel
 @{
 }
-
-<style>
-    * {
-        box-sizing: border-box;
-    }
-
-    body,
-    h1,
-    p {
-        margin: 0;
-        padding: 0;
-    }
-
-    body {
-        font-family: "Open Sans", sans-serif;
-        line-height: 1.6;
-    }
-
-    .container {
-        width: 80%;
-        margin: auto;
-    }
-
-    .banner {
-        background: linear-gradient(to right, #a18cd1 0%, #fbc2eb 100%);
-        text-align: center;
-        color: white;
-        padding: 4rem 0;
-        height: 50vh;
-        display: flex;
-    }
-
-    nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-bottom: 2rem;
-    }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            padding: 0 1rem;
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            box-sizing: border-box;
         }
 
-        nav input {
-            padding: 0.5rem;
-        }
-
-    h1 {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-    }
-
-    p {
-        margin-bottom: 1rem;
-    }
-
-    .btn-local {
-        display: inline-block;
-        background: #6c5ce7;
-        color: white;
-        padding: 1rem 2rem;
-        border-radius: 2rem;
-        text-decoration: none;
-        font-weight: bold;
-    }
-
-    .gallery {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 24px;
-    }
-
-    .gallery-item {
-        position: relative;
-        background: #ffffff;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .gallery-image {
-        width: 100%;
-        display: block;
-        height: 240px;
-        object-fit: cover;
-        object-position: center;
-    }
-
-    .gallery-item-info {
-        padding: 4px;
-        text-align: center;
-    }
-
-    .artist-name {
-        margin: 8px 0;
-        font-size: 18px;
-        color: #333;
-    }
-
-    .gallery-item-stats {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 14px;
-    }
-
-       .gallery-item-stats span {
-        margin: 0 8px;
-        }
-
-        .likes,
-        .comments {
+        body,
+        h1,
+        p {
             margin: 0;
-        display: flex;
-        align-items: center;
+            padding: 0;
         }
 
-        .likes i,
-        .comments i {
-            margin-right: 4px;
+        body {
+            font-family: "Open Sans", sans-serif;
+            line-height: 1.6;
         }
 
-    .user-short-item {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        border-radius: 8px; /* Rounded corners for the container */
-    }
-
-    .artist-profile-pic {
-        width: 36px; /* Profile picture size */
-        height: 36px; /* Profile picture size */
-        border-radius: 50%; /* Make the image round */
-        margin-right: 10px; /* Space between the image and the name */
-        object-fit: cover; /* Ensures the image covers the area */
-    }
-
-    .artist-name {
-        font-size: 16px; /* Adjust as needed */
-        color: #333; /* Dark grey color for the text */
-        font-weight: 600; /* Bold font for the artist's name */
-    }
-
-    .gallery-item-title {
-        position: absolute;
-        top: 40%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: dark;
-        background: #ccc;
-        font-weight: 600;
-        font-size: 16px;
-        padding: 5px 10px;
-        border-radius: 5px;
-        opacity: 0;
-        transition: opacity 0.3s;
-        max-width: 220px;
-    }
-
-    .gallery-item:hover {
-        cursor: pointer;
-    }
-
-        .gallery-item:hover .gallery-image {
-            opacity: 0.6;
+        .container {
+            width: 80%;
+            margin: auto;
         }
 
-        .gallery-item:hover .gallery-item-title {
-            opacity: 1;
+        .banner {
+            background: linear-gradient(to right, #a18cd1 0%, #fbc2eb 100%);
+            text-align: center;
+            color: white;
+            padding: 4rem 0;
+            height: 50vh;
+            display: flex;
         }
-    /* Add responsiveness */
-    @@media (max-width: 768px) {
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 2rem;
+        }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+                padding: 0 1rem;
+            }
+
+            nav input {
+                padding: 0.5rem;
+            }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .btn-local {
+            display: inline-block;
+            background: #6c5ce7;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
         .gallery {
-            grid-template-columns: repeat(2, 1fr);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
         }
-    }
 
-    @@media (max-width: 480px) {
-        .gallery {
-            grid-template-columns: 1fr;
+        .gallery-item {
+            position: relative;
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-    }
 
-</style>
+        .gallery-image {
+            width: 100%;
+            display: block;
+            height: 240px;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .gallery-item-info {
+            padding: 4px;
+            text-align: center;
+        }
+
+        .artist-name {
+            margin: 8px 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .gallery-item-stats {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+        }
+
+           .gallery-item-stats span {
+            margin: 0 8px;
+            }
+
+            .likes,
+            .comments {
+                margin: 0;
+            display: flex;
+            align-items: center;
+            }
+
+            .likes i,
+            .comments i {
+                margin-right: 4px;
+            }
+
+        .user-short-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px; /* Rounded corners for the container */
+        }
+
+        .artist-profile-pic {
+            width: 36px; /* Profile picture size */
+            height: 36px; /* Profile picture size */
+            border-radius: 50%; /* Make the image round */
+            margin-right: 10px; /* Space between the image and the name */
+            object-fit: cover; /* Ensures the image covers the area */
+        }
+
+        .artist-name {
+            font-size: 16px; /* Adjust as needed */
+            color: #333; /* Dark grey color for the text */
+            font-weight: 600; /* Bold font for the artist's name */
+        }
+
+        .gallery-item-title {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: dark;
+            background: #ccc;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            max-width: 220px;
+        }
+
+        .gallery-item:hover {
+            cursor: pointer;
+        }
+
+            .gallery-item:hover .gallery-image {
+                opacity: 0.6;
+            }
+
+            .gallery-item:hover .gallery-item-title {
+                opacity: 1;
+            }
+        /* Add responsiveness */
+        @@media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+</head>
+
 <div class="container mb-4 pt-3">
-    <div class="profile-pic">
-        <img src="https://placehold.co/768x432" alt="Profile Picture">
-    </div>
-
-    <h1 class="text-center">ArtistName</h1>
-
-    <div class="profile-stats mb-3 d-flex justify-content-center">
-        <div class="ms-3 me-3">
-            200 Artworks
+    <!-- Profile Section -->
+  <section class="bg-gray-100 py-10">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <div class="inline-block rounded-full overflow-hidden h-40 w-40 border-8 border-white shadow-lg">
+          <img src="https://placehold.co/160x160" alt="Portrait of Martin Deli, the artist">
         </div>
-        <div class="ms-3 me-3">
-            20 Subscribers
+        <h1 class="mt-4 text-4xl font-semibold">Martin Deli</h1>
+        <p class="mt-2 text-sm text-gray-600">I'm an artist from UK...</p>
+        <div class="mt-4">
+          <button class="text-gray-600 border-b-2 pb-1">Edit Profile</button>
         </div>
-        <div class="ms-3 me-3">
-            400 Loved
+      </div>
+    </div>
+  </section>
+
+  <!-- Subscriptions Section -->
+  <section class="py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-3 gap-6">
+        <!-- Repeated Card Elements -->
+        <!-- Include as many cards as needed to match the screenshot -->
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <div class="flex items-center space-x-4" style="flex-direction: column;">
+            <div class="rounded-full overflow-hidden h-14 w-14">
+              <img src="https://placehold.co/56x56" alt="Placeholder image for Martin Deavin">
+            </div>
+            <p class="text-sm font-medium text-gray-900 truncate mt-2">Martin Deavin</p>
+            <p class="text-sm text-gray-500 truncate">I'm an artist from UK</p>
+          </div>
+          <div class="mt-6">
+            <button class="text-gray-900 bg-gray-100 px-4 py-2 rounded-full text-sm">Subscribed</button>
+          </div>
         </div>
-    </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <div class="flex items-center space-x-4">
+            <div class="rounded-full overflow-hidden h-14 w-14">
+              <img src="https://placehold.co/56x56" alt="Placeholder image for Martin Deavin">
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-gray-900 truncate">Martin Deavin</p>
+              <p class="text-sm text-gray-500 truncate">I'm an artist from UK...</p>
+            </div>
+          </div>
+          <div class="mt-6">
+            <button class="text-gray-900 bg-gray-100 px-4 py-2 rounded-full text-sm">Subscribed</button>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <div class="flex items-center space-x-4">
+            <div class="rounded-full overflow-hidden h-14 w-14">
+              <img src="https://placehold.co/56x56" alt="Placeholder image for Martin Deavin">
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-gray-900 truncate">Martin Deavin</p>
+              <p class="text-sm text-gray-500 truncate">I'm an artist from UK...</p>
+            </div>
+          </div>
+          <div class="mt-6">
+            <button class="text-gray-900 bg-gray-100 px-4 py-2 rounded-full text-sm">Subscribed</button>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <div class="flex items-center space-x-4">
+            <div class="rounded-full overflow-hidden h-14 w-14">
+              <img src="https://placehold.co/56x56" alt="Placeholder image for Martin Deavin">
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-gray-900 truncate">Martin Deavin</p>
+              <p class="text-sm text-gray-500 truncate">I'm an artist from UK...</p>
+            </div>
+          </div>
+          <div class="mt-6">
+            <button class="text-gray-900 bg-gray-100 px-4 py-2 rounded-full text-sm">Subscribed</button>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <div class="flex items-center space-x-4">
+            <div class="rounded-full overflow-hidden h-14 w-14">
+              <img src="https://placehold.co/56x56" alt="Placeholder image for Martin Deavin">
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-gray-900 truncate">Martin Deavin</p>
+              <p class="text-sm text-gray-500 truncate">I'm an artist from UK...</p>
+            </div>
+          </div>
+          <div class="mt-6">
+            <button class="text-gray-900 bg-gray-100 px-4 py-2 rounded-full text-sm">Subscribed</button>
+          </div>
+        </div>
+        <!-- Repeat for each subscription -->
 
-    <div class="text-center">
-        <button id="btn-subcribe" class="btn btn-dark">Subcribe</button>
-    </div>
-
-    <hr>
-
-    <div class="gallery container p-3 mb-2">
-        @for (var i = 1; i <= 12; i++)
-        {
-            <a class="gallery-item" asp-page="./Details" asp-route-id="10" style="color: black; text-decoration: none;">
-                <img src="@("https://placehold.co/300")"
-                 class="gallery-image" />
-                <div class="gallery-item-title">Title</div>
-                <div class="gallery-item-info d-flex justify-content-between">
-                    <div class="user-short-item" style="flex: 2">
-                        <img src="https://placehold.co/300" class="artist-profile-pic" />
-                        <span class="artist-name">ArtistName</span>
-                    </div>
-                    <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
-                        <span class="likes"><i class="far fa-heart"></i>10k</span>
-                        <span class="comments"><i class="fa-solid fa-eye"></i>2k</span>
-                    </div>
-                </div>
-            </a>
-        }
-    </div>
+      </div>
 </div>
