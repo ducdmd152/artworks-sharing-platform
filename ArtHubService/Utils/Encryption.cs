@@ -52,4 +52,16 @@ public class Encryption
         }
         return cipherText;
     }
+
+    public static string EncodeEmailToKey(string email)
+    {
+        byte[] bytes = Encoding.UTF8.GetBytes(email);
+        return Convert.ToBase64String(bytes);
+    }
+
+    public static string DecodeKeyToEmail(string key)
+    {
+        byte[] bytes = Convert.FromBase64String(key);
+        return Encoding.UTF8.GetString(bytes);
+    }
 }

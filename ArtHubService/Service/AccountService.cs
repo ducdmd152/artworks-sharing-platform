@@ -177,5 +177,46 @@ namespace ArtHubService.Service
             }
             return null;
         }
+
+        public async Task<bool> ChangePassword(PasswordConfirmDto passwordConfirmDto, string email)
+        {
+            try
+            {
+                await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);                
+                var dataUpdate = accountRepository.GetAccountIncludeArtistByEmail(email);
+                dataUpdate.Password = passwordConfirmDto.NewPassword;                
+                accountRepository.Update(dataUpdate);
+                await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                unitOfWork.RollbackTransaction();
+            }
+            return false;
+        }
+
+        public bool CheckCorrectPassword(string email, string password)
+        {
+            return accountRepository.CheckCorrectPassword(email, password);
+        }
+
+        public async Task<bool> UpdateAccountEnable(string email, bool enable)
+        {
+            try
+            {
+                await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+                Account account = accountRepository.GetAccountByEmail(email);
+                account.Enabled = enable;
+                accountRepository.Update(account);
+                await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                unitOfWork.RollbackTransaction();
+            }
+            return false;
+        }
     }
 }

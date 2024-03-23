@@ -58,6 +58,74 @@ public class PostService : IPostService
         return await postRepository.GetAllPostBySearchConditionAsync(searchPayload);
     }
 
+    public async Task<PageResult<SelectPostDTO>> GetReactedPostList(string audienceEmail, int pageIndex = 1, int pageSize = 12)
+    {
+        try
+        {
+            var list = this.dapperQueryService
+                .Select<SelectPostDTO>(QueryName.SelectReactedPostList,
+                new
+                {
+                    AudienceEmail = audienceEmail,
+                    PageIndex = pageIndex,
+                    PageSize = pageSize,
+                });
+
+            var result = new PageResult<SelectPostDTO>
+            {
+                PageData = list.ToList(),
+                PageInfo = new PageInfo
+                {
+                    PageNum = pageIndex,
+                    PageSize = pageSize,
+                    TotalPages = list.First().TotalPages,
+                    TotalItems = list.First().TotalItems,
+                }
+            };
+            return result;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("GetReactedPostList || Exception...");
+            Console.WriteLine(e.Message);
+            return null;
+        }
+    }
+
+    public async Task<PageResult<SelectPostDTO>> GetBookmarkedPostList(string audienceEmail, int pageIndex = 1, int pageSize = 12)
+    {
+        try
+        {
+            var list = this.dapperQueryService
+                .Select<SelectPostDTO>(QueryName.SelectBookmarkedPostList,
+                new
+                {
+                    AudienceEmail = audienceEmail,
+                    PageIndex = pageIndex,
+                    PageSize = pageSize,
+                });
+
+            var result = new PageResult<SelectPostDTO>
+            {
+                PageData = list.ToList(),
+                PageInfo = new PageInfo
+                {
+                    PageNum = pageIndex,
+                    PageSize = pageSize,
+                    TotalPages = list.First().TotalPages,
+                    TotalItems = list.First().TotalItems,
+                }
+            };
+            return result;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("GetReactedPostList || Exception...");
+            Console.WriteLine(e.Message);
+            return null;
+        }
+    }
+
     public Post Get(int id) => postRepository.Get(id);
     public List<Post> TestPostCategory()
     {

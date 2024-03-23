@@ -3,6 +3,7 @@
     Date: 19/03/2024
     
     @AudienceEmail string
+    @ArtistEmail string
 */
 
 
@@ -21,3 +22,4 @@ FROM post
 WHERE
     status = 2
     AND (scope = 1 OR (scope = 2 AND artist_email IN (SELECT email_artist FROM SubscribedCreators)))
+    AND (@ArtistEmail IS NULL OR artist_email = @ArtistEmail)

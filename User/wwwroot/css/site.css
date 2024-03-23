@@ -269,7 +269,10 @@ html {
     background-color: var(--dark-color-light);
     color: #fff !important;
 }
-
+.nav-user {
+    display: flex;
+    align-items: center;
+}
 .nav-user:hover .user-menu {
     display: block;
 }

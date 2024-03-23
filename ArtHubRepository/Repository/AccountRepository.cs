@@ -28,5 +28,15 @@ namespace ArtHubRepository.Repository
         {
             return this.DbSet.Include(a => a.Artist).Include(a => a.Role).First(a => a.Email.Equals(email));
         }
+
+        public bool CheckCorrectPassword(string email, string password)
+        {
+            return this.DbSet.Any(a => a.Email.Equals(email) & a.Password.Equals(password));
+        }
+
+        public Account GetAccountByEmail(string email)
+        {
+            return this.DbSet.Where(a => a.Email == email).First();
+        }
     }
 }

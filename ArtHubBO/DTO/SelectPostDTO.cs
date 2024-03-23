@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace ArtHubBO.DTO
 {
-    public class SuggestPostDTO
+    public class SelectPostDTO
     {
         public int PostId { get; set; }
         public string Title { get; set; }
+        public string Image { get; set; }        
         public string Description { get; set; }
         public int Status { get; set; }
         public int Scope { get; set; }
@@ -18,5 +19,8 @@ namespace ArtHubBO.DTO
         public int TotalBookmark { get; set; }
         public string ArtistEmail { get; set; }
         public string ArtistName { get; set; }
+        public string ArtistAvatar { get; set; }
+        public int TotalPages { get; set; }
+        public int TotalItems { get; set; }
     }
 }
