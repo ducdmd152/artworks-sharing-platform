@@ -1,14 +1,35 @@
 ﻿@page
 @model User.Pages.Creator.AudienceSubscriberStatisticModel
 @{
+    string type = Request.Query["type"];
+    if (string.IsNullOrEmpty(type))
+    {
+        type = "Subscriber";
+    }
 }
+<style>
+    .btn.active {
+        background-color: #333;
+        color: #fff;
+    }
+</style>
 <div class="container mb-4" style="margin-top: 100px;">
+    <div class="d-flex justify-content-center">
+        <div class="me-4">
+            <a href="/Creator/AudienceSubscriberStatistic?type=Subscriber" class="btn position-relative mb-2 @(type == "Subscriber" ? "active" : "")">Subscriber Statistic</a>
+        </div>
+        <div>
+            <a href="/Creator/AudienceSubscriberStatistic?type=Revenue" class="btn position-relative mb-2 @(type == "Revenue" ? "active" : "")">Revenue Statistic</a>
+        </div>
+    </div>
+    
     <select id="timeFrameSelect" class="form-control mb-3">
         <option value="weekly">Weekly</option>
         <option value="monthly">12 Months</option>
     </select>
-    <canvas id="subscriptionChart" width="400" height="200"></canvas>
-
+    <div class="d-flex justify-content-center" style="width:100%; height: 70vh;">
+        <canvas id="subscriptionChart"></canvas>
+    </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -25,7 +46,7 @@
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Subscriptions',
+                    label: 'Total',
                     data: data,
                     fill: false,
                     borderColor: 'rgb(75, 192, 192)',
@@ -33,27 +54,23 @@
                 }]
             },
             options: {
-                // ... other options
+                
             }
-
-
         });
+        document.getElementById('subscriptionChart').setAttribute('width', '600');
+        document.getElementById('subscriptionChart').setAttribute('height', '400');
     }
 
     // Function to update the chart data
     function updateChartData(timeFrame) {
         var data = [];
         var labels = [];
-        // Fetch the data based on the time frame...
-        // This is where you would fetch the data from your server
-        // and update the 'data' and 'labels' arrays accordingly.
-
-        // For demonstration, here's some dummy data:
+        // Use the fetched data from the model
         if (timeFrame === 'weekly') {
-            data = [20, 30, 25, 35, 40, 45, 50]; // Example data
-            labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']; // Example labels
+            data = [@Model.StatisticOfWeek.Monday, @Model.StatisticOfWeek.Tuesday, @Model.StatisticOfWeek.Wednesday, @Model.StatisticOfWeek.Thursday, @Model.StatisticOfWeek.Friday, @Model.StatisticOfWeek.Saturday, @Model.StatisticOfWeek.Sunday]; // Example data
+            labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; // Example labels
         } else { // 'monthly'
-            data = [100, 120, 170, 130, 180, 190, 200, 210, 240, 230, 220, 250]; // Example data
+            data = [@Model.StatisticOfYear.January, @Model.StatisticOfYear.February, @Model.StatisticOfYear.March, @Model.StatisticOfYear.April, @Model.StatisticOfYear.May, @Model.StatisticOfYear.June, @Model.StatisticOfYear.July, @Model.StatisticOfYear.August, @Model.StatisticOfYear.September, @Model.StatisticOfYear.October, @Model.StatisticOfYear.November, @Model.StatisticOfYear.December]; // Example data
             labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; // Example labels
         }
         createChart(data, labels);
