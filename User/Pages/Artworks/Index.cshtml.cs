@@ -20,6 +20,7 @@ namespace User.Pages.Audience
 
         public Account Account { get; set; } = default!;
         public IList<Post> Posts { get; set; } = default!;
+        public IList<Post> InsteadPosts { get; set; } = default!;
         public IList<Category> Categories { get; set; }
         public SearchPayload<PostAudienceSearchConditionDto> SearchPayload = default!;
 
@@ -48,6 +49,27 @@ namespace User.Pages.Audience
             };
 
             Posts = await postService.GetAllPostBySearchConditionForAudienceAsync(SearchPayload);
+
+            if (Posts == null || Posts.Count == 0)
+            {
+                condition = new PostAudienceSearchConditionDto()
+                {
+                    AudienceEmail = Account?.Email ?? string.Empty,
+                    PostStatus = PostStatus.Approval,
+                    SortType = SortType.FAVOURITE,
+                    SortDirection = SortDirection.DESC,
+                };
+                SearchPayload = new SearchPayload<PostAudienceSearchConditionDto>()
+                {
+                    PageInfo = new PageInfo()
+                    {
+                        PageNum = pageIndex,
+                        PageSize = pageSize,
+                    },
+                    SearchCondition = condition
+                };
+                InsteadPosts = await postService.GetAllPostBySearchConditionForAudienceAsync(SearchPayload);
+            }
         }
     }
 }
