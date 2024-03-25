@@ -36,8 +36,8 @@ namespace User.Pages.CreatorExploration
 
             PostAudienceSearchConditionDto condition = new PostAudienceSearchConditionDto()
             {
-                //ArtistEmail = artistEmail,
-                //AudienceEmail = audienceEmail,
+                ArtistEmail = artistEmail,
+                AudienceEmail = audienceEmail,
                 PostStatus = PostStatus.Approval,
                 SortType = SortType.RECENT,
                 SortDirection = SortDirection.DESC,
