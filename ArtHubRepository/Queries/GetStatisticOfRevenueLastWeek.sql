@@ -18,6 +18,6 @@ FROM
 INNER JOIN
     ArtHub.dbo.fee f ON t.fee_id = f.fee_id
 WHERE
-	t.created_date >= DATEADD(DAY, -DATEPART(WEEKDAY, GETDATE()) - 6, CAST(GETDATE() AS DATE))
-	AND t.created_date < DATEADD(DAY, -DATEPART(WEEKDAY, GETDATE()) + 2, CAST(GETDATE() AS DATE))
+	t.created_date >= DATEADD(WEEK, DATEDIFF(WEEK, 0, GETDATE()) - 2, 0)
+	AND t.created_date < DATEADD(WEEK, DATEDIFF(WEEK, 0, GETDATE()) - 1, 0)
 	AND f.artist_email = @ArtistEmail;

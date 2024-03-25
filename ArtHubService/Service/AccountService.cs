@@ -218,5 +218,21 @@ namespace ArtHubService.Service
             }
             return false;
         }
+
+        public async Task<bool> CreateAccount(Account account)
+        {
+            try
+            {
+                await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+                await accountRepository.AddAsync(account).ConfigureAwait(false);
+                await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+                return true;
+            }
+            catch (Exception e)
+            {
+                unitOfWork.RollbackTransaction();
+            }
+            return false;            
+        }
     }
 }

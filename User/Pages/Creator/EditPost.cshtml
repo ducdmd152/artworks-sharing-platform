@@ -3,6 +3,7 @@
 @{
 }
 <div class="container mb-4" style="margin-top: 100px;">
+    <partial name="Shared/Partial/_toastyAnnouncePartial" />
     <div class="title text-center mt-4">
         <h2 class="position-relative d-inline-block">Edit Post</h2>
     </div>
@@ -128,7 +129,20 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
 <script>
+
+    var failUploadImageMessage = '@TempData["FailUploadImage"]';
+    if (failUploadImageMessage) {
+        showOutOfStockToastDanger('Upload Image', failUploadImageMessage);
+    }
+
+    var failUpdatePostMessage = '@TempData["FailUpdatePost"]';
+    if (failUpdatePostMessage) {
+        showOutOfStockToastDanger('Update', failUpdatePostMessage);
+    }
 
     document.querySelector('#updateButton').addEventListener('click', function () {        
         document.querySelector('#errorMessageCategories').textContent = '';      

@@ -8,6 +8,7 @@ using ArtHubService.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using User.Pages.Filter;
+using System.Net;
 
 namespace User.Pages.Creator;
 
@@ -100,9 +101,14 @@ public class EditPostModel : PageModel
                 AwsSecret = configuration[S3Constants.SecretKey] ?? ""
             };
             var responseUploadImage = await storageService.UploadFileAsync(s3Obj, credential);
+            if (responseUploadImage.StatusCode != (int)HttpStatusCode.OK)
+            {
+                TempData["FailUploadImage"] = "Upload image fail!";
+                return Page();
+            }
             Post.Images.First().ImageUrl = responseUploadImage.LinkSource;
         }
-
+        
                  
 
         // Post category
@@ -140,8 +146,13 @@ public class EditPostModel : PageModel
         }
         
 
-        await postService.UpdatePost(Post).ConfigureAwait(false);
-
+        var updatedPost = await postService.UpdatePost(Post).ConfigureAwait(false);
+        if (updatedPost == null)
+        {
+            TempData["FailUpdatePost"] = "Update post fail!";
+            return Page();
+        }
+        TempData["UpdatePostSuccess"] = "Edit post "+ updatedPost.Title +" success!";
         return RedirectToPage(URIConstant.ArtworkList);
     }
 
