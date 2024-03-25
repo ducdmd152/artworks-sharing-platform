@@ -15,6 +15,8 @@ namespace ArtHubBO.DTO
         public string ArtistTotalReact { get; set; }
         public string ArtistTotalView { get; set; }
         public string ArtistAvatar { get; set; }
+        public bool? IsSubscribed { get; set; }
+        public string? SubscribeExpiredDate { get; set; }
         public int TotalPages { get; set; }
         public int TotalItems { get; set; }
     }

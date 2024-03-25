@@ -4,15 +4,6 @@
     
     @AudienceEmail string
 */
-
-WITH SubscribedCreators AS (
-    SELECT DISTINCT email_artist AS Email
-    FROM subscriber
-    WHERE email_user = @AudienceEmail
-        AND status = 1 
-        AND GETDATE() <= expired_date       
-)
-
 SELECT
     ArtistEmail,
     ArtistBio,
@@ -22,7 +13,8 @@ SELECT
     ArtistTotalView,
     ArtistAvatar,
     TotalPages,
-    TotalItems
+    TotalItems,
+	SubcribeExpiredDate
 FROM (
     SELECT DISTINCT
         a.email AS ArtistEmail,
@@ -32,9 +24,10 @@ FROM (
         SUM(p.total_react) AS ArtistTotalReact,
         SUM(p.total_view) AS ArtistTotalView,
         acc.avatar AS ArtistAvatar,
-        COUNT(*) OVER () AS TotalItems,
-        CEILING(COUNT(*) OVER () * 1.0 / @PageSize) AS TotalPages,
-        ROW_NUMBER() OVER (ORDER BY a.total_subscribe DESC, SUM(p.total_react) DESC) AS RowNum
+        COUNT(a.email) OVER () AS TotalItems,
+		FORMAT(sub.expired_date, 'dd/MM/yyyy HH:mm') AS SubcribeExpiredDate,
+        CEILING(COUNT(a.email) OVER () * 1.0 / @PageSize) AS TotalPages,
+        ROW_NUMBER() OVER (ORDER BY MAX(sub.created_date) DESC) AS RowNum
     FROM subscriber sub
     INNER JOIN artist a ON (sub.status = 1 AND GETDATE() <= sub.expired_date AND sub.email_user = @AudienceEmail AND sub.email_artist = a.email)
     INNER JOIN account acc ON a.email = acc.email
@@ -45,9 +38,7 @@ FROM (
         a.bio,
         a.artist_name,
         a.total_subscribe,
-        acc.avatar
+        acc.avatar,
+		sub.expired_date
 ) AS SubQuery
-WHERE RowNum BETWEEN (@PageIndex - 1) * @PageSize + 1 AND @PageIndex * @PageSize
-ORDER BY
-    ArtistTotalSubscribe DESC,
-    ArtistTotalReact DESC;
+WHERE RowNum BETWEEN (@PageIndex - 1) * @PageSize + 1 AND @PageIndex * @PageSize;
