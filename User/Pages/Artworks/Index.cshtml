@@ -192,6 +192,15 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .gallery-item {
+            position: relative;
+        }
+        .scope-badge {
+            position: absolute;
+            top: 6px;
+            left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -214,6 +223,17 @@
                             <span class="likes"><i class="fa-solid fa-heart"></i> @item.TotalReact</span>
                         <span class="comments"><i class="fa-solid fa-eye"></i> @item.TotalView</span>
                     </div>
+                </div>
+                <div class="scope-badge">
+                    @if (@item.Scope == 2)
+                    {
+                        <span class="badge bg-secondary" style="font-size: 10px;">Subscriber Only</span>
+                    }
+                    else if (@item.Scope == 3)
+                    {
+                        <span class="badge bg-dark">Private</span>
+                    }
+
                 </div>
             </a>
         }
@@ -244,7 +264,10 @@
         }
 
         function filterByCategory(category) {
-            console.log("Filter by category: " + category);
+            var keyword = document.getElementById('searchInput').value.trim();
+            var orderSelect = document.getElementById('order-select').value;
+            console.log(category);
+            window.location.href = '../Artworks?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect + "&category=" + category;
         }
 
         function performSearch() {

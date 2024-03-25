@@ -25,8 +25,8 @@ namespace User.Pages.Artworks
             this.reportService = reportService;
         }
         public Post Post { get; set; } = default!;
-        public List<Post> ArtistSuggestion = default!;
-        public List<Post> OtherSuggestion = default!;
+        public IList<Post> ArtistSuggestion = default!;
+        public IList<Post> OtherSuggestion = default!;
         public bool IsReacted { get; set; }
         public bool IsBookmarked { get; set; }
         public async Task<IActionResult> OnGetAsync(int id)
@@ -49,33 +49,34 @@ namespace User.Pages.Artworks
                 IsBookmarked = interactionService.CheckIsBookmarkedForPost(email, id);
                 await interactionService.OneMoreView(id).ConfigureAwait(false);
 
-                ArtistSuggestion = await postService.GetAllPostBySearchConditionAsync(new SearchPayload<PostSearchConditionDto>()
+                ArtistSuggestion = await postService.GetAllPostBySearchConditionForAudienceAsync(new SearchPayload<PostAudienceSearchConditionDto>()
                 {
                     PageInfo = new PageInfo()
                     {
                         PageNum = 1,
                         PageSize = 3,
                     },
-                    SearchCondition = new PostSearchConditionDto()
+                    SearchCondition = new PostAudienceSearchConditionDto()
                     {
                         ArtistEmail = item.ArtistEmail,
+                        SuggestCategoryId = Post.PostCategories.Select(item => item.CategoryId).ToArray(),
                     }
                 });
 
-                OtherSuggestion = await postService.GetAllPostBySearchConditionAsync(new SearchPayload<PostSearchConditionDto>()
+                OtherSuggestion = await postService.GetAllPostBySearchConditionForAudienceAsync(new SearchPayload<PostAudienceSearchConditionDto>()
                 {
                     PageInfo = new PageInfo()
                     {
                         PageNum = 1,
                         PageSize = 4,
                     },
-                    SearchCondition = new PostSearchConditionDto()
+                    SearchCondition = new PostAudienceSearchConditionDto()
                     {
-                        PostScope = PostScope.Public,
+                        OthersOfArtistEmail = item.ArtistEmail,
                         PostStatus = PostStatus.Approval,
                         SortType = SortType.FAVOURITE,
                         SortDirection = SortDirection.DESC,
-                        //CategoryId = Post.PostCategories.Select(item => item.CategoryId).ToArray(),
+                        SuggestCategoryId = Post.PostCategories.Select(item => item.CategoryId).ToArray(),
                     }
                 });
             }
