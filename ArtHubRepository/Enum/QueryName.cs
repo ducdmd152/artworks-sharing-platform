@@ -8,6 +8,7 @@
         SelectIsReactedForPost,
         SelectIsBookmarkedForPost,
         SubcribeChartQuery,
-        TopCreatorQuery, 
+        TopCreatorQuery,
+        GetAccountManagement,
     }
 }

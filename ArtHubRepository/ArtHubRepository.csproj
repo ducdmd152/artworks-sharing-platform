@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Queries\GetAccountManagement.sql" />
     <None Remove="Queries\SelectAllPostListForAuthenticatedAudience.sql" />
     <None Remove="Queries\SelectIsBookmarkedForPost.sql" />
     <None Remove="Queries\SelectIsReactedForPost.sql" />
@@ -16,6 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Queries\GetAccountManagement.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Queries\SubcribeChartQuery.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>

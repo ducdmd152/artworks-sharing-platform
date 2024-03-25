@@ -23,10 +23,15 @@ namespace ArtHubRepository.Repository
         
          public int GetTotalUsers()
         {
-            return this.DbSet.Count(p => p.RoleId != 2 && p.RoleId != 3);
+            return this.DbSet.Count(p => p.RoleId != 4 && p.RoleId != 3);
         }
 
         public Account GetAccount(string postArtistEmail)
             => this.DbSet.FirstOrDefault(x => x.Email == postArtistEmail);
+
+        public IEnumerable<Account> GetCreatorAndUser()
+        {
+            return this.DbSet.Where(p => p.RoleId != 1);
+        }
     }
 }

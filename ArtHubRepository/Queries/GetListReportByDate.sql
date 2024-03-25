@@ -7,7 +7,7 @@
     @PageSize int
 */
 
-WITH ReportList AS (
+WITH AccountList AS (
     SELECT
         r.report_id,
         r.reason,
