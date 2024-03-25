@@ -21,7 +21,6 @@ namespace User.Pages.Audience
         public Account Account { get; set; } = default!;
         public IList<Post> Posts { get; set; } = default!;
         public IList<Post> InsteadPosts { get; set; } = default!;
-        public IList<Category> Categories { get; set; }
         public SearchPayload<PostAudienceSearchConditionDto> SearchPayload = default!;
 
 

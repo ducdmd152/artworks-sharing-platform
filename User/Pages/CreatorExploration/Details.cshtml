@@ -1,4 +1,5 @@
 ﻿@page
+@using ArtHubService.Utils;
 @model User.Pages.CreatorExploration.DetailsModel
 @{
 }
@@ -187,6 +188,22 @@
                 grid-template-columns: 1fr;
             }
         }
+        .btn-subscribed:hover {
+            color: black !important;
+            background: gray;
+            border: solid 1px darkgray;           
+            transform: scale(1.05);
+        }
+
+        .gallery-item {
+            position: relative;
+        }
+
+        .scope-badge {
+            position: absolute;
+            top: 8px;
+            left: 10px;
+        }
 
     </style>
 </head>
@@ -197,36 +214,84 @@
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center">
         <div class="inline-block rounded-full overflow-hidden h-40 w-40 border-8 border-white shadow-lg">
-          <img src="https://placehold.co/160x160" alt="Portrait of Martin Deli, the artist">
+                    <img src="@Model.Creator.ArtistAvatar" class="h-40 w-40" style="object-fit: cover; object-position: center;" alt="Portrait of the artist">
         </div>
-        <h1 class="mt-4 text-4xl font-semibold">Martin Deli</h1>
-        <p class="mt-2 text-sm text-gray-600">I'm an artist from UK...</p>
+        <h1 class="mt-4 text-4xl font-semibold">@Model.Creator.ArtistName</h1>
+         
+                <div class="text-sm text-gray-500 overflow-hidden" style="font-size: 16px; width: 300px; margin: auto; text-overflow: ellipsis; white-space: nowrap; display: grid; grid-template-columns: repeat(3, 1fr); grid-column-gap: 6px;">
+                    <p class="fw-bold text-center">@Model.Creator.ArtistTotalSubscribe subcribers</p>
+                    <p class="fw-bold text-center">@Model.Creator.ArtistTotalView views</p>
+                    <p class="fw-bold text-center">@Model.Creator.ArtistTotalReact loved</p>
+                </div>
+                <p class="mt-2 text-sm text-gray-600">@Model.Creator.ArtistBio</p>
+                
         <div class="mt-4">
-          <button class="text-white-600 border-b-2 px-4 py-2 btn btn-dark">Subribe</button>
+                    @if (@Model.Creator.IsSubscribed == true)
+                    {
+                        <button class="text-gray-600 border-b-2 px-4 py-2 btn btn-light btn-subscribed" style="background-color: rgba(255, 255, 255, 0.7);">Subscribed</button>
+                    }
+                    else
+                    {
+                        <button class="text-white-600 border-b-2 px-4 py-2 btn btn-dark">Subscribe</button>
+                    }
+          
         </div>
       </div>
     </div>
   </section>
 
   <!-- Artworks Section -->
-    <div class="gallery container p-5 mb-2">
-        @for(int i = 0; i < 12; i++)
+   <section class="mb-3">
+        @if (@Model.Posts == null || @Model.Posts.Count == 0)
         {
-            <a class="gallery-item" asp-page="./Details" asp-route-id="1" style="color: black; text-decoration: none;">
-                <img src=""
-                 class="gallery-image" />
-                <div class="gallery-item-title">Title</div>
-                <div class="gallery-item-info d-flex justify-content-between">
-                    <div class="user-short-item" style="flex: 2">
-                        <img src="" class="artist-profile-pic" />
-                        <span class="artist-name">ArtistName</span>
-                    </div>
-                    <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
-                        <span class="likes"><i class="fa-solid fa-heart"></i> 1k</span>
-                        <span class="comments"><i class="fa-solid fa-eye"></i> 1k</span>
-                    </div>
-                </div>
-            </a>
+            <div class="container p-5 mb-2">
+                <p class="text-dark fst-italic m-auto text-center" style="font-size: 20px;">No artworks available.</p>
+            </div>
         }
-    </div>
+        else
+        {
+            <div class="gallery p-5 mb-2">
+                @foreach (var item in Model.Posts)
+                {
+                    <a class="gallery-item" href="/Artworks/Details?id=@item.PostId" style="color: black; text-decoration: none;">
+                        <img src="@(item.Images.FirstOrDefault()?.ImageUrl ?? "https://placehold.co/300")"
+                     class="gallery-image" />
+                        <div class="gallery-item-title">@item.Title</div>
+                        <div class="gallery-item-info d-flex justify-content-between">
+                            <div class="user-short-item" style="flex: 2">
+                                <img src="@(item.Artist?.Account?.Avatar ?? "https://placehold.co/300")" class="artist-profile-pic" />
+                                <span class="artist-name">@item.Artist?.ArtistName</span>
+                            </div>
+                            <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
+                                <span class="likes"><i class="fa-solid fa-heart"></i> @item.TotalReact</span>
+                                <span class="comments"><i class="fa-solid fa-eye"></i> @item.TotalView</span>
+                            </div>
+                        </div>
+                        <div class="scope-badge">
+                            @if (@item.Scope == 2)
+                            {
+                                <span class="badge bg-secondary" style="font-size: 11px;">Subscriber Only</span>
+                            }
+                            else if (@item.Scope == 3)
+                            {
+                                <span class="badge bg-dark">Private</span>
+                            }
+
+                        </div>
+                    </a>
+                }
+            </div>
+
+            <nav aria-label="Page navigation" style="display: flex; justify-content: center; width: 100%;">
+                <ul class="pagination">
+                    @for (var i = 1; i <= @Model.SearchPayload.PageInfo.TotalPages; i++)
+                    {
+                        <li class="page-item @(Model.SearchPayload.PageInfo.PageNum == i ? "active" : "")">
+                            <a class="page-link" style="font-size: 20px; padding: 8px 16px;" href="?id=@(Encryption.EncodeEmailToKey(Model.Creator.ArtistEmail))&pageIndex=@i">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+   </section>
 </div>

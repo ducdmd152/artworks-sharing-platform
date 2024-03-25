@@ -7,6 +7,7 @@ public class PostAudienceSearchConditionDto
     public string ArtistEmail { get; set; } = null!;
     public string OthersOfArtistEmail { get; set; } = null!;
     public string AudienceEmail { get; set; } = null!;
+    public List<int> NotIncludePosts { get; set; } = null!;
     public DateTime? CreatedDate { get; set; }
     public string? Title { get; set; }
     public PostStatus? PostStatus { get; set; }

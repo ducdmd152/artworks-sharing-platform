@@ -162,6 +162,11 @@ namespace ArtHubRepository.Repository
                     query = query.Where(p => p.Scope == (int)PostScope.Public || (p.Scope == (int)PostScope.Subscriber) && subscribedEmails.Any(email => email == p.ArtistEmail));                    
                 }
 
+                if (searchCondition.NotIncludePosts != null && searchCondition.NotIncludePosts.Count > 0)
+                {
+                    query = query.Where(p => !searchCondition.NotIncludePosts.Contains(p.PostId));
+                }
+
                 if (searchCondition.ArtistEmail != null)
                 {
                     query = query.Where(p => p.ArtistEmail.Equals(searchCondition.ArtistEmail));

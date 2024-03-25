@@ -270,12 +270,19 @@
       </div>
       <hr/>
       <div class="more-artwork mt-4">
-        <h2 class="m-3 text-center">More from Martin Deavin</h2>
+            <h2 class="m-3 text-center">More from @Model.Post?.Artist?.ArtistName</h2>
         <div class="thumbnails">
           @foreach (var item in Model.ArtistSuggestion)
           {
-            <a class="thumbnail" asp-page="./Details" asp-route-id="@item.PostId" style="color: black; text-decoration: none;">
+            <a class="gallery-item thumbnail" asp-page="./Details" asp-route-id="@item.PostId" style="color: black; text-decoration: none;">
                 <img src="@(item?.Images?.FirstOrDefault()?.ImageUrl ?? "https://placehold.co/300")" alt="Artwork Thumbnail" class="thumbnail-image">
+                <div class="gallery-item-title mt-4">@item.Title</div>
+                <div class="d-flex justify-content-end" style="position:absolute; bottom:8px; right: 8px;">
+                    <div class="gallery-item-stats ml-1" style="flex: 1; background: rgba(255, 255, 255, 0.2); padding: 3px 4px; border-radius: 2px;">
+                        <span class="likes"><i class="far fa-heart"></i> @item.TotalReact</span>
+                        <span class="comments"><i class="far fa-bookmark"></i> @item.TotalBookmark</span>
+                    </div>
+                </div>
             </a>
           }                       
         </div>
