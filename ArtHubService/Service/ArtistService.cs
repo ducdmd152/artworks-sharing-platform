@@ -56,4 +56,38 @@ public class ArtistService : IArtistService
             TotalPostCount = artistDataQueryDto.TotalPostCount,
         };
     }
+
+    public PageResult<SelectCreatorDTO> GetTopCreators(string audienceEmail, int pageIndex = 1, int pageSize = 12)
+    {
+        try
+        {
+            var list = this.dapperQueryService
+                .Select<SelectCreatorDTO>(QueryName.SelectTopCreators,
+                new
+                {
+                    AudienceEmail = audienceEmail,
+                    PageIndex = pageIndex,
+                    PageSize = pageSize,
+                });
+
+            var result = new PageResult<SelectCreatorDTO>
+            {
+                PageData = list.ToList(),
+                PageInfo = new PageInfo
+                {
+                    PageNum = pageIndex,
+                    PageSize = pageSize,
+                    TotalPages = list.First().TotalPages,
+                    TotalItems = list.First().TotalItems,
+                }
+            };
+            return result;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("GetTopCreators || Exception...");
+            Console.WriteLine(e.Message);
+            return null;
+        }
+    }
 }

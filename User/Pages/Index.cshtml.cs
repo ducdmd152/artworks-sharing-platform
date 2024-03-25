@@ -4,6 +4,7 @@ using ArtHubBO.Entities;
 using ArtHubBO.Enum;
 using ArtHubBO.Payload;
 using ArtHubService.Interface;
+using ArtHubService.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -20,15 +21,17 @@ namespace User.Pages
             _logger = logger;
         }
 
+        public Account Account { get; set; } = default!;
         public IList<Post> Posts { get; set; } = default!;
-        public SearchPayload<PostSearchConditionDto> SearchPayload = default!;
+        public SearchPayload<PostAudienceSearchConditionDto> SearchPayload = default!;
 
 
-        public async Task OnGetAsync(int pageIndex = 1, int pageSize = 12, string? search = "", int? orderBy = null, int[]? category = null)
+        public async Task OnGetAsync(int pageIndex = 1, int pageSize = 12, string? search = "", int orderBy = 1, int[]? category = null)
         {
-            PostSearchConditionDto condition = new PostSearchConditionDto()
+            Account = SessionUtil.GetAuthenticatedAccount(HttpContext);
+            PostAudienceSearchConditionDto condition = new PostAudienceSearchConditionDto()
             {
-                PostScope = PostScope.Public,
+                AudienceEmail = Account?.Email ?? string.Empty,
                 PostStatus = PostStatus.Approval,
                 SortType = orderBy == (int)SortType.FAVOURITE ? SortType.FAVOURITE : SortType.RECENT,
                 SortDirection = SortDirection.DESC,
@@ -36,7 +39,7 @@ namespace User.Pages
                 CategoryId = category
             };
 
-            SearchPayload = new SearchPayload<PostSearchConditionDto>()
+            SearchPayload = new SearchPayload<PostAudienceSearchConditionDto>()
             {
                 PageInfo = new PageInfo()
                 {
@@ -46,7 +49,7 @@ namespace User.Pages
                 SearchCondition = condition
             };
 
-            Posts = await postService.GetAllPostBySearchConditionAsync(SearchPayload);
+            Posts = await postService.GetAllPostBySearchConditionForAudienceAsync(SearchPayload);
         }
     }
 }

@@ -24,4 +24,5 @@ public interface IPostService
     Task<PageResult<SelectPostDTO>> GetReactedPostList(string audienceEmail, int pageIndex = 1, int pageSize = 12);
 
     Task<PageResult<SelectPostDTO>> GetBookmarkedPostList(string audienceEmail, int pageIndex = 1, int pageSize = 12);
+    Task<IList<Post>> GetAllPostBySearchConditionForAudienceAsync(SearchPayload<PostAudienceSearchConditionDto> searchPayload);
 }

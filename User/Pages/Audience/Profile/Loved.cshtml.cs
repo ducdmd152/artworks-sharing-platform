@@ -18,12 +18,15 @@ namespace User.Pages.Audience.Profile
             this.postService = postService;
         }
 
+        public Account Account { get; set; }
         public IList<SelectPostDTO> Posts { get; set; } = default!;
         public PageInfo PageInfo = default!;
 
 
         public async Task OnGetAsync(int pageIndex = 1, int pageSize = 12)
         {
+            Account = SessionUtil.GetAuthenticatedAccount(HttpContext);
+
             var result = await postService.GetReactedPostList(SessionUtil.GetAuthenticatedAccount(this.HttpContext)?.Email, pageIndex, pageSize);
             Posts = result.PageData;
             PageInfo = result.PageInfo;
