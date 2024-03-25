@@ -3,6 +3,7 @@ using ArtHubBO.Entities;
 using ArtHubBO.Enum;
 using ArtHubBO.Payload;
 using ArtHubService.Interface;
+using ArtHubService.Utils;
 using InventoryManagementGUI.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,8 @@ namespace User.Pages.Artworks
             this.interactionService = interactionService;
             this.reportService = reportService;
         }
+
+        public Account Account { get; set; } = default!;
         public Post Post { get; set; } = default!;
         public IList<Post> ArtistSuggestion = default!;
         public IList<Post> OtherSuggestion = default!;
@@ -49,6 +52,7 @@ namespace User.Pages.Artworks
                 IsBookmarked = interactionService.CheckIsBookmarkedForPost(email, id);
                 await interactionService.OneMoreView(id).ConfigureAwait(false);
 
+                Account = SessionUtil.GetAuthenticatedAccount(HttpContext);
                 ArtistSuggestion = await postService.GetAllPostBySearchConditionForAudienceAsync(new SearchPayload<PostAudienceSearchConditionDto>()
                 {
                     PageInfo = new PageInfo()
@@ -59,6 +63,8 @@ namespace User.Pages.Artworks
                     SearchCondition = new PostAudienceSearchConditionDto()
                     {
                         ArtistEmail = item.ArtistEmail,
+                        AudienceEmail = Account?.Email ?? "",
+                        NotIncludePosts = new List<int>() { Post.PostId },
                         SuggestCategoryId = Post.PostCategories.Select(item => item.CategoryId).ToArray(),
                     }
                 });
@@ -72,6 +78,7 @@ namespace User.Pages.Artworks
                     },
                     SearchCondition = new PostAudienceSearchConditionDto()
                     {
+                        AudienceEmail = Account?.Email ?? "",
                         OthersOfArtistEmail = item.ArtistEmail,
                         PostStatus = PostStatus.Approval,
                         SortType = SortType.FAVOURITE,
