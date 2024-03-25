@@ -58,6 +58,11 @@ public class PostService : IPostService
         return await postRepository.GetAllPostBySearchConditionAsync(searchPayload);
     }
 
+    public async Task<IList<Post>> GetAllPostBySearchConditionForAudienceAsync(SearchPayload<PostAudienceSearchConditionDto> searchPayload)
+    {
+        return await postRepository.GetAllPostBySearchConditionForAudienceAsync(searchPayload);
+    }
+
     public async Task<PageResult<SelectPostDTO>> GetReactedPostList(string audienceEmail, int pageIndex = 1, int pageSize = 12)
     {
         try

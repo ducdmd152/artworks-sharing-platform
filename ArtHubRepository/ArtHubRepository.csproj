@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Queries\GetStatisticOfRevenueLastWeek.sql" />
+    <None Remove="Queries\GetStatisticOfRevenueMonthOfYear.sql" />
+    <None Remove="Queries\GetStatisticOfSubscriberLastWeek.sql" />
+    <None Remove="Queries\GetStatisticOfSubscriberMonthOfYear.sql" />
     <None Remove="Queries\SelectAllPostListForAudience.sql" />
     <None Remove="Queries\SelectBookmarkedPostList.sql" />
     <None Remove="Queries\SelectIsBookmarkedForPost.sql" />
@@ -29,6 +33,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Queries\GetStatisticOfRevenueLastWeek.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Queries\GetStatisticOfRevenueMonthOfYear.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Queries\GetStatisticOfSubscriberMonthOfYear.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Queries\GetStatisticOfSubscriberLastWeek.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Queries\SelectBookmarkedPostList.sql" />
     <EmbeddedResource Include="Queries\SelectReactedPostList.sql" />
     <EmbeddedResource Include="Queries\SelectSubcribingCreatorList.sql" />

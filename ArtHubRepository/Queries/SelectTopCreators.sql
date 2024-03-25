@@ -1,47 +1,54 @@
 ﻿/*
     CreatedBy: DucDMD
-    Date: 19/03/2024
+    Date: 25/03/2024
     
-    @PageIndex INT;
-    @PageSize INT;
+    @AudienceEmail string
 */
+WITH SubscribedCreators AS (
+	SELECT email_artist
+	FROM
+		subscriber
+	WHERE 
+		email_user = @AudienceEmail
+		AND status = 1
+		AND GETDATE() <= expired_date
+)
 
-DECLARE @PageIndex INT = 1;
-DECLARE @PageSize INT = 12;
-
-WITH TopCreators AS (
-    SELECT
+SELECT
+    ArtistEmail,
+    ArtistBio,
+    ArtistName,
+    ArtistTotalSubscribe,
+    ArtistTotalReact,
+    ArtistTotalView,
+    ArtistAvatar,
+    CASE WHEN ArtistEmail IN (SELECT email_artist FROM SubscribedCreators)
+		THEN 'True' ELSE 'False'
+		END
+		AS IsSubscribed,
+    TotalPages,
+    TotalItems
+FROM (
+    SELECT DISTINCT
         a.email AS ArtistEmail,
-        a.artist_name AS ArtistName,
         a.bio AS ArtistBio,
+        a.artist_name AS ArtistName,
+        a.total_subscribe AS ArtistTotalSubscribe,
+        SUM(p.total_react) AS ArtistTotalReact,
+        SUM(p.total_view) AS ArtistTotalView,
         acc.avatar AS ArtistAvatar,
-        COUNT(DISTINCT sub.subscriber_id) AS TotalSubscribers,
-        SUM(p.total_react) AS TotalReactions,
-        ROW_NUMBER() OVER (ORDER BY COUNT(DISTINCT sub.subscriber_id) DESC, SUM(p.total_react) DESC) AS RowNum
-    FROM
-        artist a
-    JOIN
-        account acc ON a.email = acc.email
-    LEFT JOIN
-        subscriber sub ON a.email = sub.email_artist
-    LEFT JOIN
-        post p ON a.email = p.artist_email
-    GROUP BY
+        COUNT(a.email) OVER () AS TotalItems,
+        CEILING(COUNT(a.email) OVER () * 1.0 / @PageSize) AS TotalPages,
+        ROW_NUMBER() OVER (ORDER BY a.total_subscribe DESC, SUM(p.total_react) DESC) AS RowNum
+    FROM artist a
+    INNER JOIN account acc ON a.email = acc.email
+    LEFT JOIN post p ON a.email = p.artist_email
+    WHERE acc.enabled = 'true'
+    GROUP BY 
         a.email,
         a.bio,
         a.artist_name,
-        acc.avatar
-)
-
-SELECT 
-    ArtistEmail,
-    ArtistName,
-    ArtistBio,
-    ArtistAvatar,
-    TotalSubscribers,
-    TotalReactions
-FROM
-    TopCreators
-WHERE
-    RowNum > (@PageIndex - 1) * @PageSize
-    AND RowNum <= @PageIndex * @PageSize;
+        a.total_subscribe,
+        acc.avatar	
+) AS SubQuery
+WHERE RowNum BETWEEN (@PageIndex - 1) * @PageSize + 1 AND @PageIndex * @PageSize;

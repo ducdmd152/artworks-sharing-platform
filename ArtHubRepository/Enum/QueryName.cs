@@ -10,5 +10,11 @@
         SelectIsBookmarkedForPost,
         SelectReactedPostList,
         SelectBookmarkedPostList,
+        SelectTopCreators,
+        SelectSubcribingCreatorList,
+        GetStatisticOfSubscriberLastWeek,
+        GetStatisticOfSubscriberMonthOfYear,
+        GetStatisticOfRevenueLastWeek,
+        GetStatisticOfRevenueMonthOfYear,
     }
 }
