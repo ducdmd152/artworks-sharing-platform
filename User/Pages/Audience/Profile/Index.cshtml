@@ -258,16 +258,20 @@
     </div>
 
     <div class="gallery container p-3 mb-2">
-        @for (var i = 1; i <= 12; i++)
+        @foreach(var creator in Model.Creators)
         {
             <a class="gallery-item" asp-page="./Details" asp-route-id="10" style="color: black; text-decoration: none;">
                 <div class="bg-white p-3 rounded-lg shadow-lg">
                     <div class="d-flex align-items-center gap-1 flex-column">
                         <div class="rounded-circle overflow-hidden" style="width: 56px; height: 56px;">
-                            <img src="https://placehold.co/56x56" alt="Placeholder image for Martin Deavin" class="w-100">
+                            <img src="@creator.ArtistAvatar" alt="" style="width: 56px; height: 56px;"/>
                         </div>
-                        <p class="text-sm fw-bold text-gray-900 overflow-hidden" style="margin-bottom: 0;">Martin Deavin</p>
-                        <p class="text-sm text-gray-500 overflow-hidden" style="text-overflow: ellipsis; white-space: nowrap;">I'm an artist from UK</p>
+                        <p class="text-lg fw-bold text-gray-900 overflow-hidden" style="font-size: 18px; margin-bottom: 0;">@creator.ArtistName</p>
+                        <div class="text-sm text-gray-500 overflow-hidden" style="font-size: 14px; text-overflow: ellipsis; white-space: nowrap; display: grid; grid-template-columns: repeat(3, 1fr); grid-column-gap: 6px;">
+                            <p class="fw-bold text-center">@creator.ArtistTotalSubscribe subcribers</p>
+                            <p class="fw-bold text-center">@creator.ArtistTotalView views</p>
+                            <p class="fw-bold text-center">@creator.ArtistTotalReact loved</p>
+                        </div>
                         <div class="mt-6">
                             <button class="btn btn-light px-2 py-1 text-sm">Subscribed</button>
                         </div>
@@ -276,4 +280,14 @@
             </a>
         }
     </div>
+    <nav aria-label="Page navigation" style="display: flex; justify-content: center; width: 100%;">
+        <ul class="pagination">
+            @for (var i = 1; i <= @Model.PageInfo.TotalPages; i++)
+            {
+                    <li class="page-item @(Model.PageInfo.PageNum == i ? "active" : "")">
+                        <a class="page-link" style="font-size: 20px; padding: 8px 16px;" href="?pageIndex=@i">@i</a>
+                    </li>
+            }
+        </ul>
+    </nav>
 </div>

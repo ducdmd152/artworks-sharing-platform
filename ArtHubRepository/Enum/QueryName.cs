@@ -10,6 +10,7 @@
         SelectIsBookmarkedForPost,
         SelectReactedPostList,
         SelectBookmarkedPostList,
+        SelectSubcribingCreatorList,
         GetStatisticOfSubscriberLastWeek,
         GetStatisticOfSubscriberMonthOfYear,
         GetStatisticOfRevenueLastWeek,

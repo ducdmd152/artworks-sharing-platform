@@ -1,45 +1,53 @@
 ﻿/*
     CreatedBy: DucDMD
-    Date: 19/03/2024
+    Date: 25/03/2024
     
     @AudienceEmail string
-    @CreatorEmail string
 */
 
 WITH SubscribedCreators AS (
-    SELECT email_artist
+    SELECT DISTINCT email_artist AS Email
     FROM subscriber
-    WHERE 
-        @AudienceEmail IS NOT NULL
-        AND email_user = @AudienceEmail
+    WHERE email_user = @AudienceEmail
         AND status = 1 
         AND GETDATE() <= expired_date       
-),
-AuthenticatedPosts AS (
-    SELECT post_id
-    FROM post
-    WHERE
-        status = 2
-        AND (scope = 1 OR (scope = 2 AND artist_email IN (SELECT email_artist FROM SubscribedCreators)))
 )
-    
+
 SELECT
-    p.post_id AS PostId,
-    p.title AS Title,
-    p.description AS Description,
-    p.status AS Status,
-    p.scope AS Scope,
-    p.total_react AS TotalReact,
-    p.total_view AS TotalView,
-    p.total_bookmark AS TotalBookmark,
-    p.artist_email AS ArtistEmail,
-    a.artist_name AS ArtistName
-FROM post p
-LEFT JOIN post_category pc ON p.post_id = pc.post_id
-LEFT JOIN artist a ON p.artist_email = a.artist_email
-WHERE post_id IN (SELECT post_id FROM AuthenticatedPosts)
-ORDER BY 
-    CASE 
-        WHEN pc.category_id IN (SELECT CategoryId FROM @Categories) THEN 0
-        ELSE 1
-    END;
+    ArtistEmail,
+    ArtistBio,
+    ArtistName,
+    ArtistTotalSubscribe,
+    ArtistTotalReact,
+    ArtistTotalView,
+    ArtistAvatar,
+    TotalPages,
+    TotalItems
+FROM (
+    SELECT DISTINCT
+        a.email AS ArtistEmail,
+        a.bio AS ArtistBio,
+        a.artist_name AS ArtistName,
+        a.total_subscribe AS ArtistTotalSubscribe,
+        SUM(p.total_react) AS ArtistTotalReact,
+        SUM(p.total_view) AS ArtistTotalView,
+        acc.avatar AS ArtistAvatar,
+        COUNT(*) OVER () AS TotalItems,
+        CEILING(COUNT(*) OVER () * 1.0 / @PageSize) AS TotalPages,
+        ROW_NUMBER() OVER (ORDER BY a.total_subscribe DESC, SUM(p.total_react) DESC) AS RowNum
+    FROM subscriber sub
+    INNER JOIN artist a ON (sub.status = 1 AND GETDATE() <= sub.expired_date AND sub.email_user = @AudienceEmail AND sub.email_artist = a.email)
+    INNER JOIN account acc ON a.email = acc.email
+    LEFT JOIN post p ON a.email = p.artist_email
+    WHERE acc.enabled = 'true'
+    GROUP BY 
+        a.email,
+        a.bio,
+        a.artist_name,
+        a.total_subscribe,
+        acc.avatar
+) AS SubQuery
+WHERE RowNum BETWEEN (@PageIndex - 1) * @PageSize + 1 AND @PageIndex * @PageSize
+ORDER BY
+    ArtistTotalSubscribe DESC,
+    ArtistTotalReact DESC;
