@@ -105,11 +105,9 @@
 <partial name="Shared/Partial/_toastyAnnouncePartial" />
 <partial name="Shared/Footer"/>
 @Html.AntiForgeryToken()
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("Shared/_ValidationScriptsPartial");
-    }
-}
+@{
+    await Html.RenderPartialAsync("Shared/_ValidationScriptsPartial");
+};
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" ></script>

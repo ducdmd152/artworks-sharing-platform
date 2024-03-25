@@ -234,5 +234,10 @@ namespace ArtHubService.Service
             }
             return false;            
         }
+
+        public Account GetAccountByEmail(string accountEmail)
+        {
+            return this.accountRepository.GetAccountByEmail(accountEmail);
+        }
     }
 }
