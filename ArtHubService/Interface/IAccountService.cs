@@ -23,6 +23,8 @@ namespace ArtHubService.Interface
         public  Task<bool> DeleteAsync(string email);
 
           Task<PageResult<AccountListDTO>> GetListAccountManage(SearchAccountConditionDTO search);
+        public  Task<bool> UpdateAccount(Account account);
+
 
     }
 }

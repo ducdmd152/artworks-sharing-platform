@@ -2,6 +2,7 @@
 using ArtHubBO.Entities;
 using ArtHubBO.Enum;
 using ArtHubBO.Payload;
+using ArtHubDAO.Data;
 using ArtHubDAO.Interface;
 using ArtHubRepository.Enum;
 using ArtHubRepository.Interface;
@@ -206,5 +207,41 @@ namespace ArtHubService.Service
 
         public  Account GetAccount(string  email) => accountRepository.GetAccount(email);
 
+
+
+        public async Task<bool> UpdateAccount(Account account)
+        {
+            try
+            {
+                await this.unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+
+                var existingAccount = this.accountRepository.GetAccount(account.Email);
+
+                if (existingAccount == null)
+                {
+                    return false; // Account not found
+                }
+
+                // Update existing account properties with new values
+                existingAccount.FirstName = account.FirstName;
+                existingAccount.LastName = account.LastName;
+                existingAccount.Gender = account.Gender;
+                existingAccount.Status = account.Status;
+                existingAccount.Enabled = account.Enabled;
+
+                this.accountRepository.Update(existingAccount);
+                await this.unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+
+                return true; // Update successful
+            }
+            catch (Exception ex)
+            {
+                // Handle exception, rollback transaction if needed
+                 this.unitOfWork.RollbackTransaction();
+                return false;
+
+
+            }
+        }
     }
 }

@@ -2,7 +2,7 @@ using ArtHubService.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Admin.Pages
+namespace Admin.Pages.Admins
 {
     public class DashboardModel : PageModel
     {

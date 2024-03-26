@@ -82,7 +82,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Threading.Tasks;
 
-namespace Admin.Pages
+namespace Admin.Pages.Admins
 {
     public class AccountManagementModel : PageModel
     {

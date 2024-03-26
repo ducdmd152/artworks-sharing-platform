@@ -3,7 +3,7 @@ using ArtHubService.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Admin.Pages
+namespace Admin.Pages.Admins
 {
     public class AccountDetailManagementModel : PageModel
     {
@@ -23,7 +23,7 @@ namespace Admin.Pages
                 return NotFound();
             }
 
-            Account =  _accountService.GetAccount(email);
+            Account = _accountService.GetAccount(email);
 
             if (Account == null)
             {
