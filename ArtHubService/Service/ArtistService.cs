@@ -37,7 +37,14 @@ public class ArtistService : IArtistService
             AccountStatus = searchPayload.SearchCondition.AccountStatus,
             AccountIsEnable = searchPayload.SearchCondition.AccountIsEnable,
         });        
-        return pageResult.Build(searchPayload.PageInfo, postQuery.TotalPostCount, new List<ArtistDataDto>() { ArtistDataQueryDtoToArtistDataDto(postQuery) });
+        if (postQuery == null)
+        {
+            return pageResult.PageNoData(searchPayload.PageInfo);
+        } else
+        {
+            return pageResult.Build(searchPayload.PageInfo, postQuery.TotalPostCount, new List<ArtistDataDto>() { ArtistDataQueryDtoToArtistDataDto(postQuery) });
+        }
+        
     }
 
     private ArtistDataDto ArtistDataQueryDtoToArtistDataDto(ArtistDataQueryDto artistDataQueryDto)

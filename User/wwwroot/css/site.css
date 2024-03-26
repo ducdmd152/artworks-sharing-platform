@@ -248,16 +248,16 @@ html {
         border-style: solid;
         border-color: transparent transparent rgb(247, 233, 233) transparent;
         cursor: pointer;
-        z-index: -1;
+        z-index: -1;        
     }
 
     .user-menu::after {
         content: "";
         display: block;
         position: absolute;
-        top: -22%;        
+        top: -22%;
         width: 130px;
-        height: 30px;
+        height: 45px;
     }
 
 .user-menu-item a {
