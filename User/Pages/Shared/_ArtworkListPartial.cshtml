@@ -8,6 +8,20 @@
         var post = Model.PageData[i];
         <div class="artwork-item d-flex flex-column justify-content-between">
             <img src="@(post.Images.First().ImageUrl ?? "https://placehold.co/300")" alt="Artwork" class="img-fluid" style="width: 100%; ">
+            <div class="artwork-scope-badge" style="position: absolute; top: 150px; left: 10px; background-color: #FFFFFF; color: #333; padding: 5px; border-radius: 5px; font-weight: 700;">
+                @if (@post.Scope == 1)
+                {
+                    <span style="color: #1B6B93;">Public</span>
+                }
+                @if (@post.Scope == 2)
+                {
+                    <span style="color: burlywood;">Subscriber</span>
+                }
+                @if (@post.Scope == 3)
+                {
+                    <span style="color: brown;">Private</span>
+                }
+            </div>
             <div class="d-flex justify-content-between ms-2 me-2 mb-3">
                 <div class="d-flex align-items-center">
                     <div class="artwork-item-creator-img me-3">

@@ -70,7 +70,7 @@ public class RegisterModel : PageModel
         account.Gender = gender!;
         account.Status = (int)AccountStatus.Normal;
         account.Enabled = true;
-        account.Avatar = string.Empty;
+        account.Avatar = null;
         
         if (accountRegister.IsRegisterCreator)
         {
