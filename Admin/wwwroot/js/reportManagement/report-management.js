@@ -1,4 +1,5 @@
 var filters = {
+    ReportId: null,
     Status: 1,
     PageNumber: 1,
     PageSize: 6,
@@ -6,10 +7,16 @@ var filters = {
 
 var updateModel = {
     reportId: null,
+    reason: null,
     mode: null
 }
 
 function showDetailArtwork(postId, reportId){
+    var report = {
+        reportId: reportId,
+        postId: postId,
+    }
+
     $.ajax({
         url: '/Moderator/ReportManagement?handler=GetReportDetail', // Replace with your actual controller and action
         type: 'POST',
@@ -17,7 +24,7 @@ function showDetailArtwork(postId, reportId){
         headers: {
             RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
         },
-        data: JSON.stringify(postId),
+        data: JSON.stringify(report),
         success: function (response) {
             // Update the content of the partial container
             if(response.result === 'Ok'){
@@ -45,6 +52,16 @@ function showDetailArtwork(postId, reportId){
                     default:
                         // Handle other cases if needed
                         break;
+                }
+
+                var buttonActionDiv = document.getElementById("buttonAction");
+                if (data.Reports[0].Status === reportStatus.Reviewed) {
+                    // Hide the div with id "buttonAction"
+                    if (buttonActionDiv) {
+                        buttonActionDiv.style.display = "none";
+                    }
+                }else {
+                    buttonActionDiv.style.display = "block";
                 }
                 $('#artworkDetailModal').modal('show');
             }else{
@@ -92,41 +109,45 @@ function skipReport(){
     }
 }
 
-function banThePost(){
-    var confirmReject = confirm("Are you sure you want to ban this post from this report?");
+function banThePost() {
+    // Create an input field for the reason
+    var reason = prompt("Please provide a reason for banning this post:");
 
-    // If user confirms, proceed with rejection
-    if (confirmReject) {
-        updateModel.mode = modeUpdateReport.BanThePost;
-        $.ajax({
-            url: '/Moderator/ReportManagement?handler=SkipOrBanPost',
-            type: 'POST',
-            contentType: 'application/json',
-            headers: {
-                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
-            },
-            data: JSON.stringify(updateModel),
-            success: function (response) {
-                // Handle success response here
-                if(response.result === 'Ok'){
-                    showOutOfStockToastSuccess('Reviewed', 'Ban successfully!' );
-                }else{
-                    showOutOfStockToastDanger('Reviewed', 'Ban fail');
-                }
-                getListByPaging(1);
-                $('#artworkDetailModal').modal('hide');
-                console.log('Approved artwork successfully:', response);
-            },
-            error: function (error) {
-                // Handle error response here
-                console.error('Error approving artwork:', error);
-            }
-        });
-    } else {
-        // If user cancels, do nothing or provide feedback
-        console.log('Rejection canceled by user.');
+    // If the user cancels or doesn't provide a reason, exit the function
+    if (!reason) {
+        showOutOfStockToastDanger('Reviewed','Ban canceled by user or no reason provided.');
+        return;
     }
+
+    // If the user provides a reason, proceed with banning the post
+    updateModel.mode = modeUpdateReport.BanThePost;
+    updateModel.reason = reason; // Add reason to the updateModel
+    $.ajax({
+        url: '/Moderator/ReportManagement?handler=SkipOrBanPost',
+        type: 'POST',
+        contentType: 'application/json',
+        headers: {
+            RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+        },
+        data: JSON.stringify(updateModel),
+        success: function (response) {
+            // Handle success response here
+            if (response.result === 'Ok') {
+                showOutOfStockToastSuccess('Reviewed', 'Ban successful!');
+            } else {
+                showOutOfStockToastDanger('Reviewed', 'Ban failed');
+            }
+            getListByPaging(1);
+            $('#artworkDetailModal').modal('hide');
+            console.log('Post banned successfully:', response);
+        },
+        error: function (error) {
+            // Handle error response here
+            console.error('Error banning post:', error);
+        }
+    });
 }
+
 
 function banTheArtist(){
     var confirmReject = confirm("Are you sure you want to ban this artist from this report?");
@@ -190,6 +211,47 @@ function getListByPaging(pageNumber) {
     });
 }
 
+function updateSearchCondition(){
+    var filter1Select = document.getElementById('search-key');
+    var filter1Input = document.querySelector('.form-control');
+
+    filters[filter1Select.value === '1' ? 'ReportId' : null] = filter1Input.value === '' ? null : filter1Input.value;;
+
+    // Get value from the second filter section
+    var filter2Select = document.getElementById('search-status');
+    filters.Status = filter2Select.value;
+}
+
+function getListBySearch(modeSearch) {
+    if(modeSearch === 1){
+        filters.ReportId = null;
+    }
+    updateSearchCondition();
+    filters.PageNumber = 1;
+    console.log(filters);
+    $.ajax({
+        url: '/Moderator/ReportManagement?handler=Search', // Replace with your actual controller and action
+        type: 'POST',
+        contentType: 'application/json',
+        headers: {
+            RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+        },
+        data: JSON.stringify(filters),
+        success: function (response) {
+            // Update the content of the partial container
+            if(response.result === 'Error'){
+                showOutOfStockToastDanger('Not found', 'Please check again the condition');
+                return;
+            }
+            $('#listPartial').html(response.partial2.result);
+            $('#pagingPartial').html(response.partial1.result);
+        },
+        error: function (error) {
+            console.error('Error loading partial:', error);
+        }
+    });
+}
+
 function showScope(scope){
     switch (scope){
         case 1:
@@ -206,4 +268,9 @@ const modeUpdateReport = {
     Reviewed : 1,
     BanThePost : -1,
     BanTheArtist: -2,
+}
+
+const reportStatus ={
+    Pending: 1,
+    Reviewed: 2
 }

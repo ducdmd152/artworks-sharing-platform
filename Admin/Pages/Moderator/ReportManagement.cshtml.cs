@@ -37,7 +37,7 @@ public class ReportManagement : PageModel
     {
          var searchCondition = new SearchReportManagementConditionDto();
         searchCondition.PageNumber = 1;
-        searchCondition.PageSize = 5;
+        searchCondition.PageSize = 6;
         this.PageResult = this.reportService.GetReportList(searchCondition);
     }
 
@@ -49,14 +49,31 @@ public class ReportManagement : PageModel
         return new JsonResult(new { Partial1 = partial1, Partial2 = partial2 });
     }
 
-    public async Task<IActionResult> OnPostSearch([FromBody] SearchArtworkManagementConditionDto searchCondition)
+    public async Task<IActionResult> OnPostSearch([FromBody] SearchReportManagementConditionDto searchCondition)
     {
-        return new AcceptedResult();
+        try
+        {
+            this.PageResult = this.reportService.GetReportList(searchCondition);
+            if (this.PageResult == default || this.PageResult.PageData.Count == 0) throw new Exception();
+            var partial1 =
+                this.helper.RenderPartialToStringAsync("/Pages/Shared/_PagingPartial.cshtml", PageResult.PageInfo);
+            var partial2 =
+                this.helper.RenderPartialToStringAsync("/Pages/Shared/_ReportListPartial.cshtml", PageResult.PageData);
+            return new JsonResult(new { Partial1 = partial1, Partial2 = partial2 });
+        }
+        catch
+        {
+            return new JsonResult(new PostResult()
+            {
+                Result = Result.Error,
+                Data = "Not found!",
+            });
+        }
     }
     
-    public IActionResult OnPostGetReportDetailAsync([FromBody] int postId)
+    public IActionResult OnPostGetReportDetailAsync([FromBody] ReportDetail report)
     {
-        var result = this.postService.Get(postId);
+        var result = this.postService.GetPostForReport(report.PostId, report.ReportId);
         if (result == default)
         {
             return new JsonResult(new PostResult()
@@ -75,7 +92,7 @@ public class ReportManagement : PageModel
     
     public async Task<IActionResult> OnPostSkipOrBanPostAsync([FromBody] ReportMode reportMode)
     {
-        Result result = await this.reportService.SkipOrBanPostAsync(reportMode.ReportId, reportMode.Mode).ConfigureAwait(false);
+        Result result = await this.reportService.SkipOrBanPostAsync(reportMode.ReportId, reportMode.Mode, reportMode.Reason).ConfigureAwait(false);
         return new JsonResult(new PostResult
         {
             Result = result,
@@ -98,5 +115,12 @@ public class ReportMode
 {
     public int ReportId { get; set; }
     
+    public string Reason { get; set; }
     public int Mode { get; set; }
+}
+
+public class ReportDetail
+{
+    public int PostId { get; set; }
+    public int ReportId { get; set; }
 }

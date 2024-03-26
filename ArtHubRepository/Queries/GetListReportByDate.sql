@@ -2,6 +2,7 @@
     CreatedBy: Thong
     Date: 03/18/2024
     
+    @ReportId int
     @Status string
     @PageNumber int 
     @PageSize int
@@ -25,7 +26,9 @@ WITH ReportList AS (
         report r INNER JOIN account a ON r.reporter_email  = a.email
                  INNER JOIN post p ON r.post_id = p.post_id
     WHERE
-            r.status = 1
+        (@ReportID IS NULL OR r.report_id = @ReportId)
+        AND
+        (@Status IS NULL OR @Status = -1 OR r.status = @Status)
 )
 SELECT
     CEILING(CONVERT(decimal, r.TotalRecords) / @PageSize) AS TotalPages,

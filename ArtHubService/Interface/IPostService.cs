@@ -15,6 +15,8 @@ public interface IPostService
 
     Post Get(int id);
 
+    Post GetPostForReport(int id, int reportReportId);
+
     Task<bool> CreateNewPost(Post post);
     
     Task<Post> UpdatePost(PostUpdateDto post);

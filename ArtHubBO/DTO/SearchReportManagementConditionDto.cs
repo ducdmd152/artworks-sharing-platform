@@ -4,7 +4,9 @@ namespace ArtHubBO.DTO;
 
 public class SearchReportManagementConditionDto
 {
-    public int Status { get; set; }
+    public int? ReportId { get; set; }
+    
+    public int? Status { get; set; }
     public int PageNumber { get; set; }
     [DefaultValue(10)]
     public int PageSize { get; set; } 
