@@ -1,33 +1,41 @@
-﻿using ArtHubBO.Entities;
+﻿using ArtHubBO.DTO;
+using ArtHubBO.Entities;
+using ArtHubRepository.Enum;
 using ArtHubRepository.Interface;
 using ArtHubService.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ArtHubService.Service
+namespace ArtHubService.Service;
+
+public class TransactionService : ITransactionService
 {
-    public class TransactionService : ITransactionService
+    private readonly IDapperQueryService dapperQueryService;
+    private readonly ITransactionRepository _itransactionRepository;
+
+    public TransactionService(IDapperQueryService dapperQueryService, ITransactionRepository itransactionRepository)
     {
-        private readonly ITransactionRepository _itransactionRepository;
+        this.dapperQueryService = dapperQueryService;
+         this._itransactionRepository = itransactionRepository;
+    }
 
-        public TransactionService(ITransactionRepository itransactionRepository)
-        {
-            _itransactionRepository = itransactionRepository;
-        }
+    public async Task<StatisticOfWeekDto> GetStatisticOfRevenueLastWeek(string email)
+    {
+        return await dapperQueryService
+        .SingleOrDefaultAsync<StatisticOfWeekDto>(QueryName.GetStatisticOfRevenueLastWeek, new { ArtistEmail = email });
+    }
 
-        public IEnumerable<Transaction> GetTransactions()
-        {
-           return _itransactionRepository.GetTransactions();
-        }
+    public async Task<StatisticOfYearDto> GetStatisticOfRevenueMonthOfYear(string email)
+    {
+        return await dapperQueryService
+        .SingleOrDefaultAsync<StatisticOfYearDto>(QueryName.GetStatisticOfRevenueMonthOfYear, new { ArtistEmail = email });
+    }
+    
+    public IEnumerable<Transaction> GetTransactions()
+    {
+       return _itransactionRepository.GetTransactions();
+    }
 
-        public double TotalRevenueForApp()
-        {
-                return _itransactionRepository.TotalRevenueForApp();
-         
-        }
-
+    public double TotalRevenueForApp()
+    {
+        return _itransactionRepository.TotalRevenueForApp(); 
     }
 }

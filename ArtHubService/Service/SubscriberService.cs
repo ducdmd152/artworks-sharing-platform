@@ -1,5 +1,6 @@
 ﻿using ArtHubBO.DTO;
 using ArtHubRepository.DapperService;
+using ArtHubDAO.Interface;
 using ArtHubRepository.Enum;
 using ArtHubRepository.Interface;
 using ArtHubService.Interface;
@@ -8,13 +9,15 @@ namespace ArtHubService.Service;
 
 public class SubscriberService : ISubscriberService
 {
-	private readonly ISubscriberRepository _subcribersRepository;
-	private readonly IDapperQueryService _dapperQueryService;
+	private readonly ISubscriberRepository subscriberRepository;
+	private readonly IDapperQueryService dapperQueryService;
+	private readonly IUnitOfWork unitOfWork;
 
-	public SubscriberService(ISubscriberRepository subcribersRepository, IDapperQueryService dapperQueryService)
+	public SubscriberService(ISubscriberRepository subscriberRepository, IDapperQueryService dapperQueryService, IUnitOfWork unitOfWork = null)
 	{
-		_subcribersRepository = subcribersRepository;
-		this._dapperQueryService = dapperQueryService;
+		this.subscriberRepository = subscriberRepository;
+		this.dapperQueryService = dapperQueryService;
+		this.unitOfWork = unitOfWork;
 	}
 
 	public async Task<IEnumerable<Subchart>> GetSubChaartQuery()
@@ -28,7 +31,7 @@ public class SubscriberService : ISubscriberService
 				EndDate = DateTime.Parse("2024-03-20")
 			};
 
-			var result = _dapperQueryService.Select<Subchart>(queryName, queryParams);
+			var result = dapperQueryService.Select<Subchart>(queryName, queryParams);
 
 			return result;
 		}catch(Exception ex)
@@ -40,6 +43,18 @@ public class SubscriberService : ISubscriberService
 	public int GetTotalSubscribers()
 	{
 
-		return _subcribersRepository.GetTotalSubscribers();
+		return subscriberRepository.GetTotalSubscribers();
 	}
+
+    public async Task<StatisticOfWeekDto> GetStatisticOfSubscriberLastWeek(string email)
+    {
+        return await dapperQueryService
+                .SingleOrDefaultAsync<StatisticOfWeekDto>(QueryName.GetStatisticOfSubscriberLastWeek, new { ArtistEmail = email });
+    }
+
+    public async Task<StatisticOfYearDto> GetStatisticOfSubscriberMonthOfYear(string email)
+    {
+        return await dapperQueryService
+               .SingleOrDefaultAsync<StatisticOfYearDto>(QueryName.GetStatisticOfSubscriberMonthOfYear, new { ArtistEmail = email });
+    }
 }

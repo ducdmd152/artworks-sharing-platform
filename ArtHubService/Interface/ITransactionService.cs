@@ -1,17 +1,12 @@
-﻿using ArtHubBO.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ArtHubBO.DTO;
+using ArtHubBO.Entities;
 
-namespace ArtHubService.Interface
+namespace ArtHubService.Interface;
+
+public interface ITransactionService
 {
-    public interface ITransactionService
-    {
-        public double TotalRevenueForApp();
-        IEnumerable<Transaction> GetTransactions();
-
-
-    }
+	public double TotalRevenueForApp();
+    IEnumerable<Transaction> GetTransactions();
+    Task<StatisticOfWeekDto> GetStatisticOfRevenueLastWeek(string email);
+    Task<StatisticOfYearDto> GetStatisticOfRevenueMonthOfYear(string email);
 }

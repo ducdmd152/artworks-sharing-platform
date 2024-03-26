@@ -7,6 +7,7 @@ using ArtHubService.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using User.Pages.Filter;
+using System.Net;
 
 namespace User.Pages.Creator;
 
@@ -107,8 +108,12 @@ public class UploadNewArtworkModel : PageModel
             AwsKey = configuration[S3Constants.AccessKey] ?? "",
             AwsSecret = configuration[S3Constants.SecretKey] ?? ""
         };
-        var responseUploadImage = await storageService.UploadFileAsync(s3Obj, credential);         
-
+        var responseUploadImage = await storageService.UploadFileAsync(s3Obj, credential);
+        if (responseUploadImage.StatusCode != (int)HttpStatusCode.OK)
+        {
+            TempData["FailUploadImage"] = "Upload image fail!";
+            return Page();
+        }
         // Post category
         List<PostCategory> postCategories = new List<PostCategory>();
         foreach(var id in selectedCategoryIds) {
@@ -131,7 +136,13 @@ public class UploadNewArtworkModel : PageModel
         Post.PostCategories = new List<PostCategory>();
         postCategories.ForEach(pc => Post.PostCategories.Add(pc));     
         logger.LogInformation("Here is link image {0}", Post.Images.First().ImageUrl);
-        await postService.CreateNewPost(ConvertPostUpdateDtoToPost(Post)).ConfigureAwait(false);
+        var isCreated = await postService.CreateNewPost(ConvertPostUpdateDtoToPost(Post)).ConfigureAwait(false);
+        if (!isCreated)
+        {
+            TempData["FailCreatePost"] = "Create post fail!";
+            return Page();
+        }
+        TempData["CreatePostSuccess"] = "Create post " + Post.Title + " success!";
         return RedirectToPage(URIConstant.ArtworkList);
     }
 

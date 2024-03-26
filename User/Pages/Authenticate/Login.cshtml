@@ -4,6 +4,7 @@
     
 }
 <link rel="stylesheet" href="~/css/login-register.css" asp-append-version="true" />
+<partial name="Shared/Partial/_toastyAnnouncePartial" />
 <section class=" text-center text-lg-start">      
     <div class="card" style="border:none;">
         <div class="row g-0 d-flex align-items-center" style="background-color:var(--yellow-color-dark); max-height: calc(100vh - 75px); overflow: hidden;">
@@ -55,3 +56,13 @@
         </div>
     </div>
 </section>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script>
+    // Check if there's a success message in TempData and display a toast if found
+    var successMessage = '@TempData["SuccessMessageRegister"]';
+    if (successMessage) {
+        showOutOfStockToastSuccess('Register', successMessage);
+    }
+</script>

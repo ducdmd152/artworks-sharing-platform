@@ -3,32 +3,34 @@
 }
 
 <!-- toast -->
-<div class="position-fixed top-0 right-0 p-3" style="z-index: 5">
-    <div class="toast fade hide p-2 mt-2 bg-white" role="alert" aria-live="assertive" id="dangerToast" aria-atomic="true">
-        <div class="toast-header border-0">
-            <span class="material-symbols-outlined text-danger me-2">campaign</span>
-            <span class="me-auto text-gradient text-danger font-weight-bold" id="announceDanger">Announce</span>
-            <small class="text-body">1 min ago</small>
-            <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
-        </div>
-        <hr class="horizontal dark m-0">
-        <div class="toast-body">
-            <span id="messageDanger">Message</span>
+<div class="mt-5 d-flex justify-content-end">
+    <div class="position-fixed top-0 right-0 p-3" style="z-index: 5; margin: 70px 0 0 0;">
+        <div class="toast fade hide p-2 mt-2 bg-white" role="alert" aria-live="assertive" id="dangerToast" aria-atomic="true">
+            <div class="toast-header border-0">
+                <span class="material-symbols-outlined text-danger me-2">campaign</span>
+                <span class="me-auto text-gradient text-danger font-weight-bold" id="announceDanger">Announce</span>
+                <small class="text-body">1 min ago</small>
+                <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
+            </div>
+            <hr class="horizontal dark m-0">
+            <div class="toast-body">
+                <span id="messageDanger">Message</span>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="position-fixed top-0 right-0 p-3" style="z-index: 5">
-    <div class="toast fade hide p-2 mt-2 bg-white" role="alert" aria-live="assertive" id="successToast" aria-atomic="true">
-        <div class="toast-header border-0">
-            <span class="material-symbols-outlined text-success me-2">campaign</span>
-            <span class="me-auto text-gradient text-success font-weight-bold" id="announceSuccess">Announce</span>
-            <small class="text-body">1 min ago</small>
-            <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
-        </div>
-        <hr class="horizontal dark m-0">
-        <div class="toast-body">
-            <span id="messageSuccess">Message</span>
+    <div class="position-fixed top-0 left-0 p-3" style="z-index: 5; margin: 70px 0 0 0;">
+        <div class="toast fade hide p-2 mt-2 bg-white" role="alert" aria-live="assertive" id="successToast" aria-atomic="true">
+            <div class="toast-header border-0">
+                <span class="material-symbols-outlined text-success me-2">campaign</span>
+                <span class="me-auto text-gradient text-success font-weight-bold" id="announceSuccess">Announce</span>
+                <small class="text-body">1 min ago</small>
+                <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
+            </div>
+            <hr class="horizontal dark m-0">
+            <div class="toast-body">
+                <span id="messageSuccess">Message</span>
+            </div>
         </div>
     </div>
 </div>

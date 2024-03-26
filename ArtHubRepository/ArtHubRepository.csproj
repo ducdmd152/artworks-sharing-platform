@@ -14,6 +14,20 @@
     <None Remove="Queries\SelectSuggestPostList.sql" />
     <None Remove="Queries\SubcribeChartQuery.sql" />
     <None Remove="Queries\TopCreatorQuery.sql" />
+	<None Remove="Queries\GetStatisticOfRevenueLastWeek.sql" />
+	<None Remove="Queries\GetStatisticOfRevenueMonthOfYear.sql" />
+	<None Remove="Queries\GetStatisticOfSubscriberLastWeek.sql" />
+	<None Remove="Queries\GetStatisticOfSubscriberMonthOfYear.sql" />
+	<None Remove="Queries\SelectAllPostListForAudience.sql" />
+	<None Remove="Queries\SelectBookmarkedPostList.sql" />
+	<None Remove="Queries\SelectCreatorByEmail.sql" />
+	<None Remove="Queries\SelectIsBookmarkedForPost.sql" />
+	<None Remove="Queries\SelectIsReactedForPost.sql" />
+	<None Remove="Queries\SelectReactedPostList.sql" />
+	<None Remove="Queries\SelectSubcribingCreatorList.sql" />
+	<None Remove="Queries\SelectSuggestForCreatorPostList.sql" />
+	<None Remove="Queries\SelectSuggestForOtherCreatorsPostList.sql" />
+	<None Remove="Queries\SelectTopCreators.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,10 +53,31 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Queries\SelectSuggestPostList.sql" />
-    <EmbeddedResource Include="Queries\SelectAllPostListForAuthenticatedAudience.sql" />
+    <EmbeddedResource Include="Queries\GetStatisticOfRevenueLastWeek.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Queries\GetStatisticOfRevenueMonthOfYear.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Queries\GetStatisticOfSubscriberMonthOfYear.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Queries\GetStatisticOfSubscriberLastWeek.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Queries\SelectBookmarkedPostList.sql" />
+    <EmbeddedResource Include="Queries\SelectReactedPostList.sql" />
+    <EmbeddedResource Include="Queries\SelectSubcribingCreatorList.sql" />
+    <EmbeddedResource Include="Queries\SelectSuggestForOtherCreatorsPostList.sql" />
+    <EmbeddedResource Include="Queries\SelectCreatorByEmail.sql" />
+    <EmbeddedResource Include="Queries\SelectTopCreators.sql" />
+    <EmbeddedResource Include="Queries\SelectSuggestForCreatorPostList.sql" />
+    <EmbeddedResource Include="Queries\SelectAllPostListForAudience.sql" />
     <EmbeddedResource Include="Queries\SelectIsBookmarkedForPost.sql" />
     <EmbeddedResource Include="Queries\SelectIsReactedForPost.sql" />
+    <EmbeddedResource Include="Queries\GetArtistInfoByCondition.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Queries\GetListPostOrderByDate.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>

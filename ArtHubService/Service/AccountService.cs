@@ -167,8 +167,100 @@ namespace ArtHubService.Service
                 this.accountRepository.Update(account);
 
                 await this.unitOfWork.CommitTransactionAsync().ConfigureAwait(false); // sửa xong rồi đóng lại vă lưu
-
                 return true;
+            }
+            catch (Exception ex)
+            {
+                unitOfWork.RollbackTransaction();
+                return false;
+            }
+        }
+        public Account GetAccountIncludeArtistByEmail(string email)
+        {
+            return accountRepository.GetAccountIncludeArtistByEmail(email);
+        }
+
+        public async Task<Account?> UpdateArtistProfile(AccountUpdateDto accountUpdate)
+        {
+            try
+            {
+                await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+                var dataUpdate = accountRepository.GetAccountIncludeArtistByEmail(accountUpdate.Email);
+                dataUpdate.FirstName = accountUpdate.FirstName;
+                dataUpdate.LastName = accountUpdate.LastName;
+                dataUpdate.Gender = accountUpdate.Gender;
+                if (accountUpdate.Avatar != null)
+                {
+                    dataUpdate.Avatar = accountUpdate.Avatar;
+                } else
+                {
+                    dataUpdate.Avatar = null;
+                }
+                dataUpdate.Artist!.ArtistName = accountUpdate.ArtistName;
+                if (accountUpdate.Bio != null)
+                {
+                    dataUpdate.Artist!.Bio = accountUpdate.Bio;
+                }                
+                var updatedArtist = accountRepository.Update(dataUpdate);
+                await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+                return updatedArtist;
+            }
+            catch (Exception ex)
+            {
+                unitOfWork.RollbackTransaction();
+            }
+            return null;
+        }
+
+        public async Task<bool> ChangePassword(PasswordConfirmDto passwordConfirmDto, string email)
+        {
+            try
+            {
+                await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);                
+                var dataUpdate = accountRepository.GetAccountIncludeArtistByEmail(email);
+                dataUpdate.Password = passwordConfirmDto.NewPassword;                
+                accountRepository.Update(dataUpdate);
+                await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                unitOfWork.RollbackTransaction();
+            }
+            return false;
+        }
+
+        public bool CheckCorrectPassword(string email, string password)
+        {
+            return accountRepository.CheckCorrectPassword(email, password);
+        }
+
+        public async Task<bool> UpdateAccountEnable(string email, bool enable)
+        {
+            try
+            {
+                await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+                Account account = accountRepository.GetAccountByEmail(email);
+                account.Enabled = enable;
+                accountRepository.Update(account);
+                await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                unitOfWork.RollbackTransaction();
+            }
+            return false;
+        }
+
+        public async Task<bool> CreateAccount(Account account)
+        {
+            try
+            {
+                await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+                await accountRepository.AddAsync(account).ConfigureAwait(false);
+                await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+			    return true;
             }
             catch (Exception e)
             {
@@ -241,7 +333,12 @@ namespace ArtHubService.Service
                 return false;
 
 
-            }
+            }      
+        }
+
+        public Account GetAccountByEmail(string accountEmail)
+        {
+            return this.accountRepository.GetAccountByEmail(accountEmail);
         }
     }
 }

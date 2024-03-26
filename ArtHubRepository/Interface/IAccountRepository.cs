@@ -8,5 +8,8 @@ namespace ArtHubRepository.Interface
         Account? GetAccountsIncludeRoleByEmailPassword(string username, string password);
         Account GetAccount(string postArtistEmail);
         public int GetTotalUsers();
+        Account GetAccountIncludeArtistByEmail(string email);
+        bool CheckCorrectPassword(string email, string password);
+        Account GetAccountByEmail(string email);
     }
 }
