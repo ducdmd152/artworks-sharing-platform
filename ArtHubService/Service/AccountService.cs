@@ -1,22 +1,31 @@
 ﻿using ArtHubBO.DTO;
 using ArtHubBO.Entities;
 using ArtHubBO.Enum;
+using ArtHubBO.Payload;
+using ArtHubDAO.Data;
 using ArtHubDAO.Interface;
+using ArtHubRepository.Enum;
 using ArtHubRepository.Interface;
 using ArtHubRepository.Repository;
 using ArtHubService.Interface;
 using ArtHubService.Utils;
+using Microsoft.Extensions.Logging;
 
 namespace ArtHubService.Service
 {
     public class AccountService : IAccountService
     {
         private readonly IAccountRepository accountRepository;
+        private readonly IDapperQueryService dapperQueryService;
         private readonly IUnitOfWork unitOfWork;
-        public AccountService(IAccountRepository accountRepository, IUnitOfWork unitOfWork)
+		private readonly ILogger<AccountService> logger;
+
+		public AccountService(IAccountRepository accountRepository, IUnitOfWork unitOfWork, IDapperQueryService dapperQueryService, ILogger<AccountService> logger)
         {
             this.accountRepository = accountRepository;
             this.unitOfWork = unitOfWork;
+            this.dapperQueryService = dapperQueryService;
+            this.logger = logger;
         }
 
         public IEnumerable<Account> GetAccounts()
@@ -35,7 +44,7 @@ namespace ArtHubService.Service
             try
             {
                 await this.unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
-                var accounts = this.GetAccounts();
+                var accounts = this.accountRepository.GetAccounts();
                 accounts.First().Enabled = false;
                 foreach (var account in accounts)
                 {
@@ -141,6 +150,31 @@ namespace ArtHubService.Service
             return false;
         }
 
+        public int GetTotalUsers()
+        {
+            return this.accountRepository.GetTotalUsers();
+        }
+
+
+        public async Task<bool> DeleteAsync(string email)
+        {
+            try
+            {
+                await this.unitOfWork.BeginTransactionAsync().ConfigureAwait(false); // mở cửa cho chỉnh sửa db
+
+                var account = this.accountRepository.GetAccount(email);
+                account.Enabled = false;
+                this.accountRepository.Update(account);
+
+                await this.unitOfWork.CommitTransactionAsync().ConfigureAwait(false); // sửa xong rồi đóng lại vă lưu
+                return true;
+            }
+            catch (Exception ex)
+            {
+                unitOfWork.RollbackTransaction();
+                return false;
+            }
+        }
         public Account GetAccountIncludeArtistByEmail(string email)
         {
             return accountRepository.GetAccountIncludeArtistByEmail(email);
@@ -226,13 +260,80 @@ namespace ArtHubService.Service
                 await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
                 await accountRepository.AddAsync(account).ConfigureAwait(false);
                 await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
-                return true;
+			    return true;
             }
             catch (Exception e)
             {
-                unitOfWork.RollbackTransaction();
+                this.unitOfWork.RollbackTransaction(); // nếu lưu lỗi thì trả lại dât trước khi sửa
             }
-            return false;            
+
+            return false;
+        
+        }
+
+        public async Task<PageResult<AccountListDTO>> GetListAccountManage(
+            SearchAccountConditionDTO search)
+        {
+            try
+            {
+                var listPost = this.dapperQueryService
+                    .Select<AccountListDTO>(QueryName.GetAccountManagement, search);
+                var result = new PageResult<AccountListDTO>
+                {
+                    PageData = listPost.ToList(),
+                    PageInfo = new PageInfo
+                    {
+                        PageNum = search.PageNumber,
+                        PageSize = search.PageSize,
+                        TotalPages = listPost.First().TotalPages,
+                        TotalItems = listPost.First().TotalItems,
+                    }
+                };
+                return result;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public  Account GetAccount(string  email) => accountRepository.GetAccount(email);
+
+
+
+        public async Task<bool> UpdateAccount(Account account)
+        {
+            try
+            {
+                await this.unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+
+                var existingAccount = this.accountRepository.GetAccount(account.Email);
+
+                if (existingAccount == null)
+                {
+                    return false; // Account not found
+                }
+
+                // Update existing account properties with new values
+                existingAccount.FirstName = account.FirstName;
+                existingAccount.LastName = account.LastName;
+                existingAccount.Gender = account.Gender;
+                existingAccount.Status = account.Status;
+                existingAccount.Enabled = account.Enabled;
+
+                this.accountRepository.Update(existingAccount);
+                await this.unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+
+                return true; // Update successful
+            }
+            catch (Exception ex)
+            {
+                // Handle exception, rollback transaction if needed
+                 this.unitOfWork.RollbackTransaction();
+                return false;
+
+
+            }      
         }
 
         public Account GetAccountByEmail(string accountEmail)
