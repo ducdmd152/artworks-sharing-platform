@@ -55,23 +55,14 @@ namespace User.Pages.Creator
         [BindProperty]
         public PageResult<Post> PageResult { get; set; } = new PageResult<Post> { };
 
-        private readonly IEmailService emailService;
-
-        public ArtworkListModel(IPostService postService, ICategoryService categoryService, IEmailService emailService)
+        public ArtworkListModel(IPostService postService, ICategoryService categoryService)
         {
             this.postService = postService;
             this.categoryService = categoryService;
-            this.emailService = emailService;
         }
 
         public async Task OnGetAsync()
         {
-            emailService.SendEmail(new SendEmailDto
-            {
-                Subject = "Huhu",
-                ToEmail = "hoangtienbmt2911@gmail.com",
-                Body = "<html><body> hehe </body></html>"
-            });
             var accountEmail = HttpContext.Session.GetString("ACCOUNT_EMAIL");     
             if (accountEmail != null)
             {
