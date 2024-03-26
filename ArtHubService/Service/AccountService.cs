@@ -5,6 +5,7 @@ using ArtHubBO.Payload;
 using ArtHubDAO.Interface;
 using ArtHubRepository.Enum;
 using ArtHubRepository.Interface;
+using ArtHubRepository.Repository;
 using ArtHubService.Interface;
 using ArtHubService.Utils;
 using Microsoft.Extensions.Logging;
@@ -202,5 +203,8 @@ namespace ArtHubService.Service
                 return null;
             }
         }
+
+        public  Account GetAccount(string  email) => accountRepository.GetAccount(email);
+
     }
 }

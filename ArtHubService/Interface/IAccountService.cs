@@ -19,6 +19,7 @@ namespace ArtHubService.Interface
         public int GetTotalUsers();
 
         // Account GetAccount(string postArtistEmail);
+        public Account GetAccount(string email);
         public  Task<bool> DeleteAsync(string email);
 
           Task<PageResult<AccountListDTO>> GetListAccountManage(SearchAccountConditionDTO search);

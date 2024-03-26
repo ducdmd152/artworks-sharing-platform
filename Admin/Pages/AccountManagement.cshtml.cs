@@ -165,5 +165,28 @@ namespace Admin.Pages
             }
         }
 
+
+        public async Task<IActionResult> OnPostDetailAsync()
+        {
+            try
+            {
+                // Thực hiện tìm kiếm dựa trên searchCriteria
+                var searchCondition = new SearchAccountConditionDTO
+                {
+                    PageNumber = PageNumber,
+                    PageSize = PageSize,
+                    Email = this.SearchAccountCondition.Email
+                };
+                PageResult = await _accountService.GetListAccountManage(searchCondition);
+
+                // Trả về kết quả tìm kiếm
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { Result = "error", Message = ex.Message });
+            }
+        }
+
     }
 }

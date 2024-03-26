@@ -37,7 +37,7 @@
                         <td>@account.Enabled</td>
                         <td>
                             <a asp-page="./Edit" asp-route-id="@account.Email">Edit</a> |
-                            <a asp-page="./Details" asp-route-id="@account.Email">Details</a> |
+                            <a asp-page="./AccountDetailManagement" asp-route-email="@account.Email">Details</a> |
                             <button type="button" class="btn btn-danger" onclick="deleteAccount('@account.Email')">Delete</button>
                         </td>
                     </tr>
@@ -77,54 +77,9 @@
 
 </form>
 <script>
-    function searchAccounts() {
-        var searchInput = document.getElementById("searchInput").value;
+    
 
-        $.ajax({
-            type: "POST",
-            url: "AccountManagement?handler=Search",
-            contentType: "application/json",
-            headers: {
-                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
-            },
-            data: JSON.stringify(searchInput),
-            success: function (response) {
-                if (response.result === "success") {
-                    // Xóa dữ liệu cũ trong bảng
-                    $('#myForm tbody').empty();
-
-                    // Thêm dữ liệu mới vào bảng
-                    response.data.PageData.forEach(function (account) {
-                        var row = '<tr>' +
-                            '<td>' + account.Email + '</td>' +
-                            '<td>' + account.FirstName + ' ' + account.LastName + '</td>' +
-                            '<td>' + account.Gender + '</td>' +
-                            '<td>' + account.Status + '</td>' +
-                            '<td>' + account.Enabled + '</td>' +
-                            '<td>' +
-                            
-                            '<button class="btn btn-danger" onclick="deleteAccount(\'' + account.Email + '\')">Delete</button>' +
-                            '</td>' +
-                            '</tr>';
-                        $('#myForm tbody').append(row);
-                    });
-                } else {
-                    console.error(response.message);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error(error);
-            }
-        });
-    }
-
-    function getListByPaging(pageNumber) {
-            const form = document.getElementById('myForm');
-            form.action = 'AccountManagement?handler=Paging';
-            form.querySelector('input[name="SearchAccountCondition.PageNumber"]').value = pageNumber;
-            form.method = 'post';
-            form.submit();
-    }
+   
 
     async function deleteAccount(email) {
         var confirmDelete = confirm("Do you really want to delete the account with email " + email + "?");
