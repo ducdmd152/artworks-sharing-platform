@@ -36,17 +36,17 @@ builder.Host.ConfigureLogging(logging =>
     logging.AddConsole(); // Add console logger
 });
 
-var redis = ConnectionMultiplexer
-    .Connect(Environment.GetEnvironmentVariable("REDIS_URL"));
-// Configure Redis Based Distributed Session
-var redisConfigurationOptions = builder.Configuration["REDIS_URL"];
-
-builder.Services.AddDataProtection()
-    .PersistKeysToStackExchangeRedis(redis, "Secrets-admin-data-protection");
-builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
-{
-    redisCacheConfig.ConfigurationOptions = ConfigurationOptions.Parse(redisConfigurationOptions);
-});
+// var redis = ConnectionMultiplexer
+//     .Connect(Environment.GetEnvironmentVariable("REDIS_URL"));
+// // Configure Redis Based Distributed Session
+// var redisConfigurationOptions = builder.Configuration["REDIS_URL"];
+//
+// builder.Services.AddDataProtection()
+//     .PersistKeysToStackExchangeRedis(redis, "Secrets-admin-data-protection");
+// builder.Services.AddStackExchangeRedisCache(redisCacheConfig =>
+// {
+//     redisCacheConfig.ConfigurationOptions = ConfigurationOptions.Parse(redisConfigurationOptions);
+// });
 
 //Add session
 builder.Services.AddSession(options =>

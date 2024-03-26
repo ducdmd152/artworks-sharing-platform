@@ -16,6 +16,6 @@ SELECT
 FROM
 	ArtHub.dbo.subscriber s
 WHERE
-	s.created_date >= DATEADD(DAY, -DATEPART(WEEKDAY, GETDATE()) - 6, CAST(GETDATE() AS DATE))
-	AND s.created_date < DATEADD(DAY, -DATEPART(WEEKDAY, GETDATE()) + 2, CAST(GETDATE() AS DATE))
+	s.created_date >= DATEADD(WEEK, DATEDIFF(WEEK, 0, GETDATE()) - 2, 0)
+	AND s.created_date < DATEADD(WEEK, DATEDIFF(WEEK, 0, GETDATE()) - 1, 0)
 	AND s.email_artist =  @ArtistEmail;

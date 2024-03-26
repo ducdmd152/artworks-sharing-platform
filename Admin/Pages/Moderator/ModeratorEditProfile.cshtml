@@ -1,0 +1,116 @@
+﻿@page
+@model Admin.Pages.ModeratorEditProfile
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Morderator profile</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/moderator/artworkmanagement/artwork_management.css" />
+    <link rel="stylesheet" href="~/css/moderator/editProfile/edit_profile.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <!-- Fontawesome cdn -->
+</head>
+<body>
+@await Component.InvokeAsync("Header")
+
+<div class="container pt-5" style="margin-top: 76px;">
+    <div class="d-flex">
+        <partial name="Shared/Partial/_LeftSideBardEditProfile" model="Model.AccountUpdateType" />
+        @if (Model.AccountUpdateType.TypeUpdate == 1)
+        {
+            <div class="ms-4" style="width:70%;">
+                <form class="mt-4" id="updateProfileInfo">
+                    <input asp-for="@Model.AccountUpdate.Email" type="hidden" class="form-control">
+                    <div class="d-flex justify-content-start align-items-center">
+                        <div class="profile-img">
+                            <img id="profileImage" src="@(Model.AccountUpdate.Avatar ?? "https://placehold.it/60x60")" alt="Profile Image">
+                        </div>
+                        <input type="file" asp-for="@Model.FileUpload" id="uploadImage" class="d-none">
+                        <input asp-for="@Model.AccountUpdate.Avatar" type="hidden" class="form-control" id="avatar">
+                        <button type="button" id="uploadBtn" class="btn position-relative me-3">Upload new</button>
+                        <button type="button" id="deleteBtn" class="btn position-relative">Delete picture</button>
+                    </div>
+                    <div class="form-group mt-3 col-md-5">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" disabled placeholder="@Model.AccountUpdate.Email">
+                    </div>
+                    <div class="d-flex justify-content-between form-row">
+                        <div class="form-group mt-3 col-md-5">
+                            <label for="firstName">First Name <small class="text-danger">*</small></label>
+                            <input asp-for="@Model.AccountUpdate.FirstName" type="text" class="form-control" id="firstName" placeholder="First Name">
+                            <span asp-validation-for="@Model.AccountUpdate.FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-3 col-md-6">
+                            <label for="lastName">Last Name <small class="text-danger">*</small></label>
+                            <input asp-for="@Model.AccountUpdate.LastName" type="text" class="form-control" id="lastName" placeholder="Last Name">
+                            <span asp-validation-for="@Model.AccountUpdate.LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <div class="d-flex align-items-end mb-2 col-md-6">
+                            <div class="me-3" style="margin-bottom:1px;">
+                                <label for="gender">Gender:</label>
+                            </div>
+                            <div class="form-group form-check me-3 mb-0">
+                                <input type="radio" class="form-check-input" id="male" name="Gender" value="Male" checked="@Model.AccountUpdate.Gender.Equals("Male")">
+                                <label class="form-check-label" for="male">Male</label>
+                            </div>
+                            <div class="form-group form-check  mb-0">
+                                <input type="radio" class="form-check-input" id="female" name="Gender" value="Female" checked="@Model.AccountUpdate.Gender.Equals("Female")">
+                                <label class="form-check-label" for="female">Female</label>
+                            </div>
+                        </div>
+                        <span id="errorMessageGender" class="text-danger">@ViewData["ErrorMessageGender"]</span>
+                    </div>
+                    <button type="button" onclick="updateProfileInfo()" id="saveProfile" class="btn btn-dark  mt-3">Save Profile</button>
+                </form>
+            </div>
+        } else if (Model.AccountUpdateType.TypeUpdate == 2)
+        {
+            <div class="ms-4" style="width:70%;">
+            <form class="mt-4" id="changePassword">
+                <div class="form-group mt-3 col-md-5">
+                    <label for="oldPassword">Old Password</label>
+                    <input asp-for="PasswordConfirm.OldPassword" type="password" class="form-control" id="oldPassword" placeholder="Old Password">
+                    <span asp-validation-for="PasswordConfirm.OldPassword" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-3 col-md-5">
+                    <label for="newPasword">New password</label>
+                    <input asp-for="PasswordConfirm.NewPassword" type="password" class="form-control" id="newPasword" placeholder="New password">
+                    <span asp-validation-for="PasswordConfirm.NewPassword" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-3 col-md-5">
+                    <label for="confirmPassword">Confirm password</label>
+                    <input asp-for="PasswordConfirm.ConfirmPassword" type="password" class="form-control" id="confirmPassword" placeholder="Confirm password">
+                    <span asp-validation-for="PasswordConfirm.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <button type="button" class="btn btn-dark mt-3" onclick="changePassword()">Save New Password</button>
+            </form>
+            </div>
+        }
+    </div>
+</div>
+<partial name="Shared/Partial/_toastyAnnouncePartial" />
+<partial name="Shared/Footer"/>
+@Html.AntiForgeryToken()
+@{
+    await Html.RenderPartialAsync("Shared/_ValidationScriptsPartial");
+};
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" ></script>
+<script src="~/js/editProfile/edit-profile.js" ></script>
+</body>
+</html>

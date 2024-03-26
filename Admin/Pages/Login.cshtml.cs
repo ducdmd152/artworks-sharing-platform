@@ -42,10 +42,12 @@ namespace Admin.Pages
                 switch (role)
                 {                    
                     case "Moderator":
-                        HttpContext.Session.SetString("CREDENTIAL", accountJson);                        
+                        HttpContext.Session.SetString("CREDENTIAL", accountJson);
+                        HttpContext.Session.SetString("ACCOUNT_EMAIL", account.Email);
                         return RedirectToPage("/Moderator/ArtWorksManagement");
                     case "Admin":
                         HttpContext.Session.SetString("CREDENTIAL", accountJson);
+                        HttpContext.Session.SetString("ACCOUNT_EMAIL", account.Email);
                         return RedirectToPage("/Moderator/ArtWorksManagement");
                     default:
                         ViewData["ErrorMessage"] = MessageResource.AccountNotHavePermission;

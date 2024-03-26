@@ -11,6 +11,7 @@
         SelectReactedPostList,
         SelectBookmarkedPostList,
         SelectTopCreators,
+        SelectCreatorByEmail,
         SelectSubcribingCreatorList,
         GetStatisticOfSubscriberLastWeek,
         GetStatisticOfSubscriberMonthOfYear,

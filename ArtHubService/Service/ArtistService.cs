@@ -90,4 +90,23 @@ public class ArtistService : IArtistService
             return null;
         }
     }
+
+    public SelectCreatorDTO GetCreatorByEmail(string creatorEmail, string audienceEmail = "")
+    {
+        try
+        {
+            var result = this.dapperQueryService
+                .SingleOrDefault<SelectCreatorDTO>(QueryName.SelectCreatorByEmail,
+                new
+                {
+                    CreatorEmail = creatorEmail,
+                    AudienceEmail = audienceEmail,
+                });
+            return result;
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
+    }
 }
