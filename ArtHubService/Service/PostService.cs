@@ -132,6 +132,8 @@ public class PostService : IPostService
     }
 
     public Post Get(int id) => postRepository.Get(id);
+
+    public Post GetPostForReport(int id, int reportReportId) => postRepository.GetPostForReport(id, reportReportId);
     public List<Post> TestPostCategory()
     {
         return postRepository.GetAllPost();
