@@ -206,7 +206,7 @@ namespace ArtHubService.Service
             try
             {
                 await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
-                Account account = accountRepository.GetAccountByEmail(email);
+                Account account = accountRepository.GetAccountByEmail(email)!;
                 account.Enabled = enable;
                 accountRepository.Update(account);
                 await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
@@ -233,6 +233,11 @@ namespace ArtHubService.Service
                 unitOfWork.RollbackTransaction();
             }
             return false;            
+        }
+
+        public Account? GetAccountByEmail(string email)
+        {
+            return accountRepository.GetAccountByEmail(email);
         }
     }
 }
