@@ -37,6 +37,8 @@ namespace ArtHubService.Interface
 
         Task<bool> CreateAccount(Account account);
         Account GetAccountByEmail(string accountEmail);
+        
+        Task<Account?> UpdateModeratorProfile (AccountUpdateDto accountUpdate);
 
         public void Update(Account account);
 

@@ -22,6 +22,8 @@ namespace ArtHubBO.Entities
         public int FeeId { get; set; }
         [Column("subscriber_id")]
         public int SubscriberId { get; set; }
+        [Column("subscription_paypal_id")]
+        public string SubscriptionPaypalId { get; set; }
 
         [ForeignKey("FeeId")]
         [InverseProperty("Transactions")]

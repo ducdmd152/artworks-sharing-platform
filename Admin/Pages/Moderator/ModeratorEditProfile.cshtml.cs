@@ -66,11 +66,6 @@ public class ModeratorEditProfile : PageModel
 
      public async Task<IActionResult> OnPostUpdateProfileInfoAsync()
     {
-        if (!ModelState.IsValid)
-        {
-            return Page();
-        }
-
         var gender = Request.Form["Gender"];
         if (gender == Gender.Male.ToString() || gender == Gender.Female.ToString())
         {
@@ -112,7 +107,7 @@ public class ModeratorEditProfile : PageModel
                 AccountUpdate.Avatar = responseUploadImage.LinkSource;
             }            
         }
-        Account? updatedAccount = await accountService.UpdateArtistProfile(AccountUpdate);
+        Account? updatedAccount = await accountService.UpdateModeratorProfile(AccountUpdate);
         if (updatedAccount == null)
         {
             return new JsonResult(new PostResult()

@@ -21,6 +21,9 @@ namespace ArtHubRepository.Repository
             return this.DbSet.Include(a => a.Role).FirstOrDefault(a => a.Email.Equals(email) && a.Password.Equals(password));
         }
 
+        public Account GetAccount(string postArtistEmail)
+            => this.DbSet.Include(x => x.Role).FirstOrDefault(x => x.Email == postArtistEmail);
+            
 		public int GetTotalUsersWithinLast30Days()
 		{
 			DateTime thirtyDaysAgo = DateTime.Today.AddDays(-30);
