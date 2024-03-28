@@ -7,15 +7,18 @@ public static class URIConstant
         "/Authenticate/Login",
         "/Authenticate/Logout",
         "/Authenticate/Register",
+        "/Authenticate/ForgotPassword",
         "/Artworks/",
         "/CreatorExploration/"
     };
 
     public static readonly string[] CreatorListUris = {
-        "/Creator/Profile",
         "/Creator/ArtworkList",
+        "/Creator/AudienceSubscriberStatistic",
+        "/Creator/EditPost",
+        "/Creator/EditProfile",
+        "/Creator/Profile",
         "/Creator/UploadNewArtwork",
-        "/Creator/AudienceSubscriberStatistic"
     };
 
     public static readonly string[] AudienceListUris = {
