@@ -39,10 +39,14 @@ namespace ArtHubService.Interface
 
         public void Update(Account account);
 
-        public  Task<bool> UpdateAccountFields(string email, AccountUpdateDto updatedFields);
+      
+
+
+        public Task<bool> UpdateAccountStatus(string email);
+
+        public Task<bool> RetoreAsync(string email); 
 
 
 
-
-    }
+	}
 }

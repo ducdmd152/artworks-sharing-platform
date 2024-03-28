@@ -10,12 +10,13 @@ public class SubscriberRepository : BaseRepository<Subscriber>, ISubscriberRepos
     public SubscriberRepository(IBaseDAO<Subscriber> baseDAO) : base(baseDAO)
     {        
     }
-    public int GetTotalSubscribers()
-    {
-        return this.DbSet.Count();
-    }
-        
-    public List<string> GetSubscribingArtistEmailList(string audienceEmail)
+	public int GetTotalSubscribersWithinLast30Days()
+	{
+		DateTime thirtyDaysAgo = DateTime.Today.AddDays(-30);
+		return this.DbSet.Count(sub => sub.CreatedDate >= thirtyDaysAgo);
+	}
+
+	public List<string> GetSubscribingArtistEmailList(string audienceEmail)
     {
     return this.DbSet.Where(item => item.EmailUser.ToLower().Equals(audienceEmail.ToLower())
                                     && item.Status == 1

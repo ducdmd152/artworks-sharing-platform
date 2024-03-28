@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="~/css/adminLayout.css">
+
+    <title>@ViewData["Title"] -ArtHub</title>
+</head>
+<body>
+    <div class="container">
+        <aside>
+            <div class="top">
+                <div class="logo">
+                    <img src="">
+                    <h1>ART<span class="danger">HUB</span></h1>
+                </div>
+                <div class="close" id="close-btn">
+                    <i class='bx bxs-right-arrow'></i>
+                </div>
+            </div>
+            <div class="sidebar">
+                <a href="/Admins/Dashboard" class="nav-link">
+                    <i class='bx bx-home icon'></i>
+                    <h3 class="text nav-text">Dashboard</h3>
+                </a>
+                <a href="/Admins/TopArtWork" class="nav-link">
+                    <i class='bx bx-palette icon'></i>
+                    <h3 class="text nav-text">Top Artwork</h3>
+                </a>
+                <a href="/Admins/TopCreator" class="nav-link">
+                    <i class='bx bx-heart icon'></i>
+                    <h3 class="text nav-text">Top Creator</h3>
+                </a>
+                <a href="/Admins/AccountManagement" class="nav-link">
+                    <i class='bx bx-bar-chart icon'></i>
+                    <h3 class="text nav-text">Account Management</h3>
+                </a>
+                <a href="/Admins/Setting" class="nav-link">
+                    <i class='bx bx-bar-chart icon'></i>
+                    <h3 class="text nav-text">Platform Setting</h3>
+                </a>
+            </div>
+
+        </aside>
+        <main>
+            @RenderBody()
+        </main>
+    </div>
+
+
+
+    <script>
+       
+        document.addEventListener("DOMContentLoaded", function () {
+            var navLinks = document.querySelectorAll(".sidebar a.nav-link");
+
+           
+            navLinks.forEach(function (navLink) {
+                navLink.classList.remove("active");
+            });
+
+            
+            var currentPageLink = document.querySelector(".sidebar a.nav-link[href='" + window.location.pathname + "']");
+            if (currentPageLink) {
+                currentPageLink.classList.add("active");
+            }
+        });
+    </script>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

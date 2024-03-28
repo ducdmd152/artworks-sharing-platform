@@ -9,4 +9,6 @@ public interface ISubscriberService
 	public Task<IEnumerable<Subchart>> GetSubChaartQuery();
     Task<StatisticOfWeekDto> GetStatisticOfSubscriberLastWeek(string email);
     Task<StatisticOfYearDto> GetStatisticOfSubscriberMonthOfYear(string email);
+	public Task<StatisticOfWeekDto> GetSubChartOneWeek();
+
 }

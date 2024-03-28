@@ -10,6 +10,8 @@ namespace Admin.Pages.Admins
     public class TopCreatorModel : PageModel
     {
         private readonly ITopCreatorService _topCreatorService;
+        
+
         public TopCreatorModel(ITopCreatorService topCreatorService)
         {
             _topCreatorService = topCreatorService;

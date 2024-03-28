@@ -23,6 +23,7 @@ namespace Admin.Pages.Admins
         [BindProperty]
         public AccountUpdateDto UpdateDto { get; set; }
 
+
         public async Task<IActionResult> OnGetAsync(string email)
         {
             if (email == null)
@@ -41,32 +42,29 @@ namespace Admin.Pages.Admins
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string email)
         {
-           
 
-            try
+
+            if (string.IsNullOrEmpty(email))
             {
-                var result = await _accountService.UpdateAccountFields(Account.Email, UpdateDto); // Sử dụng Account.Email thay vì tham số email
-
-                if (!result)
-                {
-                    // Xử lý nếu cập nhật không thành công
-                    // Ví dụ: Hiển thị thông báo lỗi
-                    ModelState.AddModelError("", "Cập nhật tài khoản không thành công.");
-                    return Page();
-                }
+                return BadRequest();
             }
-            catch (Exception ex)
+
+
+            bool deleteResult = await _accountService.UpdateAccountStatus(email).ConfigureAwait(false);
+
+            if (deleteResult)
             {
-                // Xử lý ngoại lệ nếu có
-                // Ví dụ: Hiển thị thông báo lỗi
-                ModelState.AddModelError("", "Đã xảy ra lỗi khi cập nhật tài khoản.");
+
+                return RedirectToPage();
+            }
+            else
+            {
+
                 return Page();
             }
-
-            // Chuyển hướng sau khi cập nhật thành công
-            return RedirectToPage("./AccountManagement");
         }
     }
+    
 }

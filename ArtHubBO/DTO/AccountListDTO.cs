@@ -19,6 +19,7 @@ namespace ArtHubBO.DTO
 
         public string AccountCreateDate { get; set; }
         public string AccountUpdateDate { get; set; }
+
         public int TotalPages { get; set; }
         public int TotalItems { get; set; }
     }

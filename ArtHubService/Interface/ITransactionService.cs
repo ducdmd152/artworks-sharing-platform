@@ -9,4 +9,11 @@ public interface ITransactionService
     IEnumerable<Transaction> GetTransactions();
     Task<StatisticOfWeekDto> GetStatisticOfRevenueLastWeek(string email);
     Task<StatisticOfYearDto> GetStatisticOfRevenueMonthOfYear(string email);
+    public  Task<double> GetCommisionRate();
+
+
+
+    public  Task<StatisticOfYearDto> RevenueChartOfYear();
+
+
 }

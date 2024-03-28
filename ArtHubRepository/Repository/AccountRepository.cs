@@ -20,13 +20,14 @@ namespace ArtHubRepository.Repository
         {
             return this.DbSet.Include(a => a.Role).FirstOrDefault(a => a.Email.Equals(email) && a.Password.Equals(password));
         }
-        
-         public int GetTotalUsers()
-        {
-            return this.DbSet.Count(p => p.RoleId != 4 && p.RoleId != 3);
-        }
 
-        public Account GetAccount(string postArtistEmail)
+		public int GetTotalUsersWithinLast30Days()
+		{
+			DateTime thirtyDaysAgo = DateTime.Today.AddDays(-30);
+			return this.DbSet.Count(p => p.RoleId != 4 && p.RoleId != 3 && p.CreatedDate >= thirtyDaysAgo);
+		}
+
+		public Account GetAccount(string postArtistEmail)
             => this.DbSet.FirstOrDefault(x => x.Email == postArtistEmail);
 
         public IEnumerable<Account> GetCreatorAndUser()

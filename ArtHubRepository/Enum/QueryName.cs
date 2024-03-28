@@ -21,5 +21,7 @@
         GetStatisticOfSubscriberMonthOfYear,
         GetStatisticOfRevenueLastWeek,
         GetStatisticOfRevenueMonthOfYear,
-    }
+		RevenueChartOfYear,
+		SubChartQuery,
+	}
 }
