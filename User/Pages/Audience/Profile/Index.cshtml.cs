@@ -24,9 +24,12 @@ namespace User.Pages.Audience.Profile
         {
             Account = SessionUtil.GetAuthenticatedAccount(HttpContext);
 
-            var result = audienceService.GetSubcribingCreators(Account.Email, pageIndex, pageSize);
-            Creators = result.PageData;
-            PageInfo = result.PageInfo;
+            var result = audienceService.GetSubcribingCreators(Account.Email ?? string.Empty, pageIndex, pageSize);
+            if (result != null)
+            {
+                Creators = result.PageData;
+                PageInfo = result.PageInfo;
+            }
         }
     }
 }
