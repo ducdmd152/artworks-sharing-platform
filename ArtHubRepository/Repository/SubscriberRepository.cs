@@ -18,7 +18,7 @@ public class SubscriberRepository : BaseRepository<Subscriber>, ISubscriberRepos
     public List<string> GetSubscribingArtistEmailList(string audienceEmail)
     {
     return this.DbSet.Where(item => item.EmailUser.ToLower().Equals(audienceEmail.ToLower())
-                                    && item.Status == 1
+                                    //&& item.Status == 1
                                     && DateTime.Now <= item.ExpiredDate
                                     && item.EmailArtistNavigation.Account.Enabled)
                         .Select(item => item.EmailArtist)
