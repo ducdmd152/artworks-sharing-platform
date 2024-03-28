@@ -122,12 +122,13 @@
             </div>
         } else if (Model.AccountUpdateType.TypeUpdate == 3)
         {
-            <form class="ms-4">
+            <form class="ms-4" name="changeSubscribeFee">
                 <div class="form-group mt-3 col-md-12">
                     <label for="subscribeFee">Subscribe Fee</label>
-                    <input type="number" class="form-control" id="subscribeFee" placeholder="Subscribe Fee">
+                    <input type="number" asp-for="Fee" min="0" class="form-control" id="subscribeFee" placeholder="Subscribe Fee">
+                    <span asp-validation-for="Fee" class="text-danger"></span>
                 </div>                
-                <button type="button" class="btn btn-dark  mt-3">Save</button>
+                <button type="button" class="btn btn-dark mt-3" onclick="updateSubscriberFee()">Save</button>
             </form>
         } else if (Model.AccountUpdateType.TypeUpdate == 4)
         {
@@ -247,6 +248,44 @@
                             window.location.href = '/Authenticate/Login';
                         }, 2000);
                     }                    
+                },
+                error: function (error) {
+                    console.error('Error loading partial:', error);
+                }
+            });
+        } else {
+            console.error('Client-side validation failed.');
+        }
+    }
+
+    function updateSubscriberFee() {
+        var form = document.forms.namedItem("changeSubscribeFee");
+        var $form = $(form);
+
+        // Trigger validation
+        $form.validate();
+
+        if ($form.valid()) {
+            var data = new FormData(form);
+
+            $.ajax({
+                url: '/Creator/EditProfile?handler=ChangeSubscribeFee',
+                type: 'POST',
+                headers: {
+                    RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                data: data,
+                processData: false,  // Don't process the data (already FormData)
+                contentType: false,  // Don't set contentType (let jQuery handle it)
+                success: function (response) {
+                    if (response.result === 'Error') {
+                        showOutOfStockToastDanger('Fail', response.data);
+                    } else {
+                        showOutOfStockToastSuccess('Change Fee', response.data);
+                        setTimeout(function () {
+                            window.location.href = '/Creator/EditProfile';
+                        }, 2000);
+                    }
                 },
                 error: function (error) {
                     console.error('Error loading partial:', error);

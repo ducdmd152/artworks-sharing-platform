@@ -70,7 +70,7 @@ public class RegisterModel : PageModel
         account.Gender = gender!;
         account.Status = (int)AccountStatus.Normal;
         account.Enabled = true;
-        account.Avatar = null;
+        account.Avatar = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTii3hM5abJEj_Zu0wumINDLGvHaT-MZaesc9dj-gXSUg&s";
         
         if (accountRegister.IsRegisterCreator)
         {
@@ -78,13 +78,18 @@ public class RegisterModel : PageModel
             account.Artist.Email = accountRegister.Email;
             account.Artist.ArtistName = accountRegister.ArtistName;
             account.Artist.Bio = string.Empty;
+            account.Artist.Fees = new List<Fee> {
+                new Fee {
+                    Amount = 0,
+                    ArtistEmail = accountRegister.Email
+                }
+            };
             account.RoleId = (int)RoleEnum.Creator + 1;
         } else
         {
             account.RoleId = (int)RoleEnum.Audience + 1;
         }
         return account;
-
     }
 
     private bool validateInput(AccountRegisterDto accountRegisterDto)

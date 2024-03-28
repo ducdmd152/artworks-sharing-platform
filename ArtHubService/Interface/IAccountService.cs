@@ -35,6 +35,6 @@ namespace ArtHubService.Interface
         Task<bool> UpdateAccountEnable(string email, bool enable);
 
         Task<bool> CreateAccount(Account account);
-        Account GetAccountByEmail(string accountEmail);
+        Account? GetAccountByEmail(string email);
     }
 }
