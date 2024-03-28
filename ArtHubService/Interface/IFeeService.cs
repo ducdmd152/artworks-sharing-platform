@@ -1,6 +1,10 @@
-﻿namespace ArtHubService.Interface;
+﻿using ArtHubBO.Entities;
+
+namespace ArtHubService.Interface;
 
 public interface IFeeService
 {
-    double GetFeeSubscribe(string creatorEmail);
+    Fee? GetFeeByArtistEmail(string email);
+    Task<Fee?> UpdateAsync(Fee fee);
+   double GetFeeSubscribe(string creatorEmail);
 }

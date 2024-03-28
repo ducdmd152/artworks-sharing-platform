@@ -28,8 +28,11 @@ namespace User.Pages.Audience.Profile
             Account = SessionUtil.GetAuthenticatedAccount(HttpContext);
 
             var result = await postService.GetReactedPostList(SessionUtil.GetAuthenticatedAccount(this.HttpContext)?.Email, pageIndex, pageSize);
-            Posts = result.PageData;
-            PageInfo = result.PageInfo;
+            if (result != null)
+            {
+                Posts = result.PageData;
+                PageInfo = result.PageInfo;
+            }            
         }
     }
 }

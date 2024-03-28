@@ -4,17 +4,14 @@ using ArtHubBO.Entities;
 using ArtHubBO.Enum;
 using ArtHubBO.Models;
 using ArtHubService.Interface;
-using ArtHubService.Service;
 using ArtHubService.Utils;
 using InventoryManagementGUI.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
-using StackExchange.Redis;
 using System.Net;
-using System.Security.Principal;
 
-namespace User.Pages.Creator;
+namespace User.Pages.Audience.Profile;
 
 public class EditProfileModel : PageModel
 {
@@ -29,11 +26,9 @@ public class EditProfileModel : PageModel
     [BindProperty]
     public AccountUpdateTypeDto AccountUpdateType { get; set; }
     [BindProperty]
-    public IFormFile FileUpload { get; set; }    
+    public IFormFile FileUpload { get; set; }
     [BindProperty]
     public PasswordConfirmDto PasswordConfirm { get; set; }
-    [BindProperty]
-    public double Fee { get; set; }
 
     public EditProfileModel(IAccountService accountService, IConfiguration configuration, IStorageService storageService, IFeeService feeService)
     {
@@ -45,19 +40,16 @@ public class EditProfileModel : PageModel
 
     public void OnGet(int typeUpdate)
     {
-        if (typeUpdate > 0) { 
+        if (typeUpdate > 0)
+        {
             TypeUpdate = typeUpdate;
         }
-        var accountEmail = HttpContext.Session.GetString("ACCOUNT_EMAIL");        
-        if (accountEmail != null ) {            
-            var account = accountService.GetAccountIncludeArtistByEmail(accountEmail);
+        var accountEmail = HttpContext.Session.GetString("ACCOUNT_EMAIL");
+        if (accountEmail != null)
+        {
+            var account = accountService.GetAccountByEmail(accountEmail);
             AccountUpdate = AccountToAccountUpdateDto(account);
             AccountUpdateType = AccountToAccountUpdateTypeDto(account, TypeUpdate);
-            Fee? fee = feeService.GetFeeByArtistEmail(accountEmail);
-            if (fee != null)
-            {
-                Fee = fee.Amount;
-            }
         }
         return;
     }
@@ -100,12 +92,13 @@ public class EditProfileModel : PageModel
                     Result = Result.Error,
                     Data = "Fail to upload image!",
                 });
-            } else
+            }
+            else
             {
                 AccountUpdate.Avatar = responseUploadImage.LinkSource;
-            }            
+            }
         }
-        Account? updatedAccount = await accountService.UpdateArtistProfile(AccountUpdate);
+        Account? updatedAccount = await accountService.UpdateProfile(AccountUpdate);
         if (updatedAccount == null)
         {
             return new JsonResult(new PostResult()
@@ -140,7 +133,8 @@ public class EditProfileModel : PageModel
                 Result = Result.Error,
                 Data = "Your old password not correct!",
             });
-        } else
+        }
+        else
         {
             PasswordConfirm.NewPassword = Encryption.Encrypt(PasswordConfirm.NewPassword);
             bool isUpdate = await accountService.ChangePassword(PasswordConfirm, accountEmail);
@@ -152,48 +146,16 @@ public class EditProfileModel : PageModel
                     Result = Result.Ok,
                     Data = "Change password successfully!",
                 });
-            } else
+            }
+            else
             {
                 return new JsonResult(new PostResult()
                 {
                     Result = Result.Error,
                     Data = "Fail to change password!",
                 });
-            }            
-        }
-    }
-
-    public async Task<IActionResult> OnPostChangeSubscribeFeeAsync()
-    {        
-        var accountEmail = HttpContext.Session.GetString("ACCOUNT_EMAIL")!;
-        Fee? fee = feeService.GetFeeByArtistEmail(accountEmail);
-        if (fee == null)
-        {
-            return new JsonResult(new PostResult()
-            {
-                Result = Result.Error,
-                Data = "Creator not have fee. Check source code!",
-            });
-        } else
-        {
-            fee.Amount = Fee;
-            var feeUpdated = await feeService.UpdateAsync(fee);
-            if (feeUpdated == null)
-            {
-                return new JsonResult(new PostResult()
-                {
-                    Result = Result.Error,
-                    Data = "Fail to update fee!",
-                });
-            } else
-            {
-                return new JsonResult(new PostResult()
-                {
-                    Result = Result.Ok,
-                    Data = "Update fee successfully!",
-                });
             }
-        }        
+        }
     }
 
     public async Task<IActionResult> OnPostDeleteAccountAsync()
@@ -208,7 +170,8 @@ public class EditProfileModel : PageModel
                 Result = Result.Ok,
                 Data = "Delete account successfully!",
             });
-        } else
+        }
+        else
         {
             return new JsonResult(new PostResult()
             {
@@ -216,7 +179,7 @@ public class EditProfileModel : PageModel
                 Data = "Fail to delete account!",
             });
         }
-        
+
     }
 
     private AccountUpdateDto AccountToAccountUpdateDto(Account account)
@@ -227,9 +190,7 @@ public class EditProfileModel : PageModel
             FirstName = account.FirstName,
             LastName = account.LastName,
             Gender = account.Gender,
-            Avatar = account.Avatar,
-            ArtistName = account.Artist!.ArtistName,
-            Bio = account.Artist.Bio
+            Avatar = account.Avatar            
         };
     }
 
@@ -237,18 +198,17 @@ public class EditProfileModel : PageModel
     {
         AccountUpdateTypeDto accountTypeUpdate = new AccountUpdateTypeDto();
         accountTypeUpdate.TypeUpdate = typeUpdate;
-        accountTypeUpdate.Name = account.Artist!.ArtistName;
+        accountTypeUpdate.Name = account.FirstName;
         accountTypeUpdate.Avatar = account.Avatar;
         if (typeUpdate == 2)
         {
             accountTypeUpdate.NameTypeUpdate = "Change password";
-        } else if (typeUpdate == 3)
-        {
-            accountTypeUpdate.NameTypeUpdate = "Subscribe fee";
-        } else if (typeUpdate == 4)
+        }
+        else if (typeUpdate == 3)
         {
             accountTypeUpdate.NameTypeUpdate = "Delete account";
-        } else
+        }
+        else
         {
             accountTypeUpdate.NameTypeUpdate = "Edit profile";
         }

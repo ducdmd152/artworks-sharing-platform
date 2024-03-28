@@ -29,6 +29,7 @@ namespace ArtHubService.Interface
         Account GetAccountIncludeArtistByEmail(string email);
 
         Task<Account?> UpdateArtistProfile(AccountUpdateDto accountUpdate);
+        Task<Account?> UpdateProfile(AccountUpdateDto accountUpdate);
 
         Task<bool> ChangePassword(PasswordConfirmDto passwordConfirmDto, string email);
         bool CheckCorrectPassword(string email, string password);

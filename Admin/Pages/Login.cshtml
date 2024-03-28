@@ -20,12 +20,14 @@
                         <div class="form-outline mb-4">
                             <label class="label-primary form-label" for="form2Example1">Email address</label>
                             <input asp-for="@Model.Email" type="email" placeholder="Type here" class="form-control" />
+                            <span asp-validation-for="@Model.Email" class="text-danger"></span>
                         </div>
 
                         <!-- Password input -->
                         <div class="form-outline mb-2">
                             <label class="label-primary form-label" for="form2Example2">Password</label>
                             <input asp-for="@Model.Password" type="password" placeholder="Type here" class="form-control" />
+                            <span asp-validation-for="@Model.Password" class="text-danger"></span>
                         </div>
 
                         <div class="text-center">
@@ -41,3 +43,8 @@
         </div>
     </div>
 </section>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

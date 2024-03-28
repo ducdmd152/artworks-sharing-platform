@@ -43,9 +43,9 @@ namespace ArtHubRepository.Repository
             return this.DbSet.Any(a => a.Email.Equals(email) & a.Password.Equals(password));
         }
 
-        public Account GetAccountByEmail(string email)
+        public Account? GetAccountByEmail(string email)
         {
-            return this.DbSet.Where(a => a.Email == email).First();
+            return this.DbSet.Include(a => a.Role).Where(a => a.Email == email).FirstOrDefault();
         }
     }
 }

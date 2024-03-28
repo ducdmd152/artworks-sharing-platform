@@ -194,7 +194,7 @@ namespace ArtHubService.Service
                     dataUpdate.Avatar = accountUpdate.Avatar;
                 } else
                 {
-                    dataUpdate.Avatar = null;
+                    dataUpdate.Avatar = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTii3hM5abJEj_Zu0wumINDLGvHaT-MZaesc9dj-gXSUg&s";
                 }
                 dataUpdate.Artist!.ArtistName = accountUpdate.ArtistName;
                 if (accountUpdate.Bio != null)
@@ -268,7 +268,7 @@ namespace ArtHubService.Service
             try
             {
                 await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
-                Account account = accountRepository.GetAccountByEmail(email);
+                Account account = accountRepository.GetAccountByEmail(email)!;
                 account.Enabled = enable;
                 accountRepository.Update(account);
                 await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
@@ -364,9 +364,37 @@ namespace ArtHubService.Service
             }      
         }
 
-        public Account GetAccountByEmail(string accountEmail)
+        public Account? GetAccountByEmail(string email)
         {
-            return this.accountRepository.GetAccountByEmail(accountEmail);
+            return accountRepository.GetAccountByEmail(email);
+        }
+
+        public async Task<Account?> UpdateProfile(AccountUpdateDto accountUpdate)
+        {
+            try
+            {
+                await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+                var dataUpdate = accountRepository.GetAccountByEmail(accountUpdate.Email)!;
+                dataUpdate.FirstName = accountUpdate.FirstName;
+                dataUpdate.LastName = accountUpdate.LastName;
+                dataUpdate.Gender = accountUpdate.Gender;
+                if (accountUpdate.Avatar != null)
+                {
+                    dataUpdate.Avatar = accountUpdate.Avatar;
+                }
+                else
+                {
+                    dataUpdate.Avatar = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTii3hM5abJEj_Zu0wumINDLGvHaT-MZaesc9dj-gXSUg&s";
+                }
+                var updatedArtist = accountRepository.Update(dataUpdate);
+                await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+                return updatedArtist;
+            }
+            catch (Exception ex)
+            {
+                unitOfWork.RollbackTransaction();
+            }
+            return null;
         }
     }
 }
