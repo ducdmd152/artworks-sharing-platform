@@ -32,12 +32,12 @@ public class LoginMiddleware
             return;
         }
 
-        if (userConvert.RoleId == (int)RoleEnum.Audience && URIConstant.AudienceListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
+        if (userConvert.RoleId == ((int)RoleEnum.Audience + 1) && URIConstant.AudienceListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
         {
             await _next(httpContext);
             return;
         }
-        else if (userConvert.RoleId == (int)RoleEnum.Creator && URIConstant.CreatorListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
+        else if (userConvert.RoleId == ((int)RoleEnum.Creator + 1) && URIConstant.CreatorListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
         {
             await _next(httpContext);
             return;
