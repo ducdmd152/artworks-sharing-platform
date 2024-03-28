@@ -27,7 +27,7 @@ namespace ArtHubRepository.Repository
         }
 
         public Account GetAccount(string postArtistEmail)
-            => this.DbSet.FirstOrDefault(x => x.Email == postArtistEmail);
+            => this.DbSet.Include(x => x.Role).FirstOrDefault(x => x.Email == postArtistEmail);
 
         public IEnumerable<Account> GetCreatorAndUser()
         {

@@ -1,7 +1,10 @@
 ﻿using System.Text;
+using ArtHubBO.Entities;
+using ArtHubBO.Enum;
 using ArtHubRepository.Interface;
 using ArtHubService.Interface;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace ArtHubService.Service;
 
@@ -10,12 +13,16 @@ public class PaypalService : IPaypalService
     private readonly IConfiguration _configuration;
     private readonly IAccountRepository accountRepository;
     private readonly IFeeRepository feeRepository;
+    private readonly ISubscriberRepository subscriberRepository;
+    private readonly ILogger<PaypalService> logger;
 
-    public PaypalService(IConfiguration configuration, IAccountRepository accountRepository, IFeeRepository feeRepository)
+    public PaypalService(IConfiguration configuration, IAccountRepository accountRepository, IFeeRepository feeRepository, ILogger<PaypalService> logger, ISubscriberRepository subscriberRepository)
     {
         _configuration = configuration;
         this.accountRepository = accountRepository;
         this.feeRepository = feeRepository;
+        this.logger = logger;
+        this.subscriberRepository = subscriberRepository;
     }
 
     private double feeSub;
@@ -26,10 +33,43 @@ public class PaypalService : IPaypalService
 
         var response = await CreateSubscriptionPlan("Arthub Subscribe", "Monthly subscription", "MONTH", "REGULAR", 1, 12, "USD", "TIERED", "false", "ACTIVE");
         string planId =  Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response).id;
-        return await  AddSubscription(planId, audienceEmail);
+        return await  AddSubscription(planId, audienceEmail, creatorEmail);
    
 
     }
+
+    public async Task<Result> CancelSubscriptionAsync(string accEmail, string? creatorEmail, string reason)
+    {
+        Subscriber sub = this.subscriberRepository.GetSubscriber(accEmail, creatorEmail);
+        if (sub == default)
+        {
+            return Result.Error;
+        }
+        
+        // /v1/billing/subscriptions/{id}/cancel
+        // request_url
+        var requestUrl = _configuration["PAYPAL_URL"] + $"/v1/billing/subscriptions/" + sub.Transactions.FirstOrDefault().SubscriptionPaypalId + "/cancel";
+        var requestData = new
+        {
+            reason = reason,
+        };
+        var _httpClient = new HttpClient();
+        string accessToken = await GetAccessToken();
+
+        var requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
+        _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+
+        var response = await _httpClient.PostAsync(requestUrl, requestContent);
+        var responseContent = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            return Result.Ok;
+        }
+
+        return Result.Ok;
+    }
+
     public async Task<string> CreateSubscriptionPlan(string name, string description, string billingCycleFrequency, string billingCycleTenureType, int billingCycleSequence, int billingCycleTotalCycles, string currencyCode, string pricingScheme, string quantitySupported, string status)
     {
         var productId = await CreateProduct("Test product", "Product for testing"); // Replace XXXXXXXXXXXX with your actual product ID
@@ -129,11 +169,12 @@ public class PaypalService : IPaypalService
         }
         else
         {
-            throw new Exception($"Failed to create product. {responseContent}");
+            this.logger.LogError($"Failed to create product. {responseContent}");
+            return string.Empty;
         }
     }
 
-    public async Task<string> AddSubscription(string planId, string audienceEmail)
+    public async Task<string> AddSubscription(string planId, string audienceEmail, string creatorEmail)
     {
         var audienceAccount = this.accountRepository.GetAccountByEmail(audienceEmail);
         if (audienceEmail != default)
@@ -141,11 +182,28 @@ public class PaypalService : IPaypalService
             var _httpClient = new HttpClient();
             string url = _configuration["PAYPAL_URL"] + "/v1/billing/subscriptions";
             string accessToken = await GetAccessToken(); // Replace with your actual access token
-
+            DateTime startTime = default;
+            var sub = this.subscriberRepository.GetAvaiableSubcriber(audienceEmail, creatorEmail);
+            if (sub != null)
+            {
+                if (sub.ExpiredDate.Date >= DateTime.Now.AddMonths(1).Date)
+                {
+                    startTime = sub.ExpiredDate.AddDays(-1);
+                }
+                else
+                {
+                    startTime = sub.ExpiredDate.AddMinutes(30);
+                }
+            }
+            else
+            {
+                startTime = DateTime.Now.AddDays(1);
+            }
+            
             var requestData = new
             {
                 plan_id = planId,
-                start_time = DateTime.Now.AddDays(1),
+                start_time = startTime.ToString("yyyy-MM-ddTHH:mm:ssZ"),
 
                 shipping_amount = new
                 {
@@ -205,12 +263,11 @@ public class PaypalService : IPaypalService
                 return approveUrl;
                 //  return Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(responseContent).id;
             }
-
-            throw new Exception($"Failed to create subscription: {responseContent}");
+            this.logger.LogError($"Failed to create subscription: {responseContent}");
+            return string.Empty;
         }
-
-        throw new Exception($"Not found account with email {audienceEmail}");
-
+        this.logger.LogError("Not found account with email {audienceEmail}");
+        return string.Empty;
     }
         
     private async Task<string> GetAccessToken()
@@ -235,7 +292,8 @@ public class PaypalService : IPaypalService
         }
         else
         {
-            throw new Exception($"Failed to get access token. {responseContent}");
+            this.logger.LogError($"Failed to get access token. {responseContent}");
+            return string.Empty;
         }
     }
 }

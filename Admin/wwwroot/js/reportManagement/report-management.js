@@ -150,39 +150,42 @@ function banThePost() {
 
 
 function banTheArtist(){
-    var confirmReject = confirm("Are you sure you want to ban this artist from this report?");
+    // Create an input field for the reason
+    var reason = prompt("Please provide a reason for banning this post:");
 
-    // If user confirms, proceed with rejection
-    if (confirmReject) {
-        updateModel.mode = modeUpdateReport.BanTheArtist;
-        $.ajax({
-            url: '/Moderator/ReportManagement?handler=SkipOrBanPost',
-            type: 'POST',
-            contentType: 'application/json',
-            headers: {
-                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
-            },
-            data: JSON.stringify(updateModel),
-            success: function (response) {
-                // Handle success response here
-                if(response.result === 'Ok'){
-                    showOutOfStockToastSuccess('Reviewed', 'Ban successfully!' );
-                }else{
-                    showOutOfStockToastDanger('Reviewed', 'Ban fail');
-                }
-                getListByPaging(1);
-                $('#artworkDetailModal').modal('hide');
-                console.log('Approved artwork successfully:', response);
-            },
-            error: function (error) {
-                // Handle error response here
-                console.error('Error approving artwork:', error);
-            }
-        });
-    } else {
-        // If user cancels, do nothing or provide feedback
-        console.log('Rejection canceled by user.');
+    // If the user cancels or doesn't provide a reason, exit the function
+    if (!reason) {
+        showOutOfStockToastDanger('Reviewed','Ban canceled by user or no reason provided.');
+        return;
     }
+
+    // If the user provides a reason, proceed with banning the post
+    updateModel.mode = modeUpdateReport.BanTheArtist;
+    updateModel.reason = reason; // Add reason to the updateModel
+    $.ajax({
+        url: '/Moderator/ReportManagement?handler=SkipOrBanPost',
+        type: 'POST',
+        contentType: 'application/json',
+        headers: {
+            RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+        },
+        data: JSON.stringify(updateModel),
+        success: function (response) {
+            // Handle success response here
+            if(response.result === 'Ok'){
+                showOutOfStockToastSuccess('Reviewed', 'Ban successfully!' );
+            }else{
+                showOutOfStockToastDanger('Reviewed', 'Ban fail');
+            }
+            getListByPaging(1);
+            $('#artworkDetailModal').modal('hide');
+            console.log('Approved artwork successfully:', response);
+        },
+        error: function (error) {
+            // Handle error response here
+            console.error('Error approving artwork:', error);
+        }
+    });
 }
 
 function getListByPaging(pageNumber) {
