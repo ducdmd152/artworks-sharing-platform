@@ -5,6 +5,7 @@
 }
 <head>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <style>
         * {
             box-sizing: border-box;
@@ -204,7 +205,6 @@
             top: 8px;
             left: 10px;
         }
-
     </style>
 </head>
 <form method="post" id="myForm">
@@ -228,11 +228,18 @@
                     <div class="mt-4">
                         @if (@Model.Creator.IsSubscribed == true)
                         {
-                            <button class="text-gray-600 border-b-2 px-4 py-2 btn btn-light btn-subscribed disabled" style="background-color: rgba(255, 255, 255, 0.7);">Subscribed</button>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Subscribed
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <li onclick="showDialogUnSubscribe()"><a class="dropdown-item" href="#" >Unsubscribe</a></li>
+                                </ul>
+                            </div>
                         }
                         else
                         {
-                            <button class="text-white-600 border-b-2 px-4 py-2 btn btn-dark" onclick="subscribes()" >Subscribe</button>
+                            <button type="button" class="text-white-600 border-b-2 px-4 py-2 btn btn-dark" onclick="showDialogSubscribe()" >Subscribe</button>
                         }
               
                     </div>
@@ -295,29 +302,139 @@
             }
         </section>
     </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="confirmationSubModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <span>Do you want to subscribe to the artist: <b>@Model.Creator.ArtistName</b> with a monthly fee of <b>@Model.FeeSubscribe</b> $</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="subscribes()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="unsubscribeModal" tabindex="-1" aria-labelledby="unsubscribeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="unsubscribeModalLabel">Unsubscribe</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to unsubscribe from this artist?</p>
+                    <div class="mb-3">
+                        <label for="unsubReason" class="form-label">Reason for unsubscribing:</label>
+                        <textarea type="text" class="form-control" id="unsubReason" placeholder="Enter reason" ></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="cancelSubscription()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </form>
+<div id="spinner-overlay" class="invisible">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
 <partial name="Shared/Partial/_toastyAnnouncePartial"/>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 <script src="~/js/site.js" asp-append-version="true"></script>
 @Html.AntiForgeryToken()
 <script>
+
     function subscribes(){
+        var spin = document.getElementById('spinner-overlay');
+        spin.classList.remove('invisible');
         const urlParams = new URLSearchParams(window.location.search);
         var id = urlParams.get('id');
-        const form = document.getElementById('myForm');
-        form.action = 'Details?handler=Subscribers&id=' + id; 
-        form.method = 'post';
-        form.submit();
+
+       $.ajax({
+           url: '/CreatorExploration/Details?handler=Subscribers&id='+ id,
+           type: 'POST',
+           contentType: 'application/json',
+           headers: {
+               RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+           },
+           success: function (response) {
+               // Handle success response here
+               if(response.result === 'Ok'){
+                   window.location.href = response.data;
+               }else{
+                   showOutOfStockToastDanger("Subscribe", response.data);
+                   spin.classList.add('invisible');
+               }
+           },
+           error: function (error) {
+               console.log(error);
+               showOutOfStockToastDanger("Subscribe", "Fail");
+               spin.classList.add('invisible');
+           }
+       });  
+    }
+    
+    function showDialogSubscribe(){
+         $('#confirmationSubModal').modal('show');
+    }
+    
+    function showDialogUnSubscribe(){
+         $('#unsubscribeModal').modal('show');
+    }
+        
+
+    function cancelSubscription(){
+        var spin = document.getElementById('spinner-overlay');
+        spin.classList.remove('invisible');
+        const urlParams = new URLSearchParams(window.location.search);
+        var id = urlParams.get('id');
+        var reason = document.getElementById('unsubReason');
+        $.ajax({
+            url: '/CreatorExploration/Details?handler=UnSubscription&creatorEmail='+ '@Model.Creator.ArtistEmail' + '&reason=' + reason.value,
+            type: 'POST',
+            contentType: 'application/json',
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function (response) {
+                 spin.classList.add('invisible');
+                // Handle success response here
+                if(response.result === 'Ok'){
+                    showOutOfStockToastSuccess("Cancel subscription", "Successfully");
+                }else{
+                    showOutOfStockToastDanger("Subscribe", response.data);
+                }
+
+                $('#unsubscribeModal').modal('hide');
+            },
+            error: function (error) {
+                 spin.classList.add('invisible');
+                showOutOfStockToastDanger("Subscribe", "Fail");
+                $('#unsubscribeModal').modal('hide');
+            }
+        });  
     }
     
     function checkTransactionIsComplete(){
-        if('@Model.CompleteTransaction' === 'Ok'){
+        if('@Model.CompleteTransactionCondition' === 'Ok'){
             showOutOfStockToastSuccess("Subscribe", "Successfully");
-        }else if ('@Model.CompleteTransaction' === 'Error'){
+        }else if ('@Model.CompleteTransactionCondition' === 'Error'){
             showOutOfStockToastDanger("Subscribe", "Fail");
         }
     }
-    
+
     checkTransactionIsComplete();
 </script>

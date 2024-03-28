@@ -211,6 +211,34 @@ namespace ArtHubService.Service
             }
             return null;
         }
+        
+        public async Task<Account?> UpdateModeratorProfile(AccountUpdateDto accountUpdate)
+        {
+            try
+            {
+                await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+                var dataUpdate = accountRepository.GetAccount(accountUpdate.Email);
+                dataUpdate.FirstName = accountUpdate.FirstName;
+                dataUpdate.LastName = accountUpdate.LastName;
+                dataUpdate.Gender = accountUpdate.Gender;
+                if (accountUpdate.Avatar != null)
+                {
+                    dataUpdate.Avatar = accountUpdate.Avatar;
+                } else
+                {
+                    dataUpdate.Avatar = null;
+                }
+            
+                var updatedArtist = accountRepository.Update(dataUpdate);
+                await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+                return updatedArtist;
+            }
+            catch (Exception ex)
+            {
+                unitOfWork.RollbackTransaction();
+            }
+            return null;
+        }
 
         public async Task<bool> ChangePassword(PasswordConfirmDto passwordConfirmDto, string email)
         {
