@@ -159,7 +159,8 @@ public class UploadNewArtworkModel : PageModel
             TotalView = 0,
             ArtistEmail = postUpdateDto.ArtistEmail,
             Images = postUpdateDto.Images,
-            PostCategories = postUpdateDto.PostCategories
+            PostCategories = postUpdateDto.PostCategories,
+            Note = string.Empty
         };
     }
 }

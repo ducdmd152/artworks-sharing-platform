@@ -36,7 +36,7 @@
                         
                         <div class="row mb-2">
                             <div class="col">
-                                <a class="label-primary" href="#!">Forgot password?</a>
+                                <a class="label-primary" href="./ForgotPassword">Forgot password?</a>
                             </div>
                         </div>
                         
@@ -64,5 +64,9 @@
     var successMessage = '@TempData["SuccessMessageRegister"]';
     if (successMessage) {
         showOutOfStockToastSuccess('Register', successMessage);
+    }
+    var changePasswordSuccess = '@TempData["ChangePasswordSuccess"]';
+    if (changePasswordSuccess) {
+        showOutOfStockToastSuccess('Code', changePasswordSuccess);
     }
 </script>

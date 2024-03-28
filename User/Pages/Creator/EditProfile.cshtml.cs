@@ -21,6 +21,7 @@ public class EditProfileModel : PageModel
     private readonly IAccountService accountService;
     private readonly IConfiguration configuration;
     private readonly IStorageService storageService;
+    private readonly IFeeService feeService;
 
     public int TypeUpdate { get; set; } = 1;
     [BindProperty]
@@ -28,15 +29,18 @@ public class EditProfileModel : PageModel
     [BindProperty]
     public AccountUpdateTypeDto AccountUpdateType { get; set; }
     [BindProperty]
-    public IFormFile FileUpload { get; set; }
+    public IFormFile FileUpload { get; set; }    
     [BindProperty]
     public PasswordConfirmDto PasswordConfirm { get; set; }
+    [BindProperty]
+    public double Fee { get; set; }
 
-    public EditProfileModel(IAccountService accountService, IConfiguration configuration, IStorageService storageService)
+    public EditProfileModel(IAccountService accountService, IConfiguration configuration, IStorageService storageService, IFeeService feeService)
     {
         this.accountService = accountService;
         this.configuration = configuration;
         this.storageService = storageService;
+        this.feeService = feeService;
     }
 
     public void OnGet(int typeUpdate)
@@ -49,6 +53,11 @@ public class EditProfileModel : PageModel
             var account = accountService.GetAccountIncludeArtistByEmail(accountEmail);
             AccountUpdate = AccountToAccountUpdateDto(account);
             AccountUpdateType = AccountToAccountUpdateTypeDto(account, TypeUpdate);
+            Fee? fee = feeService.GetFeeByArtistEmail(accountEmail);
+            if (fee != null)
+            {
+                Fee = fee.Amount;
+            }
         }
         return;
     }
@@ -152,6 +161,39 @@ public class EditProfileModel : PageModel
                 });
             }            
         }
+    }
+
+    public async Task<IActionResult> OnPostChangeSubscribeFeeAsync()
+    {        
+        var accountEmail = HttpContext.Session.GetString("ACCOUNT_EMAIL")!;
+        Fee? fee = feeService.GetFeeByArtistEmail(accountEmail);
+        if (fee == null)
+        {
+            return new JsonResult(new PostResult()
+            {
+                Result = Result.Error,
+                Data = "Creator not have fee. Check source code!",
+            });
+        } else
+        {
+            fee.Amount = Fee;
+            var feeUpdated = await feeService.UpdateAsync(fee);
+            if (feeUpdated == null)
+            {
+                return new JsonResult(new PostResult()
+                {
+                    Result = Result.Error,
+                    Data = "Fail to update fee!",
+                });
+            } else
+            {
+                return new JsonResult(new PostResult()
+                {
+                    Result = Result.Ok,
+                    Data = "Update fee successfully!",
+                });
+            }
+        }        
     }
 
     public async Task<IActionResult> OnPostDeleteAccountAsync()

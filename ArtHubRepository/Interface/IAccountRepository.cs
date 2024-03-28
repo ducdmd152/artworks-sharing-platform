@@ -10,6 +10,6 @@ namespace ArtHubRepository.Interface
         public int GetTotalUsers();
         Account GetAccountIncludeArtistByEmail(string email);
         bool CheckCorrectPassword(string email, string password);
-        Account GetAccountByEmail(string email);
+        Account? GetAccountByEmail(string email);
     }
 }
