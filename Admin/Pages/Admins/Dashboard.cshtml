@@ -1,0 +1,240 @@
+﻿@page
+@model Admin.Pages.Admins.DashboardModel
+@{
+	Layout = "_Layout";
+}
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+	<title>Dashboard</title>
+
+</head>
+<body>
+	<div>
+		<main>
+			<h1>Dashboard</h1>
+			<div>Welcome to Dashboard</div>
+			<div class="bottom">
+
+				<div class="insights">
+					<div class="row-1">
+
+						<div class="revenue">
+							<div class="small-img">
+								<img src="./image 2194.png">
+							</div>
+
+							<div class="middle">
+								<div class="left">
+									<h1>@Model.TotalRevue</h1>
+									<h3>Total Revenue</h3>
+									<small class="text-muted">Last 24 hours</small>
+								</div>
+
+								<!-- <div class="progress">
+									<svg>
+										<circle cx='38' cy='38', r='36'></circle>
+									</svg>
+									<div class="number">
+										<p>81%</p>
+									</div>
+								</div> -->
+							</div>
+
+						</div>
+						<!--end  revenue -->
+						<div class="profit">
+							<div class="small-img">
+								<img src="./Group 18198.png">
+							</div>
+
+							<div class="middle">
+								<div class="left">
+									<h1>@Model.TotalProfit</h1>
+									<h3>Total Profit</h3>
+									<small class="text-muted">Last 24 hours</small>
+								</div>
+
+								<!-- <div class="progress">
+									<svg>
+										<circle cx='38' cy='38', r='36'></circle>
+									</svg>
+									<div class="number">
+										<p>81%</p>
+									</div>
+								</div> -->
+							</div>
+
+						</div>
+					</div>
+
+
+					<div class="row-2">
+
+						<div class="subcribes">
+							<div class="small-img">
+								<img src="./imgSubcribes.png">
+							</div>
+
+							<div class="middle">
+								<div class="left">
+									<h1>@Model.TotalSubscribers</h1>
+									<h3>Total Subcribers</h3>
+									<small class="text-muted">Last 24 hours</small>
+								</div>
+
+								<!-- <div class="progress">
+									<svg>
+										<circle cx='38' cy='38', r='36'></circle>
+									</svg>
+									<div class="number">
+										<p>81%</p>
+									</div>
+								</div> -->
+							</div>
+
+						</div>
+						<div class="users">
+							<div class="small-img">
+								<img src="./imgUser.png">
+							</div>
+
+							<div class="middle">
+								<div class="left">
+									<h1>@Model.TotalUsers</h1>
+									<h3>Total Users</h3>
+									<small class="text-muted">Last 24 hours</small>
+								</div>
+
+								<!-- <div class="progress">
+									<svg>
+										<circle cx='38' cy='38', r='36'></circle>
+									</svg>
+									<div class="number">
+										<p>81%</p>
+									</div>
+								</div> -->
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div class="chart-sub">
+					<div class="charts-card">
+						<p class="chart-title">Chart Subcribes</p>
+						<div id="area-chart"></div>
+					</div>
+				</div>
+			</div>
+			<div class="total-revenue">
+
+				<div class="charts-card">
+					<p class="chart-title">Total revenue</p>
+					<div id="line-chart"></div>
+				</div>
+			</div>
+
+			<!-- <div class="charts-card">
+				<p class="chart-title">Growth</p>
+				<div id="donut-chart"></div>
+
+			</div> -->
+		</main>
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
+
+	<script src="mysSyscript.js"></script>
+	<script>
+		const lineChartOptions = {
+			series: [
+				{
+					name: 'Total revenue',
+					data: @Html.Raw(Json.Serialize(Model.ChartData))
+				}
+			],
+			chart: {
+				height: 200,
+				type: 'line',
+				toolbar: {
+					show: false
+				}
+			},
+			colors: ['#f5b74f'],
+			dataLabels: {
+				enabled: false
+			},
+			stroke: {
+				curve: 'smooth'
+			},
+			markers: {
+				size: 0
+			},
+			xaxis: {
+				categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+			},
+			yaxis: {
+				title: {
+					text: 'Total revenue'
+				}
+			}
+		};
+
+		const lineChart = new ApexCharts(
+			document.querySelector('#line-chart'),
+			lineChartOptions
+		);
+		lineChart.render();
+
+
+
+		const areaChartOptions = {
+			series: [
+
+				{
+					name: 'Sub',
+					data: @Html.Raw(Json.Serialize(Model.ChartSub)),
+				},
+			],
+			chart: {
+				height: 200,
+				type: 'area',
+				toolbar: {
+					show: false,
+				},
+			},
+			colors: ['#246dec'],
+			dataLabels: {
+				enabled: false,
+			},
+			stroke: {
+				curve: 'smooth',
+			},
+			labels: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
+			markers: {
+				size: 0,
+			},
+			yaxis: [
+
+				{
+
+					title: {
+						text: '',
+					},
+				},
+			],
+			tooltip: {
+				shared: true,
+				intersect: false,
+			},
+		};
+
+		const areaChart = new ApexCharts(
+			document.querySelector('#area-chart'),
+			areaChartOptions
+		);
+		areaChart.render();
+	</script>
+</body>
+</html>

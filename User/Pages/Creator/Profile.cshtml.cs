@@ -11,13 +11,15 @@ namespace User.Pages.Creator;
 public class ProfileModel : PageModel
 {
     private readonly IArtistService artistService;
+    private readonly IAccountService accountService;
 
     [BindProperty]
     public PageResult<ArtistDataDto> ArtistData { get; set; }
 
-    public ProfileModel(IArtistService artistService)
+    public ProfileModel(IArtistService artistService, IAccountService accountService)
     {
         this.artistService = artistService;
+        this.accountService = accountService;
     }
 
     public async Task<IActionResult> OnGet()
@@ -42,7 +44,23 @@ public class ProfileModel : PageModel
             AccountStatus = 1,
             AccountIsEnable = true
         };
-        ArtistData = await artistService.GetArtistInforSummaryByCondition(searchPayload);
+        var artistData = await artistService.GetArtistInforSummaryByCondition(searchPayload);
+        if (artistData.PageData.Count <= 0) { 
+            var artist = accountService.GetAccountIncludeArtistByEmail(accountEmail!);
+            artistData.PageData = new List<ArtistDataDto> {
+                new ArtistDataDto {
+                    Email = artist.Email,
+                    Avatar = artist.Avatar,
+                    ArtistName = artist.Artist!.ArtistName,
+                    Bio = artist.Artist.Bio,
+                    TotalSubscriber = artist.Artist.TotalSubscribe,
+                } 
+            };
+            ArtistData = artistData;
+        } else
+        {
+            ArtistData = artistData;
+        }        
         return Page();
     }
 }

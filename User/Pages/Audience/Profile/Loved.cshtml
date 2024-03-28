@@ -230,8 +230,8 @@
 
 <div class="container d-flex flex-column justify-content-center align-items-center" style="padding-top: 50px;"> 
     <div class="d-flex flex-column justify-content-center align-items-center">
-        <img style="width: 220px; height: 220px; border-radius: 9999px" src="@Model.Account.Avatar" />
-        <div style="width: 460px; height: 64px; text-align: center; color: black; font-size: 42px; font-family: Playfair Display; font-weight: 700; word-wrap: break-word">@(Model.Account.FirstName + Model.Account.LastName)</div>
+        <img style="width: 220px; height: 220px; border-radius: 9999px" src=@(Model.Account.Avatar ?? "https://via.placeholder.com/60x60") />
+        <div style="width: 460px; height: 64px; text-align: center; color: black; font-size: 42px; font-family: Playfair Display; font-weight: 700; word-wrap: break-word">@(Model.Account.FirstName + " "  + Model.Account.LastName)</div>
     </div>
     <div class="d-flex justify-content-center gap-2 mt-1">
         <button class="btn-primary-local" style="font-size: 20px; padding: 8px 28px;">Edit Profile</button>
@@ -253,36 +253,42 @@
             </a>
         </nav>
     </div>
-    
-    <div class="gallery container p-3 mb-2">
-        @foreach (var item in Model.Posts)
-        {
-            <a class="gallery-item" href="/Artworks/Details?id=@item.PostId" style="color: black; text-decoration: none;">
-                <img src="@(item.Image ?? "https://placehold.co/300")"
-                 class="gallery-image" />
-                <div class="gallery-item-title">@item.Title</div>
-                <div class="gallery-item-info d-flex justify-content-between">
-                    <div class="user-short-item" style="flex: 2">
-                        <img src="@(item.ArtistAvatar ?? "https://placehold.co/300")" class="artist-profile-pic" />
-                        <span class="artist-name">@item.ArtistName</span>
-                    </div>
-                    <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
-                        <span class="likes"><i class="fa-solid fa-heart"></i> @item.TotalReact</span>
-                        <span class="comments"><i class="fa-solid fa-eye"></i> @item.TotalView</span>
-                    </div>
-                </div>
-            </a>
-        }
-    </div>
-
-    <nav aria-label="Page navigation" style="display: flex; justify-content: center; width: 100%;">
-        <ul class="pagination">
-            @for (var i = 1; i <= @Model.PageInfo.TotalPages; i++)
+    @if (Model.Posts == null || Model.Posts.Count == 0)
+    {
+        <p class="text-dark fst-italic m-auto text-center mt-5" style="font-size: 20px;">No loved artworks.</p>
+    }
+    else
+    {
+        <div class="gallery container p-3 mb-2">
+            @foreach (var item in Model.Posts)
             {
-                <li class="page-item @(Model.PageInfo.PageNum == i ? "active" : "")">
-                    <a class="page-link" style="font-size: 20px; padding: 8px 16px;" href="?pageIndex=@i">@i</a>
-                </li>
+                <a class="gallery-item" href="/Artworks/Details?id=@item.PostId" style="color: black; text-decoration: none;">
+                    <img src="@(item.Image ?? "https://placehold.co/300")"
+                 class="gallery-image" />
+                    <div class="gallery-item-title">@item.Title</div>
+                    <div class="gallery-item-info d-flex justify-content-between">
+                        <div class="user-short-item" style="flex: 2">
+                            <img src="@(item.ArtistAvatar ?? "https://placehold.co/300")" class="artist-profile-pic" />
+                            <span class="artist-name">@item.ArtistName</span>
+                        </div>
+                        <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
+                            <span class="likes"><i class="fa-solid fa-heart"></i> @item.TotalReact</span>
+                            <span class="comments"><i class="fa-solid fa-eye"></i> @item.TotalView</span>
+                        </div>
+                    </div>
+                </a>
             }
-        </ul>
-    </nav>
+        </div>
+
+        <nav aria-label="Page navigation" style="display: flex; justify-content: center; width: 100%;">
+            <ul class="pagination">
+                @for (var i = 1; i <= @Model.PageInfo.TotalPages; i++)
+                {
+                    <li class="page-item @(Model.PageInfo.PageNum == i ? "active" : "")">
+                        <a class="page-link" style="font-size: 20px; padding: 8px 16px;" href="?pageIndex=@i">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
 </div>

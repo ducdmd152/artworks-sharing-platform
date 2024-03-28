@@ -35,7 +35,7 @@ public class ArtWorksManagement : PageModel
     {
          var searchCondition = new SearchArtworkManagementConditionDto();
         searchCondition.PageNumber = 1;
-        searchCondition.PageSize = 5;
+        searchCondition.PageSize = 6;
         this.PageResult = await this.postService.GetListPostOrderByDate(searchCondition).ConfigureAwait(false);
     }
 
@@ -52,7 +52,7 @@ public class ArtWorksManagement : PageModel
         try
         {
             var tmp = await this.postService.GetListPostOrderByDate(searchCondition).ConfigureAwait(false);
-            if (tmp == default) throw new Exception();
+            if (tmp == default || tmp.PageData.Count == 0) throw new Exception();
             this.PageResult = tmp;
             var partial1 = this.helper.RenderPartialToStringAsync("/Pages/Shared/_PagingPartial.cshtml", tmp.PageInfo);
             var partial2 = this.helper.RenderPartialToStringAsync("/Pages/Shared/_ArtWorkListPartial.cshtml", tmp.PageData);
