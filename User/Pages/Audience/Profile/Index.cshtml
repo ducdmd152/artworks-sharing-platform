@@ -1,4 +1,5 @@
 ﻿@page
+@using ArtHubService.Utils;
 @model User.Pages.Audience.Profile.IndexModel
 @{
     ViewData["Title"] = "My Profile";
@@ -266,7 +267,7 @@
 
             @foreach (var creator in Model.Creators)
             {
-                <a class="gallery-item" asp-page="./Details" asp-route-id="10" style="color: black; text-decoration: none;">
+                <a class="gallery-item" href="/CreatorExploration/Details?id=@(Encryption.EncodeEmailToKey(creator.ArtistEmail))" style="color: black; text-decoration: none;">
                     <div class="bg-white p-3 rounded-lg shadow-lg">
                         <div class="d-flex align-items-center gap-1 flex-column">
                             <div class="rounded-circle overflow-hidden" style="width: 56px; height: 56px;">
