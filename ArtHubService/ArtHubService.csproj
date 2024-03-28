@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ArtHubBO\ArtHubBO.csproj" />
     <ProjectReference Include="..\ArtHubRepository\ArtHubRepository.csproj" />
   </ItemGroup>
 
