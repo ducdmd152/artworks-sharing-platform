@@ -188,5 +188,27 @@ namespace Admin.Pages.Admins
             }
         }
 
+        public async Task<IActionResult> OnPostDelete(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest();
+            }
+
+
+            bool deleteResult = await _accountService.DeleteAsync(email).ConfigureAwait(false);
+
+            if (deleteResult)
+            {
+
+                return RedirectToPage();
+            }
+            else
+            {
+
+                return Page();
+            }
+        }
+
     }
 }

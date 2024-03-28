@@ -9,6 +9,7 @@
         SelectIsReactedForPost,
         SelectIsBookmarkedForPost,
         SubcribeChartQuery,
+        TopArtWorkListQuery,
         TopCreatorQuery,
         GetAccountManagement,
         SelectReactedPostList,

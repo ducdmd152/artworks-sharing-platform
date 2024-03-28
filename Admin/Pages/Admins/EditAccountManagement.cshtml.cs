@@ -1,7 +1,9 @@
+﻿using ArtHubBO.DTO;
 using ArtHubBO.Entities;
 using ArtHubService.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Principal;
 
 namespace Admin.Pages.Admins
 {
@@ -18,40 +20,53 @@ namespace Admin.Pages.Admins
         [BindProperty]
         public Account Account { get; set; }
 
+        [BindProperty]
+        public AccountUpdateDto UpdateDto { get; set; }
+
         public async Task<IActionResult> OnGetAsync(string email)
         {
-            if (string.IsNullOrEmpty(email))
+            if (email == null)
             {
                 return NotFound();
             }
 
-            Account = _accountService.GetAccount(email);
+            var account =  _accountService.GetAccount(email);
 
-            if (Account == null)
+            if (account == null)
             {
                 return NotFound();
             }
 
+            Account = account;
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(string email)
+        public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+           
+
+            try
             {
+                var result = await _accountService.UpdateAccountFields(Account.Email, UpdateDto); // Sử dụng Account.Email thay vì tham số email
+
+                if (!result)
+                {
+                    // Xử lý nếu cập nhật không thành công
+                    // Ví dụ: Hiển thị thông báo lỗi
+                    ModelState.AddModelError("", "Cập nhật tài khoản không thành công.");
+                    return Page();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ nếu có
+                // Ví dụ: Hiển thị thông báo lỗi
+                ModelState.AddModelError("", "Đã xảy ra lỗi khi cập nhật tài khoản.");
                 return Page();
             }
 
-            //var result = await _accountService.UpdateAccount(email);
-
-            //if (!result)
-            //{
-            //    // Handle update failure
-            //    ModelState.AddModelError("", "Failed to update account. Please try again.");
-            //    return Page();
-            //}
-
-            return RedirectToPage("./Index"); // Redirect to account list page after successful update
+            // Chuyển hướng sau khi cập nhật thành công
+            return RedirectToPage("./AccountManagement");
         }
     }
 }

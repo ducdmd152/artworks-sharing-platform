@@ -10,6 +10,7 @@ using ArtHubRepository.Repository;
 using ArtHubService.Interface;
 using ArtHubService.Utils;
 using Microsoft.Extensions.Logging;
+using System.Security.Principal;
 
 namespace ArtHubService.Service
 {
@@ -301,41 +302,98 @@ namespace ArtHubService.Service
 
 
 
-        public async Task<bool> UpdateAccount(Account account)
+		/* public async Task<bool> UpdateAccount(Account account)
+		 {
+			 try
+			 {
+				 await this.unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+
+				 var existingAccount = this.accountRepository.GetAccount(account.Email);
+
+				 if (existingAccount == null)
+				 {
+					 return false; // Account not found
+				 }
+
+				 // Update existing account properties with new values
+				 existingAccount.FirstName = account.FirstName;
+				 existingAccount.LastName = account.LastName;
+				 existingAccount.Gender = account.Gender;
+				 existingAccount.Status = account.Status;
+				 existingAccount.Enabled = account.Enabled;
+
+				 this.accountRepository.Update(existingAccount);
+				 await this.unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+
+				 return true; // Update successful
+			 }
+			 catch (Exception ex)
+			 {
+				 // Handle exception, rollback transaction if needed
+				  this.unitOfWork.RollbackTransaction();
+				 return false;
+
+
+			 }      
+		 }*/
+
+		public void Update(Account account)
+		{
+			Account acc = GetAccount(account.Email);
+			if (acc != null)
+			{
+			 acc = this.accountRepository.Update(account);
+			}
+		}
+
+        public async Task<bool> UpdateAccountFields(string email, AccountUpdateDto updatedFields)
         {
             try
             {
-                await this.unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+                await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
 
-                var existingAccount = this.accountRepository.GetAccount(account.Email);
+                var existingAccount = accountRepository.GetAccount(email);
 
                 if (existingAccount == null)
                 {
-                    return false; // Account not found
+                    return false; // Không tìm thấy tài khoản
                 }
 
-                // Update existing account properties with new values
-                existingAccount.FirstName = account.FirstName;
-                existingAccount.LastName = account.LastName;
-                existingAccount.Gender = account.Gender;
-                existingAccount.Status = account.Status;
-                existingAccount.Enabled = account.Enabled;
+                // Cập nhật các trường thông tin cần thiết với các giá trị mới
+                existingAccount.FirstName = updatedFields.FirstName;
+                existingAccount.LastName = updatedFields.LastName;
+                existingAccount.Gender = updatedFields.Gender;
 
-                this.accountRepository.Update(existingAccount);
-                await this.unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+                // Nếu Avatar không rỗng, thì cập nhật
+                if (!string.IsNullOrEmpty(updatedFields.Avatar))
+                {
+                    existingAccount.Avatar = updatedFields.Avatar;
+                }
 
-                return true; // Update successful
+                // Nếu có ArtistName trong dto, cập nhật
+                if (!string.IsNullOrEmpty(updatedFields.ArtistName))
+                {
+                    existingAccount.Artist!.ArtistName = updatedFields.ArtistName;
+                }
+
+                // Nếu có Bio trong dto, cập nhật
+                if (!string.IsNullOrEmpty(updatedFields.Bio))
+                {
+                    existingAccount.Artist!.Bio = updatedFields.Bio;
+                }
+
+                accountRepository.Update(existingAccount);
+                await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+
+                return true; // Cập nhật thành công
             }
             catch (Exception ex)
             {
-                // Handle exception, rollback transaction if needed
-                 this.unitOfWork.RollbackTransaction();
+                // Xử lý ngoại lệ, rollback giao dịch nếu cần
+                unitOfWork.RollbackTransaction();
                 return false;
-
-
-            }      
+            }
         }
-
         public Account GetAccountByEmail(string accountEmail)
         {
             return this.accountRepository.GetAccountByEmail(accountEmail);

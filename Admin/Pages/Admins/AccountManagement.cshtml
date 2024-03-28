@@ -36,7 +36,7 @@
                         <td>@account.Status</td>
                         <td>@account.Enabled</td>
                         <td>
-                            <a asp-page="./Edit" asp-route-id="@account.Email">Edit</a> |
+                            <a asp-page="./EditAccountManagement" asp-route-email="@account.Email">Edit</a> |
                             <a asp-page="./AccountDetailManagement" asp-route-email="@account.Email">Details</a> |
                             <button type="button" class="btn btn-danger" onclick="deleteAccount('@account.Email')">Delete</button>
                         </td>
@@ -77,11 +77,17 @@
 
 </form>
 <script>
-    
 
+    function getListByPaging(pageNumber) {
+        const form = document.getElementById('myForm');
+        form.action = 'AccountManagement?handler=Paging';
+        form.querySelector('input[name="SearchAccountCondition.PageNumber"]').value = pageNumber;
+        form.method = 'post';
+        form.submit();
+    }
    
 
-    async function deleteAccount(email) {
+    function deleteAccount(email) {
         var confirmDelete = confirm("Do you really want to delete the account with email " + email + "?");
         if (confirmDelete) {
             const form = document.getElementById('myForm');

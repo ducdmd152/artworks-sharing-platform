@@ -2,15 +2,32 @@
 @model TopCreatorModel
 @{
 }
+<head>
+    <style>
+        #searchInput {
+            margin-bottom: 200px;
+            width: 100%;
+        }
+
+        #myForm .col-md-6 {
+            padding-right: 5px;
+            padding-left: 5px;
+        }
+    </style>
+</head>
+
 <form method="post" id="myForm">
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input type="text" class="form-control" id="searchInput" asp-for="@Model.SearchTopCreator.Email" placeholder="Enter search keyword...">
+ 
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="searchInput" asp-for="@Model.SearchTopCreator.Email" placeholder="Enter search keyword...">
+            </div>
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-primary" asp-page-handler="Search">Search</button>
+            </div>
         </div>
-        <div class="col-md-6">
-            <button type="submit" class="btn btn-primary" asp-page-handler="Search">Search</button>
-        </div>
-    </div>
+  
+   
 </form>
 
 @if (Model.PageResult != null && Model.PageResult.PageData != null && Model.PageResult.PageData.Any())
