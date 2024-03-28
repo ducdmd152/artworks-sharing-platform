@@ -42,6 +42,8 @@ html {
 
 .header {
     font-family: "Baloo 2";
+    top: 0;
+    width: 100%;
 }
 
 .footer {

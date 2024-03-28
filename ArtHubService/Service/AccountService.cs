@@ -237,25 +237,8 @@ namespace ArtHubService.Service
 		{
 			return accountRepository.CheckCorrectPassword(email, password);
 		}
-
-		public async Task<bool> UpdateAccountEnable(string email, bool enable)
-		{
-			try
-			{
-				await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
-				Account account = accountRepository.GetAccountByEmail(email);
-				account.Enabled = enable;
-				accountRepository.Update(account);
-				await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
-				return true;
-			}
-			catch (Exception ex)
-			{
-				unitOfWork.RollbackTransaction();
-			}
-			return false;
-		}
-
+       
+		
 		public async Task<bool> CreateAccount(Account account)
 		{
 			try

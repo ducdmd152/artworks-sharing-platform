@@ -115,6 +115,10 @@ CREATE TABLE ArtHub.dbo.post (
 	CONSTRAINT post_artist_FK FOREIGN KEY (artist_email) REFERENCES ArtHub.dbo.artist(email)
 );
 
+ALTER TABLE ArtHub.dbo.post ADD note ntext NULL;
+ALTER TABLE ArtHub.dbo.post ADD  DEFAULT '' FOR note;
+
+
 CREATE TABLE ArtHub.dbo.bookmark (
 	bookmark_id int IDENTITY(1,1) NOT NULL,
 	delete_flag bit NOT NULL,

@@ -54,7 +54,7 @@ public class ReportService : IReportService
         return new PageResult<ReportManagementItem>();
     }
 
-    public async Task<Result> SkipOrBanPostAsync(int reportModeReportId, int reportModeMode)
+    public async Task<Result> SkipOrBanPostAsync(int reportModeReportId, int reportModeMode, string reportModeReason)
     {
         try
         {
@@ -69,6 +69,7 @@ public class ReportService : IReportService
                 {
                     report.Status = (int)ReportStatus.Reviewed;
                     report.Post.Status = (int)PostStatus.Repending;
+                    report.Post.Note = reportModeReason;
                 }else if (reportModeMode == -2)
                 {
                     var account = this.accountRepository.GetAccount(report.Post.ArtistEmail);
@@ -79,6 +80,7 @@ public class ReportService : IReportService
                     }
                     report.Status = (int)ReportStatus.Reviewed;
                     report.Post.Status = (int)PostStatus.Repending;
+                    report.Post.Note = reportModeReason;
                 }
             }
 
