@@ -7,6 +7,7 @@ public static class URIConstant
         "/Authenticate/Login",
         "/Authenticate/Logout",
         "/Authenticate/Register",
+        "/Authenticate/ForgotPassword",
         "/Artworks/",
         "/CreatorExploration/"
     };
