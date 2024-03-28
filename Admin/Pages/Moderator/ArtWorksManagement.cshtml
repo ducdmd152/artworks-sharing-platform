@@ -22,7 +22,7 @@
 
 @await Component.InvokeAsync("Header")
 
-<!-- Header -->
+@* <!-- Header --> *@
 <div class="container m-4 text-center m-auto">
     <h1 class="">Artwork Management</h1>
 </div>
@@ -31,7 +31,7 @@
     <hr style="padding: 1px; width: 80%; margin: auto"/>
 </div>
 
-<!-- Table -->
+@* <!-- Table --> *@
 <div class="container mt-5">
     <div class="d-flex ">
         <div class="d-flex mb-3 me-2 col-4">
@@ -52,7 +52,7 @@
         <div class="">
             <!-- Dropdown for Status -->
             <select id="search-status" class="form-select" aria-label="Default select example" onchange="getListBySearch(2)">
-                <option value="null" selected>Status</option>
+                <option value="-1" selected>Status</option>
                 <option value="1">Pending</option>
                 <option value="2">Approved</option>
                 <option value="3">Rejected</option>
@@ -119,7 +119,7 @@
                     <p class="card-text ms-2" id="modalDescription"></p>
                     
                     <!-- Buttons -->
-                    <div class="text-center mt-3">
+                    <div class="text-center mt-3" id="buttonAction">
                         <button type="button" class="btn btn-success me-2" onclick="approveArtwork()">Approved</button>
                         <button type="button" class="btn btn-danger" onclick="rejectArtwork()">Reject</button>
                     </div>

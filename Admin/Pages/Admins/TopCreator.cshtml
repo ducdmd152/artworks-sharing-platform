@@ -1,0 +1,48 @@
+﻿@page
+@model TopCreatorModel
+@{
+}
+<form method="post" id="myForm">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input type="text" class="form-control" id="searchInput" asp-for="@Model.SearchTopCreator.Email" placeholder="Enter search keyword...">
+        </div>
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-primary" asp-page-handler="Search">Search</button>
+        </div>
+    </div>
+</form>
+
+@if (Model.PageResult != null && Model.PageResult.PageData != null && Model.PageResult.PageData.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Creator Name</th>
+                <th>Total Subscribe</th>
+                <th>Fee</th>
+                <th>Total Love</th>
+                <th>Revenue</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var account in Model.PageResult.PageData)
+            {
+                <tr>
+                    <td>@account.CreatorEmail</td>
+                    <td>@account.CreatorName</td>
+                    <td>@account.TotalSubscribe</td>
+                    <td>@account.Fee</td>
+                    <td>@account.TotalLove</td>
+                    <td>@account.Revenue</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No accounts available</p>
+}
+

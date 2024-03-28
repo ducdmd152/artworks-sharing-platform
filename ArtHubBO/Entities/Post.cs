@@ -29,6 +29,9 @@ namespace ArtHubBO.Entities
         public int Status { get; set; }
         [Column("scope")]
         public int Scope { get; set; }
+
+        [Column("note")]
+        public string Note { get; set; } = null;
         [Column("total_react")]
         public int TotalReact { get; set; }
         [Column("total_view")]

@@ -14,5 +14,10 @@ namespace ArtHubRepository.Repository
         {
             return this.DbSet.Where(f => f.ArtistEmail == email).FirstOrDefault();
         }
+        public double GetFeeByCreatorEmail(string creatorEmail)
+            => this.DbSet.First(x => x.ArtistEmail == creatorEmail).Amount;
+        
+        public Fee GetFullFeeByCreatorEmail(string creatorEmail)
+            => this.DbSet.First(x => x.ArtistEmail == creatorEmail);
     }
 }

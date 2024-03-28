@@ -7,19 +7,39 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Queries\GetStatisticOfRevenueLastWeek.sql" />
-    <None Remove="Queries\GetStatisticOfRevenueMonthOfYear.sql" />
-    <None Remove="Queries\GetStatisticOfSubscriberLastWeek.sql" />
-    <None Remove="Queries\GetStatisticOfSubscriberMonthOfYear.sql" />
-    <None Remove="Queries\SelectAllPostListForAudience.sql" />
-    <None Remove="Queries\SelectBookmarkedPostList.sql" />
+    <None Remove="Queries\GetAccountManagement.sql" />
+    <None Remove="Queries\SelectAllPostListForAuthenticatedAudience.sql" />
     <None Remove="Queries\SelectIsBookmarkedForPost.sql" />
     <None Remove="Queries\SelectIsReactedForPost.sql" />
-    <None Remove="Queries\SelectReactedPostList.sql" />
-    <None Remove="Queries\SelectSubcribingCreatorList.sql" />
-    <None Remove="Queries\SelectSuggestForCreatorPostList.sql" />
-    <None Remove="Queries\SelectSuggestForOtherCreatorsPostList.sql" />
-    <None Remove="Queries\SelectTopCreators.sql" />
+    <None Remove="Queries\SelectSuggestPostList.sql" />
+    <None Remove="Queries\SubcribeChartQuery.sql" />
+    <None Remove="Queries\TopCreatorQuery.sql" />
+	<None Remove="Queries\GetStatisticOfRevenueLastWeek.sql" />
+	<None Remove="Queries\GetStatisticOfRevenueMonthOfYear.sql" />
+	<None Remove="Queries\GetStatisticOfSubscriberLastWeek.sql" />
+	<None Remove="Queries\GetStatisticOfSubscriberMonthOfYear.sql" />
+	<None Remove="Queries\SelectAllPostListForAudience.sql" />
+	<None Remove="Queries\SelectBookmarkedPostList.sql" />
+	<None Remove="Queries\SelectCreatorByEmail.sql" />
+	<None Remove="Queries\SelectIsBookmarkedForPost.sql" />
+	<None Remove="Queries\SelectIsReactedForPost.sql" />
+	<None Remove="Queries\SelectReactedPostList.sql" />
+	<None Remove="Queries\SelectSubcribingCreatorList.sql" />
+	<None Remove="Queries\SelectSuggestForCreatorPostList.sql" />
+	<None Remove="Queries\SelectSuggestForOtherCreatorsPostList.sql" />
+	<None Remove="Queries\SelectTopCreators.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Queries\GetAccountManagement.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Queries\SubcribeChartQuery.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Queries\TopCreatorQuery.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -49,6 +69,7 @@
     <EmbeddedResource Include="Queries\SelectReactedPostList.sql" />
     <EmbeddedResource Include="Queries\SelectSubcribingCreatorList.sql" />
     <EmbeddedResource Include="Queries\SelectSuggestForOtherCreatorsPostList.sql" />
+    <EmbeddedResource Include="Queries\SelectCreatorByEmail.sql" />
     <EmbeddedResource Include="Queries\SelectTopCreators.sql" />
     <EmbeddedResource Include="Queries\SelectSuggestForCreatorPostList.sql" />
     <EmbeddedResource Include="Queries\SelectAllPostListForAudience.sql" />

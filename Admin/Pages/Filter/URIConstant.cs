@@ -11,6 +11,7 @@ public static class URIConstant
     public static readonly string[] ModeratorListUris = {
         "/Moderator/ArtWorksManagement",
         "/Moderator/ReportManagement",
+        "/Moderator/ModeratorEditProfile",
     };
 
     public static readonly string[] AdminListUris = {

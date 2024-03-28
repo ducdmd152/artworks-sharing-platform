@@ -16,7 +16,7 @@ WITH SubscribedCreators AS (
         @AudienceEmail IS NOT NULL
         AND email_user = @AudienceEmail
         AND status = 1 
-        AND GETDATE() <= expired_date       
+        AND GETDATE() <= expired_date    
 ),
 AuthenticatedPosts AS (
     SELECT post_id

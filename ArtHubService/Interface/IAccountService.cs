@@ -1,5 +1,6 @@
 ﻿using ArtHubBO.DTO;
 using ArtHubBO.Entities;
+using ArtHubBO.Payload;
 
 namespace ArtHubService.Interface
 {
@@ -14,6 +15,16 @@ namespace ArtHubService.Interface
         public Task<bool> RegisterAccountAsync();
 
         public Task<bool> RemoveAccountAsync();
+
+        public int GetTotalUsers();
+
+        // Account GetAccount(string postArtistEmail);
+        public Account GetAccount(string email);
+        public  Task<bool> DeleteAsync(string email);
+
+          Task<PageResult<AccountListDTO>> GetListAccountManage(SearchAccountConditionDTO search);
+        public  Task<bool> UpdateAccount(Account account);
+
 
         Account GetAccountIncludeArtistByEmail(string email);
 

@@ -1,4 +1,5 @@
 ﻿@page
+@using ArtHubService.Utils;
 @model User.Pages.CreatorExploration.IndexModel
 @{
     ViewData["Titel"] = "ArtHub's Creators";
@@ -13,7 +14,7 @@
         }
 
         .profile-card {
-            background-color: #6C63FF;
+            background-color: ghostwhite;
             color: #FFFFFF;
             height: 320px;
             background-size: cover;
@@ -40,22 +41,44 @@
     </style>
 </head>
 <div class="banner">
-    <h1 class="text-4xl font-semibold text-center text-gray-800">ArtHub's Creators</h1>
+    <h1 class="text-4xl font-semibold font-monospace text-center text-gray-800">Top Creators</h1>
 </div>
 <section class="container mx-auto px-6 py-8" style="width: 80%; padding-top: 20px;">
     
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        @for (int i = 0; i < 12; i++)
+        @foreach(var creator in Model.Creators)
         {
-            <div class="profile-card rounded-lg overflow-hidden"
-             style="background-image: url('https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?q=80&w=1776&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
+            <a asp-page="./Details" asp-route-id="@(Encryption.EncodeEmailToKey(creator.ArtistEmail))"
+                class="profile-card rounded-lg overflow-hidden"
+             style="background-image: url('@creator.ArtistAvatar')">
                 <div class="p-4" style="background: linear-gradient(to bottom, transparent, #6C63FF);">
-                    <h2 class="text-lg font-semibold">Helen Tra</h2>
+                    <h2 class="text-lg font-semibold">@creator.ArtistName</h2>
                     <p class="text-sm">Digital Artist</p>
-                    <p class="text-xs">helen.tra | subscribers: 1.2k</p>
-                    <button class="mt-3 w-full btn btn-dark">Subscribe</button>
+                    <div class="text-sm text-dark-500 overflow-hidden w-80" style="font-size: 14px; text-overflow: ellipsis; white-space: nowrap; display: grid; grid-template-columns: repeat(3, 1fr); grid-column-gap: 6px;">
+                        @creator.ArtistTotalSubscribe subcribers | @creator.ArtistTotalView views | @creator.ArtistTotalReact loved
+                    </div>
+                    @if (@creator.IsSubscribed == true)
+                    {
+                        <button class="mt-3 w-full btn btn-light" style="background-color: rgba(255, 255, 255, 0.7);">Subscribed</button>
+                    }
+                    else
+                    {
+                        <button class="mt-3 w-full btn btn-dark">Subscribe</button>
+                    }
                 </div>
-            </div>
+            </a>
         }
     </div>
 </section>
+<nav aria-label="Page navigation" class="mt-2" style="display: flex; justify-content: center; width: 100%;">
+    <ul class="pagination">
+        @for (var i = 1; i <= @Model.PageInfo.TotalPages; i++)
+        {
+            <li class="page-item @(Model.PageInfo.PageNum == i ? "active" : "")">
+                <a class="page-link" style="font-size: 20px; padding: 8px 16px;" href="?pageIndex=@i">@i</a>
+            </li>
+        }
+    </ul>
+</nav>
+
+<div class="mb-4"/>

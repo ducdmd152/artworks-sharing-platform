@@ -115,6 +115,10 @@ CREATE TABLE ArtHub.dbo.post (
 	CONSTRAINT post_artist_FK FOREIGN KEY (artist_email) REFERENCES ArtHub.dbo.artist(email)
 );
 
+ALTER TABLE ArtHub.dbo.post ADD note ntext NULL;
+ALTER TABLE ArtHub.dbo.post ADD  DEFAULT '' FOR note;
+
+
 CREATE TABLE ArtHub.dbo.bookmark (
 	bookmark_id int IDENTITY(1,1) NOT NULL,
 	delete_flag bit NOT NULL,
@@ -173,6 +177,30 @@ CREATE TABLE ArtHub.dbo.post_category (
 );
 
 ALTER TABLE ArtHub.dbo.post_category ADD CONSTRAINT post_category_pk PRIMARY KEY (category_id,post_id);
+
+CREATE TABLE ArtHub.dbo.report (
+	report_id int IDENTITY(1,1) NOT NULL,
+	reason nvarchar(256) NULL,
+	reporter_email varchar(256) NOT NULL,
+	post_id int NOT NULL,
+	created_date datetime NOT NULL,
+	updated_date datetime NOT NULL,
+	CONSTRAINT report_pk PRIMARY KEY (report_id),
+	CONSTRAINT report_account_FK FOREIGN KEY (reporter_email) REFERENCES ArtHub.dbo.account(email),
+	CONSTRAINT report_post_FK FOREIGN KEY (post_id) REFERENCES ArtHub.dbo.post(post_id)
+);
+
+ALTER TABLE ArtHub.dbo.report ADD status int DEFAULT 1 NOT NULL;
+
+
+INSERT INTO ArtHub.dbo.[role] (role_name,created_date,updated_date) VALUES
+	 (N'Audience','2023-05-05 00:00:00.0','2023-05-05 00:00:00.0');
+INSERT INTO ArtHub.dbo.[role] (role_name,created_date,updated_date) VALUES
+	 (N'Creator','2023-05-05 00:00:00.0','2023-05-05 00:00:00.0');
+INSERT INTO ArtHub.dbo.[role] (role_name,created_date,updated_date) VALUES
+	 (N'Moderator','2023-05-05 00:00:00.0','2023-05-05 00:00:00.0');
+INSERT INTO ArtHub.dbo.[role] (role_name,created_date,updated_date) VALUES
+	 (N'Admin','2023-05-05 00:00:00.0','2023-05-05 00:00:00.0');
 
 
 INSERT INTO ArtHub.dbo.[role] (role_name,created_date,updated_date) VALUES

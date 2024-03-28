@@ -58,6 +58,11 @@ public class PostService : IPostService
         return await postRepository.GetAllPostBySearchConditionAsync(searchPayload);
     }
 
+    public async Task<IList<Post>> GetAllPostBySearchConditionForAudienceAsync(SearchPayload<PostAudienceSearchConditionDto> searchPayload)
+    {
+        return await postRepository.GetAllPostBySearchConditionForAudienceAsync(searchPayload);
+    }
+
     public async Task<PageResult<SelectPostDTO>> GetReactedPostList(string audienceEmail, int pageIndex = 1, int pageSize = 12)
     {
         try
@@ -127,6 +132,8 @@ public class PostService : IPostService
     }
 
     public Post Get(int id) => postRepository.Get(id);
+
+    public Post GetPostForReport(int id, int reportReportId) => postRepository.GetPostForReport(id, reportReportId);
     public List<Post> TestPostCategory()
     {
         return postRepository.GetAllPost();
