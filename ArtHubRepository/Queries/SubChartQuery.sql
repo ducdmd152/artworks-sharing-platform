@@ -9,5 +9,5 @@
 FROM
 	ArtHub.dbo.subscriber s
 WHERE
-	s.created_date >= DATEADD(WEEK, DATEDIFF(WEEK, 0, GETDATE()) - 2, 0)
-	AND s.created_date < DATEADD(WEEK, DATEDIFF(WEEK, 0, GETDATE()) - 1, 0)
+	s.created_date >= DATEADD(WEEK, DATEDIFF(WEEK, 0, GETDATE()) - 1, 0)
+	AND s.created_date < DATEADD(WEEK, DATEDIFF(WEEK, 0, GETDATE()) - 0, 0)
