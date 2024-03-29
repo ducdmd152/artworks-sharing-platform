@@ -105,6 +105,11 @@ namespace User.Pages.CreatorExploration
         {
             Account acc = SessionUtil.GetAuthenticatedAccount(HttpContext);
             var creatorEmail = HttpContext.Session.GetString("CREATOR_EMAIL");
+            if (creatorEmail == null)
+            {
+                return RedirectToPage("/CreatorExploration/Index");
+            }
+
             var result = await this.subscribePaidService.SubscribePaidAsync(subscription_id, acc.Email, creatorEmail).ConfigureAwait(false);
             this.CompleteTransactionCondition = result == Result.Error ? "Error" : "Ok";
 
@@ -117,8 +122,12 @@ namespace User.Pages.CreatorExploration
         {
             Account acc = SessionUtil.GetAuthenticatedAccount(HttpContext);
             var creatorEmail = HttpContext.Session.GetString("CREATOR_EMAIL");
+            if (creatorEmail == null)
+            {
+                return RedirectToPage("/CreatorExploration/Index");
+            }
+
             this.CompleteTransactionCondition =  "Error";
-            
             await this.LoadDataShowPageAsync(creatorEmail, acc.Email);
             HttpContext.Session.Remove("CREATOR_EMAIL");
             return Page();
