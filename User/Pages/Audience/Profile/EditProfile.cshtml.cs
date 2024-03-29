@@ -1,5 +1,3 @@
-﻿using System.Net;
-using System.Runtime.Serialization;
 using ArtHubBO.Constants;
 using ArtHubBO.DTO;
 using ArtHubBO.Entities;
@@ -11,60 +9,52 @@ using InventoryManagementGUI.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using System.Net;
 
-namespace Admin.Pages;
+namespace User.Pages.Audience.Profile;
 
-public class ModeratorEditProfile : PageModel
+public class EditProfileModel : PageModel
 {
     private readonly IAccountService accountService;
     private readonly IConfiguration configuration;
     private readonly IStorageService storageService;
+    private readonly IFeeService feeService;
 
-    public ModeratorEditProfile(IAccountService accountService, IConfiguration configuration, IStorageService storageService)
+    public int TypeUpdate { get; set; } = 1;
+    [BindProperty]
+    public AccountUpdateDto AccountUpdate { get; set; }
+    [BindProperty]
+    public AccountUpdateTypeDto AccountUpdateType { get; set; }
+    [BindProperty]
+    public IFormFile FileUpload { get; set; }
+    [BindProperty]
+    public PasswordConfirmDto PasswordConfirm { get; set; }
+
+    public EditProfileModel(IAccountService accountService, IConfiguration configuration, IStorageService storageService, IFeeService feeService)
     {
         this.accountService = accountService;
         this.configuration = configuration;
         this.storageService = storageService;
+        this.feeService = feeService;
     }
 
-    [BindProperty]
-    [DataMember]
-    public AccountUpdateTypeDto AccountUpdateType { get; set; }
-    
-    [BindProperty]
-    [DataMember]
-    public AccountUpdateDto AccountUpdate { get; set; }
-    
-    [BindProperty]
-    public IFormFile FileUpload { get; set; }
-    
-    [BindProperty]
-    public PasswordConfirmDto PasswordConfirm { get; set; }
-    
-    public IActionResult OnGet()
+    public void OnGet(int typeUpdate)
     {
-        var accountEmail = HttpContext.Session.GetString("ACCOUNT_EMAIL");        
-        if (accountEmail != null ) {            
+        if (typeUpdate > 0)
+        {
+            TypeUpdate = typeUpdate;
+        }
+        var accountEmail = HttpContext.Session.GetString("ACCOUNT_EMAIL");
+        if (accountEmail != null)
+        {
             var account = accountService.GetAccountByEmail(accountEmail);
             AccountUpdate = AccountToAccountUpdateDto(account);
-            AccountUpdateType = AccountToAccountUpdateTypeDto(account, 1);
+            AccountUpdateType = AccountToAccountUpdateTypeDto(account, TypeUpdate);
         }
-
-        return Page();
+        return;
     }
 
-    public IActionResult OnPostChangeTypeEdit()
-    {
-        var accountEmail = HttpContext.Session.GetString("ACCOUNT_EMAIL");        
-        if (accountEmail != null ) {            
-            var account = accountService.GetAccountByEmail(accountEmail);
-            AccountUpdate = AccountToAccountUpdateDto(account);
-        }
-        
-        return Page();
-    }
-
-     public async Task<IActionResult> OnPostUpdateProfileInfoAsync()
+    public async Task<IActionResult> OnPostUpdateProfileInfoAsync()
     {
         var gender = Request.Form["Gender"];
         if (gender == Gender.Male.ToString() || gender == Gender.Female.ToString())
@@ -102,12 +92,13 @@ public class ModeratorEditProfile : PageModel
                     Result = Result.Error,
                     Data = "Fail to upload image!",
                 });
-            } else
+            }
+            else
             {
                 AccountUpdate.Avatar = responseUploadImage.LinkSource;
-            }            
+            }
         }
-        Account? updatedAccount = await accountService.UpdateModeratorProfile(AccountUpdate);
+        Account? updatedAccount = await accountService.UpdateProfile(AccountUpdate);
         if (updatedAccount == null)
         {
             return new JsonResult(new PostResult()
@@ -142,7 +133,8 @@ public class ModeratorEditProfile : PageModel
                 Result = Result.Error,
                 Data = "Your old password not correct!",
             });
-        } else
+        }
+        else
         {
             PasswordConfirm.NewPassword = Encryption.Encrypt(PasswordConfirm.NewPassword);
             bool isUpdate = await accountService.ChangePassword(PasswordConfirm, accountEmail);
@@ -154,18 +146,42 @@ public class ModeratorEditProfile : PageModel
                     Result = Result.Ok,
                     Data = "Change password successfully!",
                 });
-            } else
+            }
+            else
             {
                 return new JsonResult(new PostResult()
                 {
                     Result = Result.Error,
                     Data = "Fail to change password!",
                 });
-            }            
+            }
         }
     }
 
-    
+    public async Task<IActionResult> OnPostDeleteAccountAsync()
+    {
+        var accountEmail = HttpContext.Session.GetString("ACCOUNT_EMAIL")!;
+        bool isUpdate = await accountService.UpdateAccountEnable(accountEmail, false);
+        if (isUpdate)
+        {
+            HttpContext.Session.Clear();
+            return new JsonResult(new PostResult()
+            {
+                Result = Result.Ok,
+                Data = "Delete account successfully!",
+            });
+        }
+        else
+        {
+            return new JsonResult(new PostResult()
+            {
+                Result = Result.Error,
+                Data = "Fail to delete account!",
+            });
+        }
+
+    }
+
     private AccountUpdateDto AccountToAccountUpdateDto(Account account)
     {
         return new AccountUpdateDto
@@ -174,9 +190,7 @@ public class ModeratorEditProfile : PageModel
             FirstName = account.FirstName,
             LastName = account.LastName,
             Gender = account.Gender,
-            Avatar = account.Avatar,
-            ArtistName = string.Empty,
-            Bio = string.Empty,
+            Avatar = account.Avatar            
         };
     }
 
@@ -184,16 +198,20 @@ public class ModeratorEditProfile : PageModel
     {
         AccountUpdateTypeDto accountTypeUpdate = new AccountUpdateTypeDto();
         accountTypeUpdate.TypeUpdate = typeUpdate;
-        accountTypeUpdate.Name = account.FirstName + " " + account.LastName;
+        accountTypeUpdate.Name = account.FirstName;
         accountTypeUpdate.Avatar = account.Avatar;
-        if (typeUpdate == 1)
-        {
-            accountTypeUpdate.NameTypeUpdate = "Edit profile";
-        } else
+        if (typeUpdate == 2)
         {
             accountTypeUpdate.NameTypeUpdate = "Change password";
         }
-
+        else if (typeUpdate == 3)
+        {
+            accountTypeUpdate.NameTypeUpdate = "Delete account";
+        }
+        else
+        {
+            accountTypeUpdate.NameTypeUpdate = "Edit profile";
+        }
         return accountTypeUpdate;
     }
 }

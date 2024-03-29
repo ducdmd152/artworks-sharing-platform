@@ -20,7 +20,6 @@ namespace ArtHubRepository.Repository
         {
             return this.DbSet.Include(a => a.Role).FirstOrDefault(a => a.Email.Equals(email) && a.Password.Equals(password));
         }
-
 		public int GetTotalUsersWithinLast30Days()
 		{
 			DateTime thirtyDaysAgo = DateTime.Today.AddDays(-30);
@@ -46,7 +45,7 @@ namespace ArtHubRepository.Repository
 
         public Account? GetAccountByEmail(string email)
         {
-            return this.DbSet.Where(a => a.Email == email).FirstOrDefault();
+            return this.DbSet.Include(a => a.Role).Where(a => a.Email == email).FirstOrDefault();
         }
     }
 }

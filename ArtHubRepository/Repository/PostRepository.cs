@@ -340,6 +340,6 @@ namespace ArtHubRepository.Repository
                 .FirstOrDefault(item => item.PostId == id);
         
         public Post GetById(int postId)
-            => this.DbSet.FirstOrDefault(i => i.PostId == postId);
+            => this.DbSet.Include(x => x.Images).FirstOrDefault(i => i.PostId == postId);
     }
 }

@@ -1,5 +1,5 @@
 ﻿@page
-@model User.Pages.Creator.EditProfileModel
+@model User.Pages.Audience.Profile.EditProfileModel
 @{
 }
 <style>
@@ -36,7 +36,7 @@
 
 <div class="container pt-5">
     <div class="d-flex">
-        <partial name="Shared/_LeftSideBardEditProfileCreator" model="Model.AccountUpdateType" />
+        <partial name="Shared/_LeftSideBardEditProfileAudience" model="Model.AccountUpdateType" />
         @if (Model.AccountUpdateType.TypeUpdate == 1)
         {
             <div class="ms-4" style="width:70%;">
@@ -69,11 +69,6 @@
                     </div>
 
                     <div class="d-flex justify-content-between mt-3">
-                        <div class="form-group mt-3 col-md-5">
-                            <label for="artistName">Artist Name <small class="text-danger">*</small></label>
-                            <input asp-for ="@Model.AccountUpdate.ArtistName" type="text" class="form-control" id="artistName" placeholder="Artist Name">
-                            <span asp-validation-for="@Model.AccountUpdate.ArtistName" class="text-danger"></span>
-                        </div>
                         <div class="d-flex align-items-end mb-2 col-md-6">
                             <div class="me-3" style="margin-bottom:1px;">
                                 <label for="gender">Gender:</label>
@@ -89,21 +84,16 @@
                         </div>
                         <span id="errorMessageGender" class="text-danger">@ViewData["ErrorMessageGender"]</span>
                     </div>
-
-                    <div class="form-group  mt-3">
-                        <label for="bio">Bio</label>
-                        <textarea asp-for="@Model.AccountUpdate.Bio" class="form-control" id="bio" rows="3"></textarea>
-                        <span asp-validation-for="@Model.AccountUpdate.Bio" class="text-danger"></span>
-                    </div>
                     <button type="button" onclick="updateProfileInfo()" id="saveProfile" class="btn btn-dark  mt-3">Save Profile</button>
                 </form>
             </div>
-        } else if (Model.AccountUpdateType.TypeUpdate == 2)
+        }
+        else if (Model.AccountUpdateType.TypeUpdate == 2)
         {
             <div class="ms-4" style="width:70%;">
                 <form class="mt-4" id="changePassword">
                     <div class="form-group mt-3 col-md-5">
-                        <label for="oldPassword">Old Password</label>                        
+                        <label for="oldPassword">Old Password</label>
                         <input asp-for="PasswordConfirm.OldPassword" type="password" class="form-control" id="oldPassword" placeholder="Old Password">
                         <span asp-validation-for="PasswordConfirm.OldPassword" class="text-danger"></span>
                     </div>
@@ -120,21 +110,12 @@
                     <button type="button" class="btn btn-dark mt-3" onclick="changePassword()">Save New Password</button>
                 </form>
             </div>
-        } else if (Model.AccountUpdateType.TypeUpdate == 3)
-        {
-            <form class="ms-4" name="changeSubscribeFee">
-                <div class="form-group mt-3 col-md-12">
-                    <label for="subscribeFee">Subscribe Fee</label>
-                    <input type="number" asp-for="Fee" min="0" class="form-control" id="subscribeFee" placeholder="Subscribe Fee">
-                    <span asp-validation-for="Fee" class="text-danger"></span>
-                </div>                
-                <button type="button" class="btn btn-dark mt-3" onclick="updateSubscriberFee()">Save</button>
-            </form>
-        } else if (Model.AccountUpdateType.TypeUpdate == 4)
+        }
+        else if (Model.AccountUpdateType.TypeUpdate == 3)
         {
             <form class="mt-4" id="deleteAccount">
                 <button type="button" class="btn btn-dark ms-3" onclick="deleteAccount()">Delete Account</button>
-            </form>            
+            </form>
         }
     </div>
 
@@ -179,7 +160,7 @@
 
 
     document.querySelector('#saveProfile').addEventListener('click', function () {
-        document.querySelector('#errorMessageGender').textContent = '';        
+        document.querySelector('#errorMessageGender').textContent = '';
     });
 
     function updateProfileInfo() {
@@ -193,7 +174,7 @@
             var data = new FormData(form);
 
             $.ajax({
-                url: '/Creator/EditProfile?handler=UpdateProfileInfo',
+                url: '/Audience/Profile/EditProfile?handler=UpdateProfileInfo',
                 type: 'POST',
                 headers: {
                     RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
@@ -202,14 +183,14 @@
                 processData: false,  // Don't process the data (already FormData)
                 contentType: false,  // Don't set contentType (let jQuery handle it)
                 success: function (response) {
-                    if (response.result === 'Error') {                        
+                    if (response.result === 'Error') {
                         showOutOfStockToastDanger('Fail', response.data);
-                    } else {                        
+                    } else {
                         showOutOfStockToastSuccess('Upload', response.data);
                         setTimeout(function () {
-                            window.location.href = '/Creator/EditProfile';
+                            window.location.href = '/Audience/Profile/EditProfile';
                         }, 2000);
-                    }                                       
+                    }
                 },
                 error: function (error) {
                     console.error('Error loading partial:', error);
@@ -231,7 +212,7 @@
             var data = new FormData(form);
 
             $.ajax({
-                url: '/Creator/EditProfile?handler=ChangePassword',
+                url: '/Audience/Profile/EditProfile?handler=ChangePassword',
                 type: 'POST',
                 headers: {
                     RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
@@ -246,44 +227,6 @@
                         showOutOfStockToastSuccess('Success', response.data);
                         setTimeout(function () {
                             window.location.href = '/Authenticate/Login';
-                        }, 2000);
-                    }                    
-                },
-                error: function (error) {
-                    console.error('Error loading partial:', error);
-                }
-            });
-        } else {
-            console.error('Client-side validation failed.');
-        }
-    }
-
-    function updateSubscriberFee() {
-        var form = document.forms.namedItem("changeSubscribeFee");
-        var $form = $(form);
-
-        // Trigger validation
-        $form.validate();
-
-        if ($form.valid()) {
-            var data = new FormData(form);
-
-            $.ajax({
-                url: '/Creator/EditProfile?handler=ChangeSubscribeFee',
-                type: 'POST',
-                headers: {
-                    RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
-                },
-                data: data,
-                processData: false,  // Don't process the data (already FormData)
-                contentType: false,  // Don't set contentType (let jQuery handle it)
-                success: function (response) {
-                    if (response.result === 'Error') {
-                        showOutOfStockToastDanger('Fail', response.data);
-                    } else {
-                        showOutOfStockToastSuccess('Change Fee', response.data);
-                        setTimeout(function () {
-                            window.location.href = '/Creator/EditProfile';
                         }, 2000);
                     }
                 },
@@ -310,7 +253,7 @@
             // If user confirms, proceed with rejection
             if (confirmReject) {
                 $.ajax({
-                    url: '/Creator/EditProfile?handler=DeleteAccount',
+                    url: '/Audience/Profile/EditProfile?handler=DeleteAccount',
                     type: 'POST',
                     headers: {
                         RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
@@ -332,7 +275,7 @@
                         console.error('Error loading partial:', error);
                     }
                 });
-            }            
+            }
         } else {
             console.error('Client-side validation failed.');
         }

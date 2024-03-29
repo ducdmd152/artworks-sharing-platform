@@ -316,6 +316,7 @@
             var artworkLike = $('#artwork' + index + 'Like').val();
             var artworkBookmark = $('#artwork' + index + 'Bookmark').val();
             var artworkScope = $('#artwork' + index + 'Scope').val();
+            var artworkNote = $('#artwork' + index + 'Note').val();
             if (artworkScope == 1) {
                 artworkScope = "Public";
             } else if (artworkScope == 2) {
@@ -338,7 +339,11 @@
             var id = $('#artwork' + index + 'Id').val();
 
             $('#artworkDetailModalLabel').text(title);
-            $('.modal-body').html('<img src="' + imageUrl + '" alt="Artwork" class="artwork-item-img"> <div class="gallery-item-info d-flex justify-content-between mt-2"> <div class="user-item"> <img src="' + imageProfile + '" class="artist-profile-pic-suggest" /> <span class="artist-name-suggest">' + artistName + '</span> </div> <div class="gallery-item-stats ml-1"> <span class="likes me-3"><i class="far fa-heart"></i>' + artworkLike + '</span> <span class="comments"><i class="far fa-bookmark"></i>' + artworkBookmark + '</span> </div> </div><div class="d-flex justify-content-start my-2"><span class="me-4"><b>Status:</b> <span class="artwork-status">' + artworkStatus + '</span></span><span><b>Scope:</b> <span class="artwork-scope">' + artworkScope + '</span></span></div> <p>' + description + '</p>');
+            if (artworkStatus == 'Reject') {
+                $('.modal-body').html('<img src="' + imageUrl + '" alt="Artwork" class="artwork-item-img"> <div class="gallery-item-info d-flex justify-content-between mt-2"> <div class="user-item"> <img src="' + imageProfile + '" class="artist-profile-pic-suggest" /> <span class="artist-name-suggest">' + artistName + '</span> </div> <div class="gallery-item-stats ml-1"> <span class="likes me-3"><i class="far fa-heart"></i>' + artworkLike + '</span> <span class="comments"><i class="far fa-bookmark"></i>' + artworkBookmark + '</span> </div> </div><div class="d-flex justify-content-start my-2"><span class="me-4"><b>Status:</b> <span class="artwork-status">' + artworkStatus + '</span></span><span><b>Scope:</b> <span class="artwork-scope">' + artworkScope + '</span></span></div> <p>' + description + '</p><span>Reason reject: ' + artworkNote + '</span>');
+            } else {
+                $('.modal-body').html('<img src="' + imageUrl + '" alt="Artwork" class="artwork-item-img"> <div class="gallery-item-info d-flex justify-content-between mt-2"> <div class="user-item"> <img src="' + imageProfile + '" class="artist-profile-pic-suggest" /> <span class="artist-name-suggest">' + artistName + '</span> </div> <div class="gallery-item-stats ml-1"> <span class="likes me-3"><i class="far fa-heart"></i>' + artworkLike + '</span> <span class="comments"><i class="far fa-bookmark"></i>' + artworkBookmark + '</span> </div> </div><div class="d-flex justify-content-start my-2"><span class="me-4"><b>Status:</b> <span class="artwork-status">' + artworkStatus + '</span></span><span><b>Scope:</b> <span class="artwork-scope">' + artworkScope + '</span></span></div> <p>' + description + '</p>');
+            }            
             $('.edit-post').html('<a href="/Creator/EditPost?postId=' + id + '" class="btn btn-secondary">Edit</a>');
             // Show the modal
             $('#artworkDetailModal').modal('show');

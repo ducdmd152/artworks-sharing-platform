@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +32,7 @@ namespace ArtHubBO.Entities
         public int Scope { get; set; }
 
         [Column("note")]
+        [DefaultValue("")]
         public string Note { get; set; } = null;
         [Column("total_react")]
         public int TotalReact { get; set; }

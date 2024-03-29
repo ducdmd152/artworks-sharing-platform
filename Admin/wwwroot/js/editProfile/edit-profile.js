@@ -29,9 +29,6 @@ function updateProfileInfo() {
                     showOutOfStockToastDanger('Fail', response.data);
                 } else {
                     showOutOfStockToastSuccess('Upload', response.data);
-                    setTimeout(function () {
-                        window.location.href = '/Creator/EditProfile';
-                    }, 2000);
                 }
             },
             error: function (error) {
@@ -67,9 +64,6 @@ function changePassword() {
                     showOutOfStockToastDanger('Fail', response.data);
                 } else {
                     showOutOfStockToastSuccess('Success', response.data);
-                    setTimeout(function () {
-                        window.location.href = '/Authenticate/Login';
-                    }, 2000);
                 }
             },
             error: function (error) {
