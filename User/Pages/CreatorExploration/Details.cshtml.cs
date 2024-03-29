@@ -75,7 +75,11 @@ namespace User.Pages.CreatorExploration
             Account acc = SessionUtil.GetAuthenticatedAccount(HttpContext);
             if (acc == default)
             {
-                return Redirect("/Authenticate/Login");
+                return new JsonResult(new
+                {
+                    Result = "Login",
+                    Data = "/Authenticate/Login",
+                });
             }
 
             var artistEmail = Encryption.DecodeKeyToEmail(id);
