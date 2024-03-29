@@ -70,15 +70,11 @@
         }
     </div>
 </section>
-<nav aria-label="Page navigation" class="mt-2" style="display: flex; justify-content: center; width: 100%;">
-    <ul class="pagination">
-        @for (var i = 1; i <= @Model.PageInfo.TotalPages; i++)
-        {
-            <li class="page-item @(Model.PageInfo.PageNum == i ? "active" : "")">
-                <a class="page-link" style="font-size: 20px; padding: 8px 16px;" href="?pageIndex=@i">@i</a>
-            </li>
-        }
-    </ul>
-</nav>
+<partial name="Shared/_PagingPartial" model="@Model.PageInfo"/>
 
 <div class="mb-4"/>
+<script>
+    function getListByPaging(pageIndex){
+        window.location.href = '/CreatorExploration?pageIndex=' + pageIndex;
+    }
+</script>

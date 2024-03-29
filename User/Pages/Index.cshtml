@@ -249,16 +249,7 @@
         }
     </div>
     
-    <nav aria-label="Page navigation" style="display: flex; justify-content: center; width: 100%;">
-        <ul class="pagination">
-            @for (var i = 1; i <= @Model.SearchPayload.PageInfo.TotalPages; i++)
-            {
-                <li class="page-item @(Model.SearchPayload.PageInfo.PageNum == i ? "active" : "")">
-                    <a class="page-link" style="font-size: 20px; padding: 8px 16px;" href="?pageIndex=@i">@i</a>
-                </li>
-            }
-        </ul>
-    </nav>
+    <partial name="Shared/_PagingPartial" model="@Model.SearchPayload.PageInfo"/>
 </body>
 
 @section Scripts {
@@ -283,6 +274,20 @@
         function performSearch() {
             event.preventDefault();
             window.location.href = getURL();
+        }
+        
+        function getListByPaging(pageIndex){
+            var keyword = document.getElementById('searchInput').value.trim();
+            var orderSelect = document.getElementById('order-select').value;
+            const urlParams = new URLSearchParams(window.location.search);
+            var category = urlParams.get('category');
+            console.log(category);
+            if (category){
+                window.location.href = '../Artworks?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect + "&pageIndex=" + pageIndex +"&category=" + category;
+            }else{        
+               window.location.href = '../Artworks?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect + "&pageIndex=" + pageIndex;
+            }
+            
         }
     </script>
 }
