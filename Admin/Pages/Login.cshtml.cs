@@ -48,7 +48,7 @@ namespace Admin.Pages
                     case "Admin":
                         HttpContext.Session.SetString("CREDENTIAL", accountJson);
                         HttpContext.Session.SetString("ACCOUNT_EMAIL", account.Email);
-                        return RedirectToPage("/Moderator/ArtWorksManagement");
+                        return RedirectToPage("/Admins/Dashboard");
                     default:
                         ViewData["ErrorMessage"] = MessageResource.AccountNotHavePermission;
                         return Page();
