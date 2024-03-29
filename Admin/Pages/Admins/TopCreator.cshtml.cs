@@ -18,10 +18,10 @@ namespace Admin.Pages.Admins
         }
 
         [BindProperty(SupportsGet = true)]
-        public int PageNumber { get; set; } = 1; // S? trang m?c ??nh là 1
+        public int PageNumber { get; set; } = 1; 
 
         [BindProperty(SupportsGet = true)]
-        public int PageSize { get; set; } = 10;
+        public int PageSize { get; set; } = 4;
 
         public PageResult<TopCreatorDTO> PageResult { get; set; }
 
@@ -31,8 +31,8 @@ namespace Admin.Pages.Admins
         public async Task<IActionResult> OnGetAsync()
         {
             
-            int startRow = (PageNumber - 1) * PageSize + 1;
-            int endRow = PageNumber * PageSize;
+          /*  int startRow = (PageNumber - 1) * PageSize + 1;
+            int endRow = PageNumber * PageSize;*/
 
            
             var searchCondition = new SearchTopCreatorDTO
