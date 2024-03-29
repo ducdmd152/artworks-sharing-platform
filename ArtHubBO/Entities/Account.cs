@@ -58,5 +58,6 @@ namespace ArtHubBO.Entities
         public virtual ICollection<Report> Reports { get; set; }
         [InverseProperty("EmailUserNavigation")]
         public virtual ICollection<Subscriber> Subscribers { get; set; }
+
     }
 }

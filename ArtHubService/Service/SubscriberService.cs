@@ -43,7 +43,7 @@ public class SubscriberService : ISubscriberService
 	public int GetTotalSubscribers()
 	{
 
-		return subscriberRepository.GetTotalSubscribers();
+		return subscriberRepository.GetTotalSubscribersWithinLast30Days();
 	}
 
     public async Task<StatisticOfWeekDto> GetStatisticOfSubscriberLastWeek(string email)
@@ -57,4 +57,10 @@ public class SubscriberService : ISubscriberService
         return await dapperQueryService
                .SingleOrDefaultAsync<StatisticOfYearDto>(QueryName.GetStatisticOfSubscriberMonthOfYear, new { ArtistEmail = email });
     }
+
+	public async Task<StatisticOfWeekDto> GetSubChartOneWeek()
+	{
+		var statisticsOfYear = await dapperQueryService.SingleOrDefaultAsync<StatisticOfWeekDto>(QueryName.SubChartQuery, null);
+		return statisticsOfYear;
+	}
 }

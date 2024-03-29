@@ -1,11 +1,21 @@
-﻿WITH CreatorRevenue AS (
+﻿/*
+DECLARE @PageNumber INT = 2;
+DECLARE @PageSize INT = 4;
+DECLARE @AudienceEmail VARCHAR(100) = 'user1@gmail.com';
+DECLARE @CreatorEmail VARCHAR(100) = 'creator@gmail.com';
+DECLARE @Email VARCHAR(100) = '';
+*/
+
+WITH CreatorRevenue AS (
     SELECT
         artist.email AS CreatorEmail,
         artist.artist_name AS CreatorName,
         artist.total_subscribe AS TotalSubscribe,
         fee.amount AS Fee,
         SUM([transaction].amount) AS Revenue,
-        ROW_NUMBER() OVER (ORDER BY artist.email) AS RowNum
+		CEILING(COUNT(artist.email) OVER () * 1.0 / @PageSize) AS TotalPages,
+		COUNT(artist.email) OVER () AS TotalItems,
+        ROW_NUMBER() OVER (ORDER BY SUM([transaction].amount) DESC) AS RowNum
     FROM 
         ArtHub.dbo.artist AS artist
     JOIN 
@@ -13,7 +23,7 @@
     JOIN 
         ArtHub.dbo.[transaction] AS [transaction] ON [transaction].fee_id = fee.fee_id
     WHERE
-        (@Email IS NULL OR artist.email = @Email)
+        (@Email IS NULL OR artist.email LIKE ('%' + @Email +'%'))
     GROUP BY 
         artist.email,
         artist.artist_name,
@@ -33,9 +43,9 @@ WithArtworkLove AS (
 )
 
 SELECT
-    CEILING(CONVERT(DECIMAL, COUNT(*)) / 10) AS TotalPages,
-    COUNT(*) AS TotalItems,
-    cr.CreatorEmail AS CreatorEmail,
+    cr.TotalPages AS TotalPages,
+	cr.TotalItems AS TotalItems,
+	cr.CreatorEmail AS CreatorEmail,
     cr.CreatorName AS CreatorName,
     cr.TotalSubscribe AS TotalSubscribe,
     cr.Fee AS Fee,
@@ -49,13 +59,15 @@ FROM
 LEFT JOIN 
     WithArtworkLove AS art ON cr.CreatorEmail = art.email
 WHERE
-    cr.RowNum BETWEEN (1 - 1) * 10 + 1 AND 1 * 10
+    cr.RowNum BETWEEN (@PageNumber - 1) * @PageSize + 1 AND @PageNumber * @PageSize
 GROUP BY 
     cr.CreatorEmail,
     cr.CreatorName,
     cr.TotalSubscribe,
     cr.Fee,
     art.TotalLove,
-    cr.Revenue
+    cr.Revenue,
+	cr.TotalPages,
+	cr.TotalItems
 ORDER BY
-    cr.Revenue DESC; -- Sorting by TotalSubscribe in descending order
+    cr.Revenue DESC;

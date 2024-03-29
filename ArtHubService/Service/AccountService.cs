@@ -10,17 +10,18 @@ using ArtHubRepository.Repository;
 using ArtHubService.Interface;
 using ArtHubService.Utils;
 using Microsoft.Extensions.Logging;
+using System.Security.Principal;
 
 namespace ArtHubService.Service
 {
-    public class AccountService : IAccountService
-    {
+	public class AccountService : IAccountService
+	{
         private readonly IAccountRepository accountRepository;
         private readonly IDapperQueryService dapperQueryService;
         private readonly IUnitOfWork unitOfWork;
-		private readonly ILogger<AccountService> logger;
+        private readonly ILogger<AccountService> logger;
 
-		public AccountService(IAccountRepository accountRepository, IUnitOfWork unitOfWork, IDapperQueryService dapperQueryService, ILogger<AccountService> logger)
+        public AccountService(IAccountRepository accountRepository, IUnitOfWork unitOfWork, IDapperQueryService dapperQueryService, ILogger<AccountService> logger)
         {
             this.accountRepository = accountRepository;
             this.unitOfWork = unitOfWork;
@@ -34,8 +35,8 @@ namespace ArtHubService.Service
         }
 
         public Account? GetAccountByUsernameAndPassword(string email, string password)
-        {            
-            var decryptPassword = Encryption.Encrypt(password);           
+        {
+            var decryptPassword = Encryption.Encrypt(password);
             return this.accountRepository.GetAccountsIncludeRoleByEmailPassword(email, decryptPassword);
         }
 
@@ -53,7 +54,7 @@ namespace ArtHubService.Service
 
                 var accountNew = accountRepository.UpdateRange(accounts);
                 await this.unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
-                
+
                 return accountNew.FirstOrDefault();
             }
             catch (Exception e)
@@ -137,7 +138,7 @@ namespace ArtHubService.Service
                         RoleId = 0,
                     }
                 };
-                
+
                 this.accountRepository.RemoveRange(accounts);
                 await this.unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
                 return true;
@@ -152,7 +153,7 @@ namespace ArtHubService.Service
 
         public int GetTotalUsers()
         {
-            return this.accountRepository.GetTotalUsers();
+            return this.accountRepository.GetTotalUsersWithinLast30Days();
         }
 
 
@@ -164,8 +165,8 @@ namespace ArtHubService.Service
 
                 var account = this.accountRepository.GetAccount(email);
                 account.Enabled = false;
-                this.accountRepository.Update(account);
 
+                this.accountRepository.Update(account);
                 await this.unitOfWork.CommitTransactionAsync().ConfigureAwait(false); // sửa xong rồi đóng lại vă lưu
                 return true;
             }
@@ -179,7 +180,6 @@ namespace ArtHubService.Service
         {
             return accountRepository.GetAccountIncludeArtistByEmail(email);
         }
-
         public async Task<Account?> UpdateArtistProfile(AccountUpdateDto accountUpdate)
         {
             try
@@ -192,7 +192,8 @@ namespace ArtHubService.Service
                 if (accountUpdate.Avatar != null)
                 {
                     dataUpdate.Avatar = accountUpdate.Avatar;
-                } else
+                }
+                else
                 {
                     dataUpdate.Avatar = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTii3hM5abJEj_Zu0wumINDLGvHaT-MZaesc9dj-gXSUg&s";
                 }
@@ -200,7 +201,7 @@ namespace ArtHubService.Service
                 if (accountUpdate.Bio != null)
                 {
                     dataUpdate.Artist!.Bio = accountUpdate.Bio;
-                }                
+                }
                 var updatedArtist = accountRepository.Update(dataUpdate);
                 await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
                 return updatedArtist;
@@ -244,9 +245,9 @@ namespace ArtHubService.Service
         {
             try
             {
-                await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);                
+                await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
                 var dataUpdate = accountRepository.GetAccountIncludeArtistByEmail(email);
-                dataUpdate.Password = passwordConfirmDto.NewPassword;                
+                dataUpdate.Password = passwordConfirmDto.NewPassword;
                 accountRepository.Update(dataUpdate);
                 await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
                 return true;
@@ -263,23 +264,6 @@ namespace ArtHubService.Service
             return accountRepository.CheckCorrectPassword(email, password);
         }
 
-        public async Task<bool> UpdateAccountEnable(string email, bool enable)
-        {
-            try
-            {
-                await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
-                Account account = accountRepository.GetAccountByEmail(email)!;
-                account.Enabled = enable;
-                accountRepository.Update(account);
-                await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                unitOfWork.RollbackTransaction();
-            }
-            return false;
-        }
 
         public async Task<bool> CreateAccount(Account account)
         {
@@ -288,7 +272,7 @@ namespace ArtHubService.Service
                 await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
                 await accountRepository.AddAsync(account).ConfigureAwait(false);
                 await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
-			    return true;
+                return true;
             }
             catch (Exception e)
             {
@@ -296,7 +280,7 @@ namespace ArtHubService.Service
             }
 
             return false;
-        
+
         }
 
         public async Task<PageResult<AccountListDTO>> GetListAccountManage(
@@ -325,43 +309,85 @@ namespace ArtHubService.Service
             }
         }
 
-        public  Account GetAccount(string  email) => accountRepository.GetAccount(email);
+        public Account GetAccount(string email) => accountRepository.GetAccount(email);
 
+        public void Update(Account account)
+        {
+            Account acc = GetAccount(account.Email);
+            if (acc != null)
+            {
+                acc = this.accountRepository.Update(account);
+            }
+        }
 
-
-        public async Task<bool> UpdateAccount(Account account)
+        public async Task<bool> UpdateAccountStatus(string email)
         {
             try
             {
-                await this.unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+                await this.unitOfWork.BeginTransactionAsync().ConfigureAwait(false); // mở cửa cho chỉnh sửa db
 
-                var existingAccount = this.accountRepository.GetAccount(account.Email);
+                var account = this.accountRepository.GetAccount(email);
 
-                if (existingAccount == null)
+                if (account.Status == (int)AccountStatus.Normal)
                 {
-                    return false; // Account not found
+                    account.Status = (int)AccountStatus.Ban;
+                }
+                else if (account.Status == (int)AccountStatus.Ban)
+                {
+                    account.Status = (int)AccountStatus.Normal;
                 }
 
-                // Update existing account properties with new values
-                existingAccount.FirstName = account.FirstName;
-                existingAccount.LastName = account.LastName;
-                existingAccount.Gender = account.Gender;
-                existingAccount.Status = account.Status;
-                existingAccount.Enabled = account.Enabled;
 
-                this.accountRepository.Update(existingAccount);
-                await this.unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+                this.accountRepository.Update(account);
 
-                return true; // Update successful
+                await this.unitOfWork.CommitTransactionAsync().ConfigureAwait(false); // sửa xong rồi đóng lại vă lưu
+                return true;
             }
             catch (Exception ex)
             {
-                // Handle exception, rollback transaction if needed
-                 this.unitOfWork.RollbackTransaction();
+                unitOfWork.RollbackTransaction();
                 return false;
+            }
+        }
+
+        public async Task<bool> UpdateAccountEnable(string email, bool enable)
+        {
+            try
+            {
+                await unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
+                Account account = accountRepository.GetAccountByEmail(email);
+                account.Enabled = enable;
+                accountRepository.Update(account);
+                await unitOfWork.CommitTransactionAsync().ConfigureAwait(false);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                unitOfWork.RollbackTransaction();
+            }
+            return false;
+        }
 
 
-            }      
+        public async Task<bool> RetoreAsync(string email)
+        {
+            try
+            {
+                await this.unitOfWork.BeginTransactionAsync().ConfigureAwait(false); // mở cửa cho chỉnh sửa db
+
+                var account = this.accountRepository.GetAccount(email);
+                account.Enabled = true;
+
+                this.accountRepository.Update(account);
+
+                await this.unitOfWork.CommitTransactionAsync().ConfigureAwait(false); // sửa xong rồi đóng lại vă lưu
+                return true;
+            }
+            catch (Exception ex)
+            {
+                unitOfWork.RollbackTransaction();
+                return false;
+            }
         }
 
         public Account? GetAccountByEmail(string email)

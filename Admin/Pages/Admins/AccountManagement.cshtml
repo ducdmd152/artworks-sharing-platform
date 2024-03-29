@@ -1,93 +1,239 @@
 ﻿@page
 @model Admin.Pages.Admins.AccountManagementModel
 @{
+	Layout = "Shared/_LayoutAdmin";
 }
+<header>
+	<style>
+		/* Định dạng cho bảng */
+		.table {
+			width: 100%;
+			border-collapse: collapse;
+			border: 1px solid #dee2e6;
+			margin-top: 20px;
+		}
+
+			/* Định dạng cho các tiêu đề cột */
+			.table th {
+				background-color: #f8f9fa;
+				color: #212529;
+				padding: 8px;
+				text-align: left;
+				border: 1px solid #dee2e6;
+			}
+
+			/* Định dạng cho các dòng */
+			.table td {
+				padding: 8px;
+				border: 1px solid #dee2e6;
+			}
+
+			/* Định dạng cho hàng xen kẽ */
+			.table tbody tr:nth-child(even) {
+				background-color: #f2f2f2;
+			}
+
+			/* Định dạng cho nút xóa */
+			.table .btn-danger {
+				padding: 6px 12px;
+				font-size: 14px;
+				line-height: 1.42857143;
+				text-align: center;
+				white-space: nowrap;
+				vertical-align: middle;
+				cursor: pointer;
+				border: 1px solid transparent;
+				border-radius: 4px;
+				background-color: #d9534f;
+				color: #fff;
+			}
+
+				/* Định dạng cho nút xóa khi di chuột qua */
+				.table .btn-danger:hover {
+					background-color: #c9302c;
+				}
+
+		#myForm {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+			margin-top: 20px; /* Khoảng cách phía trên form */
+		}
+
+		#searchInput {
+			width: 100%; /* Độ rộng của ô tìm kiếm */
+			padding: 8px; /* Khoảng cách nội dung trong ô tìm kiếm */
+			border: 1px solid #ced4da; /* Đường viền của ô tìm kiếm */
+			border-radius: 4px; /* Độ cong góc của ô tìm kiếm */
+			margin-bottom: 10px; /* Khoảng cách phía dưới của ô tìm kiếm */
+		}
+
+		.btn-primary {
+			width: 100%; /* Độ rộng của nút tìm kiếm */
+			padding: 8px; /* Khoảng cách nội dung trong nút tìm kiếm */
+			background-color: #007bff; /* Màu nền của nút tìm kiếm */
+			border: 1px solid #007bff; /* Đường viền của nút tìm kiếm */
+			color: #fff; /* Màu chữ của nút tìm kiếm */
+			border-radius: 4px; /* Độ cong góc của nút tìm kiếm */
+		}
+
+			.btn-primary:hover {
+				background-color: #0056b3; /* Màu nền của nút tìm kiếm khi di chuột qua */
+				border-color: #0056b3; /* Đường viền của nút tìm kiếm khi di chuột qua */
+			}
+
+	</style>
+</header>
 <form method="post" id="myForm">
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input type="text" class="form-control" id="searchInput" asp-for="@Model.SearchAccountCondition.Email" placeholder="Enter search keyword...">
-        </div>
-        <div class="col-md-6">
-            <button type="submit" class="btn btn-primary" asp-page-handler="Search" >Search</button>
-        </div>
-    </div>
+	<h1>ACCOUNT MANAGENENT</h1>
+	<div class="row mb-3">
+		<div class="col-md-6">
+			<input type="text" class="form-control" id="searchInput" asp-for="@Model.SearchAccountCondition.Email" placeholder="Enter search keyword...">
+		</div>
+		<div class="col-md-6">
+			<button type="submit" class="btn btn-primary" asp-page-handler="Search">Search</button>
+		</div>
+	</div>
 
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Email</th>
-                <th>FullName</th>
-                <th>Gender</th>
-                <th>Status</th>
-                <th>Enabled</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model.PageResult != null && Model.PageResult.PageData != null && Model.PageResult.PageData.Any())
-            {
-                @foreach (var account in Model.PageResult.PageData)
-                {
-                    <tr>
-                        <td>@account.Email</td>
-                        <td>@account.FirstName @account.LastName</td>
-                        <td>@account.Gender</td>
-                        <td>@account.Status</td>
-                        <td>@account.Enabled</td>
-                        <td>
-                            <a asp-page="./Edit" asp-route-id="@account.Email">Edit</a> |
-                            <a asp-page="./AccountDetailManagement" asp-route-email="@account.Email">Details</a> |
-                            <button type="button" class="btn btn-danger" onclick="deleteAccount('@account.Email')">Delete</button>
-                        </td>
-                    </tr>
-                }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="6">No accounts available</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Email</th>
+				<th>FullName</th>
+				<th>Gender</th>
+				<th>Status</th>
+				<th>Enabled</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@if (Model.PageResult != null && Model.PageResult.PageData != null && Model.PageResult.PageData.Any())
+			{
+				@foreach (var account in Model.PageResult.PageData)
+				{
+					<tr>
+						<td>@account.Email</td>
+						<td>@account.FirstName @account.LastName</td>
+						<td>@account.Gender</td>
+						<td>@GetStatusText(account.Status)</td>
+						<td>@GetEnableText(account.Enabled)</td>
+						<td>
+							@* <a asp-page="./EditAccountManagement" asp-route-email="@account.Email">Edit</a> | *@
+							<button type="button" class="btn btn-danger" onclick="updateAccount('@account.Email')">Edit</button>
+							
+							<a asp-page="./AccountDetailManagement" asp-route-email="@account.Email">Details</a> |
+						
+								@if (!account.Enabled)
+								{
+								<button type="button" class="btn btn-success" onclick="restoreAccount('@account.Email')">Restore</button>
+								}
+								else
+								{
+								<button type="button" class="btn btn-danger" onclick="deleteAccount('@account.Email')">Delete</button>
+								}
+					
+						</td>
+					</tr>
+				}
+			}
+			else
+			{
+				<tr>
+					<td colspan="6">No accounts available</td>
+				</tr>
+			}
+		</tbody>
+	</table>
 
-@* @if (Model.PageResult != null && Model.PageResult.PageInfo != null && Model.PageResult.PageInfo.TotalItems > 0)
-{
-    var totalPages = (int)Math.Ceiling((decimal)Model.PageResult.PageInfo.TotalItems / Model.PageResult.PageInfo.PageSize);
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
-            @for (int i = 1; i <= totalPages; i++)
-            {
-                <li class="page-item @(i == Model.PageResult.PageInfo.PageNum ? "active" : "")">
-                    <a class="page-link" href="?PageNumber=@i&PageSize=@Model.PageResult.PageInfo.PageSize">@i</a>
-                </li>
-            }
-        </ul>
-    </nav>
-} *@
-    @if(Model.PageResult.PageInfo != null)
-    {
-        <div id="pagingPartial">
-            <partial name="Shared/_PagingPartial" model="@Model.PageResult?.PageInfo" />
-        </div>
-    }
 
-    <input type="hidden" name="SearchAccountCondition.PageNumber" /> @* check chỗ name *@
+	@if (Model.PageResult != null && Model.PageResult.PageInfo != null)
+	{
+		<div id="pagingPartial">
+			<partial name="Shared/_PagingPartial" model="@Model.PageResult.PageInfo" />
+		</div>
+	}
+
+	<input type="hidden" name="SearchAccountCondition.PageNumber" /> @* check chỗ name *@
 
 </form>
 <script>
-    
 
-   
+	function getListByPaging(pageNumber) {
+		const form = document.getElementById('myForm');
+		form.action = 'AccountManagement?handler=Paging';
+		form.querySelector('input[name="SearchAccountCondition.PageNumber"]').value = pageNumber;
+		form.method = 'post';
+		form.submit();
+	}
 
-    async function deleteAccount(email) {
-        var confirmDelete = confirm("Do you really want to delete the account with email " + email + "?");
-        if (confirmDelete) {
-            const form = document.getElementById('myForm');
-            form.action = 'AccountManagement?handler=Delete&email=' + email;
-            form.method = 'post';
-            form.submit();
-        }
-    }
+
+	function deleteAccount(email) {
+		var confirmDelete = confirm("Do you really want to delete the account with email " + email + "?");
+		if (confirmDelete) {
+			const form = document.getElementById('myForm');
+			form.action = 'AccountManagement?handler=Delete&email=' + email;
+			form.method = 'post';
+			form.submit();
+		}
+	}
+
+	function restoreAccount(email) {
+		var confirmRestore = confirm("Are you sure you want to restore the account with email " + email + "?");
+		if (confirmRestore) {
+			const form = document.getElementById('myForm');
+			form.action = 'AccountManagement?handler=Restore&email=' + email;
+			form.method = 'post';
+			form.submit();
+		}
+	}
+
+	function updateAccount(email) {
+		var confirmRestore = confirm("Are you sure you want to update the account with email " + email + "?");
+		if (confirmRestore) {
+			const form = document.getElementById('myForm');
+			form.action = 'AccountManagement?handler=Update&email=' + email;
+			form.method = 'post';
+			form.submit();
+		}
+	}
+
+	@functions {
+		// Hàm để ánh xạ giá trị số sang trạng thái chữ
+		public string GetStatusText(int status)
+		{
+			switch (status)
+			{
+				case 1:
+					return "Normal";
+				case 2:
+					return "Ban";
+
+				default:
+					return "Unknown";
+			}
+		}
+
+
+		public string GetEnableText(bool status)
+		{
+			switch (status)
+			{
+				case false:
+					return "Deleted";
+				case true:
+					return "Enable";
+
+				default:
+					return "Unknown";
+			}
+		}
+ }
+
+		
+		
+
+	
+
 </script>

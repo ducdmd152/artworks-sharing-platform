@@ -81,8 +81,9 @@
                         @if (user == null)
                         {
                             <div>
-                                <a asp-page="/Authenticate/Login" type="button" class="btn position-relative mx-2">
-                                    <i class="fa-solid fa-user"></i>
+                                <a asp-page="/Authenticate/Login" type="button" class="btn position-relative mx-2 d-flex align-items-center">
+                                    <i class="fa-solid fa-user me-2"></i>
+                                    <span>Sign In</span>
                                 </a>
                             </div>
                         }
@@ -135,8 +136,9 @@
                                     break;
                                 default:
                                     <div>
-                                        <a asp-page="/Authenticate/Login" type="button" class="btn position-relative mx-2">
-                                            <i class="fa-solid fa-user"></i>
+                                        <a asp-page="/Authenticate/Login" type="button" class="btn position-relative mx-2 d-flex align-items-center">
+                                            <i class="fa-solid fa-user mr-2"></i>
+                                            <span>Sign In</span>
                                         </a>
                                     </div>
                                     break;

@@ -54,4 +54,11 @@ public class SubscriberRepository : BaseRepository<Subscriber>, ISubscriberRepos
 
 
    	}
+   	
+   		public int GetTotalSubscribersWithinLast30Days()
+	{
+		DateTime thirtyDaysAgo = DateTime.Today.AddDays(-30);
+		return this.DbSet.Count(sub => sub.CreatedDate >= thirtyDaysAgo);
+	}
+
 }

@@ -1,8 +1,9 @@
 ﻿@page
-@model TopCreatorModel
+@model Admin.Pages.Admins.TopArtWorkModel
 @{
 	Layout = "Shared/_LayoutAdmin";
 }
+
 <header>
 	<style>
 		/* Custom CSS for table */
@@ -58,12 +59,12 @@
 	</style>
 
 </header>
-
 <form method="post" id="myForm">
-	<h1>TOP CREATOR</h1>
+	<h1>TOP ART WORK</h1>
+
 	<div class="row mb-3">
 		<div class="col-md-6">
-			<input type="text" class="form-control" id="searchInput" asp-for="@Model.SearchTopCreator.Email" placeholder="Enter search keyword...">
+			<input type="text" class="form-control" id="searchInput" asp-for="@Model.SearchTopArtWork.PostTitle" placeholder="Enter search keyword...">
 		</div>
 		<div class="col-md-6">
 			<button type="submit" class="btn btn-primary" asp-page-handler="Search">Search</button>
@@ -77,13 +78,12 @@
 	<table class="table">
 		<thead>
 			<tr>
-				<th>Email</th>
+				<th>PostTitle</th>
 				<th>Creator Name</th>
-				<th>Revenue</th>
-				<th>Total Subscribe</th>
-				<th>Fee</th>
-				<th>Total Love</th>
-				
+				<th>LoveCount</th>
+				<th>SaveCount</th>
+				<th>ViewCount</th>
+
 			</tr>
 		</thead>
 		<tbody>
@@ -92,15 +92,15 @@
 				@foreach (var account in Model.PageResult.PageData)
 				{
 					<tr>
-						<td>@account.CreatorEmail</td>
+						<td>@account.PostTitle</td>
 						<td>@account.CreatorName</td>
-						<td>@account.Revenue</td>
-						<td>@account.TotalSubscribe</td>
-						<td>@account.Fee</td>
-						<td>@account.TotalLove</td>
-						
+						<td>@account.LoveCount</td>
+						<td>@account.SaveCount</td>
+						<td>@account.ViewCount</td>
+
 					</tr>
 				}
+
 			}
 
 
@@ -117,13 +117,13 @@
 		</div>
 	}
 
-	<input type="hidden" name="SearchTopCreator.PageNumber" /> @* check chỗ name *@
+	<input type="hidden" name="SearchTopArtWork.PageNumber" /> @* check chỗ name *@
 </form>
 <script>
 	function getListByPaging(pageNumber) {
 		const form = document.getElementById('myForm');
-		form.action = 'TopCreator?handler=Paging';
-		form.querySelector('input[name="SearchTopCreator.PageNumber"]').value = pageNumber;
+		form.action = 'TopArtWork?handler=Paging';
+		form.querySelector('input[name="SearchTopArtWork.PageNumber"]').value = pageNumber;
 		form.method = 'post';
 		form.submit();
 	}

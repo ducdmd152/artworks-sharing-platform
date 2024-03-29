@@ -5,13 +5,11 @@ public static class URIConstant
     public static readonly string[] WhiteListUris = {
         "/Login",
         "/Logout",
-        "/"
+        "/NotFound"
     };
 
     public static readonly string[] ModeratorListUris = {
-        "/Moderator/ArtWorksManagement",
-        "/Moderator/ReportManagement",
-        "/Moderator/ModeratorEditProfile",
+        "/Moderator/"
     };
 
     public static readonly string[] AdminListUris = {
@@ -21,9 +19,11 @@ public static class URIConstant
         "/Admins/Setting",
         "/Admins/TopArtWork",
         "/Admins/TopCreator",
+        "/Admins/"
     };
 
-    public static readonly string HomePage = "/";
+    public static readonly string HomePage = "/Login";
 
     public static readonly string Login = "/Login";
+    public static readonly string NotFound = "/NotFound";
 }
