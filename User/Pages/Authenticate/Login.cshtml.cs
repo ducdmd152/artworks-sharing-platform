@@ -23,14 +23,18 @@ namespace User.Pages.Authenticate
 
         public LoginModel(IAccountService accountService)
         {
-            this.accountService = accountService;
+            this.accountService = accountService;                            
+        }
+
+        public void OnGet()
+        {
             if (HttpContext != null && HttpContext.Session != null)
             {
                 var userString = HttpContext.Session.GetString("CREDENTIAL");
                 var userConvert = userString != null ? JsonConvert.DeserializeObject<Account>(userString) : null;
                 if (userConvert != null)
                     HttpContext.Response.Redirect(URIConstant.HomePage);
-            }                
+            }
         }
 
 
