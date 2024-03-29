@@ -11,7 +11,7 @@ WITH SubscribedCreators AS (
 		subscriber
 	WHERE 
 		email_user = @AudienceEmail
-		/*AND status = 1*/
+		AND status = 1
 		AND GETDATE() <= expired_date
 )
 

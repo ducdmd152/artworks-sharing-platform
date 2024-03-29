@@ -225,7 +225,7 @@
                     </div>
                     <p class="mt-2 text-sm text-gray-600">@Model.Creator.ArtistBio</p>
                     
-                    <div class="mt-4">
+                    <div class="mt-4" id="buttonAction"> 
                         @if (@Model.Creator.IsSubscribed == true)
                         {
                             <div class="dropdown">
@@ -289,16 +289,7 @@
                     }
                 </div>
 
-                <nav aria-label="Page navigation" style="display: flex; justify-content: center; width: 100%;">
-                    <ul class="pagination">
-                        @for (var i = 1; i <= @Model.SearchPayload.PageInfo.TotalPages; i++)
-                        {
-                            <li class="page-item @(Model.SearchPayload.PageInfo.PageNum == i ? "active" : "")">
-                                <a class="page-link" style="font-size: 20px; padding: 8px 16px;" href="?id=@(Encryption.EncodeEmailToKey(Model.Creator.ArtistEmail))&pageIndex=@i">@i</a>
-                            </li>
-                        }
-                    </ul>
-                </nav>
+                <partial name="Shared/_PagingPartial" model="@Model.SearchPayload.PageInfo"/>
             }
         </section>
     </div>
@@ -313,6 +304,8 @@
                 </div>
                 <div class="modal-body">
                     <span>Do you want to subscribe to the artist: <b>@Model.Creator.ArtistName</b> with a monthly fee of <b>@Model.FeeSubscribe</b> $</span>
+                    <hr/>
+                    <p class="fs-6 fst-italic">Notice: If you have a previous subscription to this creator that is still active, you will not be charged until the end of the current subscription period.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -374,10 +367,14 @@
                // Handle success response here
                if(response.result === 'Ok'){
                    window.location.href = response.data;
-               }else{
+               }else if (response.result === 'Error'){
                    showOutOfStockToastDanger("Subscribe", response.data);
                    spin.classList.add('invisible');
                }
+               else if (response.result === 'Login'){
+                    window.location.href = response.data;      
+               }
+               
            },
            error: function (error) {
                console.log(error);
@@ -413,6 +410,8 @@
                  spin.classList.add('invisible');
                 // Handle success response here
                 if(response.result === 'Ok'){
+                    var buttonAction = document.getElementById('buttonAction');
+                    buttonAction.innerHTML = '<button type="button" class="text-white-600 border-b-2 px-4 py-2 btn btn-dark" onclick="showDialogSubscribe()" >Subscribe</button>';
                     showOutOfStockToastSuccess("Cancel subscription", "Successfully");
                 }else{
                     showOutOfStockToastDanger("Subscribe", response.data);
@@ -437,4 +436,10 @@
     }
 
     checkTransactionIsComplete();
+    
+    function getListByPaging(pageIndex){
+        const urlParams = new URLSearchParams(window.location.search);
+        var id = urlParams.get('id');
+        window.location.href = '/CreatorExploration/Details?pageIndex=' + pageIndex + '&id=' + id;
+    }
 </script>

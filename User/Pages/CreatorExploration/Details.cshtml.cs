@@ -38,7 +38,7 @@ namespace User.Pages.CreatorExploration
         public IList<Post> Posts { get; set; } = default!;
         public SearchPayload<PostAudienceSearchConditionDto> SearchPayload = default!;
 
-        public async Task OnGet(string id, int pageIndex = 1, int pageSize = 12)
+        public async Task OnGet(string id, int pageIndex = 1, int pageSize = 2)
         {
             this.CompleteTransactionCondition = "None";
             Account = SessionUtil.GetAuthenticatedAccount(HttpContext);
@@ -75,7 +75,11 @@ namespace User.Pages.CreatorExploration
             Account acc = SessionUtil.GetAuthenticatedAccount(HttpContext);
             if (acc == default)
             {
-                return Redirect("/Authenticate/Login");
+                return new JsonResult(new
+                {
+                    Result = "Login",
+                    Data = "/Authenticate/Login",
+                });
             }
 
             var artistEmail = Encryption.DecodeKeyToEmail(id);
