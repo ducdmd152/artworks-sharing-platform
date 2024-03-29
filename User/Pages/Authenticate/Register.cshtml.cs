@@ -80,7 +80,7 @@ public class RegisterModel : PageModel
             account.Artist.Bio = string.Empty;
             account.Artist.Fees = new List<Fee> {
                 new Fee {
-                    Amount = 0,
+                    Amount = 5,
                     ArtistEmail = accountRegister.Email
                 }
             };
