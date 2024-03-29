@@ -14,7 +14,7 @@ SELECT
     ArtistAvatar,
     TotalPages,
     TotalItems,
-	SubcribeExpiredDate
+	SubscribeExpiredDate
 FROM (
     SELECT DISTINCT
         a.email AS ArtistEmail,
@@ -25,7 +25,7 @@ FROM (
         SUM(p.total_view) AS ArtistTotalView,
         acc.avatar AS ArtistAvatar,
         COUNT(a.email) OVER () AS TotalItems,
-		FORMAT(sub.expired_date, 'dd/MM/yyyy HH:mm') AS SubcribeExpiredDate,
+		FORMAT(sub.expired_date, 'dd/MM/yyyy HH:mm') AS SubscribeExpiredDate,
         CEILING(COUNT(a.email) OVER () * 1.0 / @PageSize) AS TotalPages,
         ROW_NUMBER() OVER (ORDER BY MAX(sub.created_date) DESC) AS RowNum
     FROM subscriber sub
