@@ -20,8 +20,8 @@ SELECT DISTINCT
     a.bio AS ArtistBio,
     a.artist_name AS ArtistName,
     a.total_subscribe AS ArtistTotalSubscribe,
-    SUM(p.total_react) AS ArtistTotalReact,
-    SUM(p.total_view) AS ArtistTotalView,
+    (CASE WHEN SUM(p.total_react) IS NULL THEN 0 ELSE SUM(p.total_react) END) AS ArtistTotalReact,
+	(CASE WHEN SUM(p.total_view)  IS NULL THEN 0 ELSE SUM(p.total_view)  END) AS ArtistTotalView,
     acc.avatar AS ArtistAvatar,
     CASE WHEN a.email IN (SELECT email_artist FROM SubscribedCreators)
 		THEN 'True' ELSE 'False'
