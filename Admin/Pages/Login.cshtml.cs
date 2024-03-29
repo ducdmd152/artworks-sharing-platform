@@ -21,11 +21,7 @@ namespace Admin.Pages
 
         public LoginModel(IAccountService accountService)
         {
-            this.accountService = accountService;
-            if (HttpContext?.Session == null)
-            {
-                Console.WriteLine("No session");
-            }            
+            this.accountService = accountService;        
         }
 
         public void OnGet()
