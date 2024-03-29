@@ -9,6 +9,7 @@
         SelectIsReactedForPost,
         SelectIsBookmarkedForPost,
         SubcribeChartQuery,
+        TopArtWorkListQuery,
         TopCreatorQuery,
         GetAccountManagement,
         SelectReactedPostList,
@@ -20,5 +21,7 @@
         GetStatisticOfSubscriberMonthOfYear,
         GetStatisticOfRevenueLastWeek,
         GetStatisticOfRevenueMonthOfYear,
-    }
+		RevenueChartOfYear,
+		SubChartQuery,
+	}
 }

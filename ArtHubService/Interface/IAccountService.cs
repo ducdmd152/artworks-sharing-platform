@@ -23,7 +23,7 @@ namespace ArtHubService.Interface
         public  Task<bool> DeleteAsync(string email);
 
           Task<PageResult<AccountListDTO>> GetListAccountManage(SearchAccountConditionDTO search);
-        public  Task<bool> UpdateAccount(Account account);
+    //    public  Task<bool> UpdateAccount(Account account);
 
 
         Account GetAccountIncludeArtistByEmail(string email);
@@ -33,11 +33,23 @@ namespace ArtHubService.Interface
 
         Task<bool> ChangePassword(PasswordConfirmDto passwordConfirmDto, string email);
         bool CheckCorrectPassword(string email, string password);
-        Task<bool> UpdateAccountEnable(string email, bool enable);
+        
 
         Task<bool> CreateAccount(Account account);
         Account GetAccountByEmail(string accountEmail);
         
         Task<Account?> UpdateModeratorProfile (AccountUpdateDto accountUpdate);
-    }
+
+        public void Update(Account account);
+
+
+        Task<bool> UpdateAccountEnable(string email, bool enable);
+
+        public Task<bool> UpdateAccountStatus(string email);
+
+        public Task<bool> RetoreAsync(string email); 
+
+
+
+	}
 }

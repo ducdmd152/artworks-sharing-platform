@@ -17,42 +17,33 @@ public class LoginMiddleware
     public async Task Invoke(HttpContext httpContext)
     {
         var path = httpContext.Request.Path.ToString().ToLower();
-        var userString = httpContext.Session.GetString("CREDENTIAL");
-        if (!URIConstant.WhiteListUris.Any(uri => uri.ToLower().Equals(path)))
-        {            
-            if (userString != null)
-            {
-                var userConvert = JsonConvert.DeserializeObject<Account>(userString);
-                if (userConvert != null)
-                {
-                    if (userConvert.Role.RoleName.Equals(RoleEnum.Moderator.ToString()) && URIConstant.ModeratorListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
-                    {
-                        await _next(httpContext);
-                        return;
-                    }
-                    else if (userConvert.Role.RoleName.Equals(RoleEnum.Admin.ToString()) && URIConstant.AdminListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
-                    {
-                        await _next(httpContext);
-                        return;
-                    }
-                    else
-                    {
-                        httpContext.Response.Redirect(URIConstant.Login);
-                        return;
-                    }
-                }
-            }            
-            else
-            {
-                httpContext.Response.Redirect(URIConstant.Login);
-                return;
-            }
-        }
-        else if (URIConstant.Login.Equals(path) && userString != null)
+        if (URIConstant.WhiteListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
         {
-            httpContext.Response.Redirect(URIConstant.HomePage);
+            await _next(httpContext);
             return;
         }
-        await _next(httpContext);
+
+        var userString = httpContext.Session.GetString("CREDENTIAL");
+        var userConvert = userString != null ? JsonConvert.DeserializeObject<Account>(userString) : null;
+
+        if (userConvert == null)
+        {
+            httpContext.Response.Redirect(URIConstant.Login);
+            return;
+        }
+
+        if (userConvert.RoleId == ((int)RoleEnum.Moderator + 1) && URIConstant.ModeratorListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
+        {
+            await _next(httpContext);
+            return;
+        }
+        else if (userConvert.RoleId == ((int)RoleEnum.Admin + 1) && URIConstant.AdminListUris.Any(uri => (path + "/").StartsWith(uri.ToLower())))
+        {
+            await _next(httpContext);
+            return;
+        }
+
+        httpContext.Response.Redirect(URIConstant.NotFound);
     }
 }
+

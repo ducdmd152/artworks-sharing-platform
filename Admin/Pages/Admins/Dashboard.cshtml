@@ -1,7 +1,7 @@
 ﻿@page
 @model Admin.Pages.Admins.DashboardModel
 @{
-	Layout = "_Layout";
+	Layout = "Shared/_LayoutAdmin";
 }
 <!DOCTYPE html>
 <html>
@@ -22,48 +22,34 @@
 
 						<div class="revenue">
 							<div class="small-img">
-								<img src="./image 2194.png">
+								<img src="~/images/Revenue.png" alt="Revenue">
+
 							</div>
 
 							<div class="middle">
 								<div class="left">
 									<h1>@Model.TotalRevue</h1>
 									<h3>Total Revenue</h3>
-									<small class="text-muted">Last 24 hours</small>
+									<small class="text-muted">Last 30 days</small>
 								</div>
 
-								<!-- <div class="progress">
-									<svg>
-										<circle cx='38' cy='38', r='36'></circle>
-									</svg>
-									<div class="number">
-										<p>81%</p>
-									</div>
-								</div> -->
 							</div>
 
 						</div>
 						<!--end  revenue -->
 						<div class="profit">
 							<div class="small-img">
-								<img src="./Group 18198.png">
+								<img src="~/images/Profit.png" alt="Profit">
 							</div>
 
 							<div class="middle">
 								<div class="left">
 									<h1>@Model.TotalProfit</h1>
 									<h3>Total Profit</h3>
-									<small class="text-muted">Last 24 hours</small>
+									<small class="text-muted">Last 30 days</small>
 								</div>
 
-								<!-- <div class="progress">
-									<svg>
-										<circle cx='38' cy='38', r='36'></circle>
-									</svg>
-									<div class="number">
-										<p>81%</p>
-									</div>
-								</div> -->
+								
 							</div>
 
 						</div>
@@ -74,47 +60,34 @@
 
 						<div class="subcribes">
 							<div class="small-img">
-								<img src="./imgSubcribes.png">
+								<img src="~/images/imgSubcribes.png" alt="imgSubcribes">
 							</div>
 
 							<div class="middle">
 								<div class="left">
 									<h1>@Model.TotalSubscribers</h1>
 									<h3>Total Subcribers</h3>
-									<small class="text-muted">Last 24 hours</small>
+									<small class="text-muted">Last 30 days</small>
 								</div>
 
-								<!-- <div class="progress">
-									<svg>
-										<circle cx='38' cy='38', r='36'></circle>
-									</svg>
-									<div class="number">
-										<p>81%</p>
-									</div>
-								</div> -->
+								
 							</div>
 
 						</div>
 						<div class="users">
 							<div class="small-img">
-								<img src="./imgUser.png">
+								<img src="~/images/imgUser.png" alt="imgUser">
+
 							</div>
 
 							<div class="middle">
 								<div class="left">
 									<h1>@Model.TotalUsers</h1>
 									<h3>Total Users</h3>
-									<small class="text-muted">Last 24 hours</small>
+									<small class="text-muted">Last 30 days</small>
 								</div>
 
-								<!-- <div class="progress">
-									<svg>
-										<circle cx='38' cy='38', r='36'></circle>
-									</svg>
-									<div class="number">
-										<p>81%</p>
-									</div>
-								</div> -->
+							
 							</div>
 
 						</div>
@@ -135,17 +108,14 @@
 				</div>
 			</div>
 
-			<!-- <div class="charts-card">
-				<p class="chart-title">Growth</p>
-				<div id="donut-chart"></div>
-
-			</div> -->
+			
 		</main>
 	</div>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 
-	<script src="mysSyscript.js"></script>
+
 	<script>
 		const lineChartOptions = {
 			series: [
@@ -211,7 +181,7 @@
 			stroke: {
 				curve: 'smooth',
 			},
-			labels: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
+			labels: ['Monday', 'Tueday', 'Wednesday', 'Thurday', 'Friday', 'Satday', 'Sunday'],
 			markers: {
 				size: 0,
 			},
@@ -235,6 +205,46 @@
 			areaChartOptions
 		);
 		areaChart.render();
+
+		// donut chart
+
+
+		document.addEventListener('DOMContentLoaded', function () {
+			// Dữ liệu cho biểu đồ
+			var currentValue = 80; // Giá trị hiện tại
+			var remainingValue = 100 - currentValue; // Giá trị còn lại
+			var data = {
+				labels: ['A'],
+				datasets: [{
+					data: [currentValue, remainingValue],
+					backgroundColor: ['skyblue', 'lightgray']
+				}]
+			};
+
+			// Tạo biểu đồ
+			var ctx = document.getElementById('donutChart').getContext('2d');
+			var donutChart = new Chart(ctx, {
+				type: 'doughnut',
+				data: data,
+				options: {
+					cutoutPercentage: 80,
+					plugins: {
+						legend: {
+							display: false // Ẩn legend
+						},
+						title: {
+							display: true,
+							text: 'Profit Growth',
+							font: {
+								size: 16
+							},
+							color: 'black'
+						}
+					}
+				}
+			});
+		});
 	</script>
+	
 </body>
 </html>

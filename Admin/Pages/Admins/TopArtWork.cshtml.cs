@@ -1,48 +1,48 @@
 using ArtHubBO.DTO;
 using ArtHubBO.Payload;
 using ArtHubService.Interface;
-using ArtHubService.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Admin.Pages.Admins
 {
-    public class TopCreatorModel : PageModel
+    public class TopArtWorkModel : PageModel
     {
-        private readonly ITopCreatorService _topCreatorService;
-        
+        private readonly ITopArtWorkService _topArtWorkService;
 
-        public TopCreatorModel(ITopCreatorService topCreatorService)
+
+
+
+        public TopArtWorkModel(ITopArtWorkService topArtWorkService)
         {
-            _topCreatorService = topCreatorService;
+            _topArtWorkService = topArtWorkService;
         }
 
         [BindProperty(SupportsGet = true)]
-        public int PageNumber { get; set; } = 1; 
+        public int PageNumber { get; set; } = 1; // S? trang m?c ??nh là 1
 
         [BindProperty(SupportsGet = true)]
-        public int PageSize { get; set; } = 4;
+        public int PageSize { get; set; } = 10;
 
-        public PageResult<TopCreatorDTO> PageResult { get; set; }
+        public PageResult<TopArtWorkDTO> PageResult { get; set; }
 
         [BindProperty]
-        public SearchTopCreatorDTO SearchTopCreator { get; set; }
+        public SearchArtWorkDTO SearchTopArtWork { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            
-          /*  int startRow = (PageNumber - 1) * PageSize + 1;
+/*            int startRow = (PageNumber - 1) * PageSize + 1;
             int endRow = PageNumber * PageSize;*/
 
-           
-            var searchCondition = new SearchTopCreatorDTO
+          
+            var searchCondition = new SearchArtWorkDTO
             {
                 PageNumber = PageNumber,
                 PageSize = PageSize
             };
-            PageResult = await _topCreatorService.GetTopCreator(searchCondition);
+            PageResult = await _topArtWorkService.GetArtWork(searchCondition);
 
-          
+            
             return Page();
         }
 
@@ -51,16 +51,16 @@ namespace Admin.Pages.Admins
         {
             try
             {
-                // Th?c hi?n tìm ki?m d?a trên searchCriteria
-                var searchCondition = new SearchTopCreatorDTO
+                
+                var searchCondition = new SearchArtWorkDTO
                 {
                     PageNumber = PageNumber,
                     PageSize = PageSize,
-                    Email = SearchTopCreator.Email
+                    PostTitle = SearchTopArtWork.PostTitle
                 };
-                PageResult = await _topCreatorService.GetTopCreator(searchCondition);
+                PageResult = await _topArtWorkService.GetArtWork(searchCondition);
 
-                // Tr? v? k?t qu? tìm ki?m
+            
                 return Page();
             }
             catch (Exception ex)
@@ -74,16 +74,16 @@ namespace Admin.Pages.Admins
         {
             try
             {
-               
-                var searchCondition = new SearchTopCreatorDTO
-                {
-                    PageNumber = SearchTopCreator.PageNumber,
-                    PageSize = PageSize,
-                    Email = SearchTopCreator.Email
-                };
-                PageResult = await _topCreatorService.GetTopCreator(searchCondition);
 
-                
+                var searchCondition = new SearchArtWorkDTO
+                {
+                    PageNumber = SearchTopArtWork.PageNumber,
+                    PageSize = PageSize,
+                    PostTitle = SearchTopArtWork.PostTitle
+                };
+                PageResult = await _topArtWorkService.GetArtWork(searchCondition);
+
+
                 return Page();
             }
             catch (Exception ex)
@@ -93,3 +93,4 @@ namespace Admin.Pages.Admins
         }
     }
 }
+
