@@ -238,6 +238,8 @@ html {
     height: 32px;
     border-radius: 50%;
     border: 1px solid rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+    object-position: center;
 }
 
 .user-menu {
