@@ -258,7 +258,7 @@
             var keyword = document.getElementById('searchInput').value.trim();
             var orderSelect = document.getElementById('order-select').value;
             console.log(orderSelect);
-            return '../Artworks?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect;
+            return '/Index?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect;
         }
         function handleOrderChange() {
             window.location.href = getURL();
@@ -268,7 +268,7 @@
             var keyword = document.getElementById('searchInput').value.trim();
             var orderSelect = document.getElementById('order-select').value;
             console.log(category);
-            window.location.href = '../Artworks?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect + "&category=" + category;
+            window.location.href = '/Index?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect + "&category=" + category;
         }
 
         function performSearch() {
@@ -283,9 +283,9 @@
             var category = urlParams.get('category');
             console.log(category);
             if (category){
-                window.location.href = '../Artworks?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect + "&pageIndex=" + pageIndex +"&category=" + category;
+                window.location.href = '/Index?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect + "&pageIndex=" + pageIndex +"&category=" + category;
             }else{        
-               window.location.href = '../Artworks?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect + "&pageIndex=" + pageIndex;
+               window.location.href = '/Index?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect + "&pageIndex=" + pageIndex;
             }
             
         }
