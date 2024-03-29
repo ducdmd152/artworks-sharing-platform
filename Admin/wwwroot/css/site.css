@@ -42,10 +42,8 @@ html {
 
 .header {
     font-family: "Baloo 2";
-    position: fixed;
     top: 0;
     width: 100%;
-    z-index: 1000; /* Ensure it's above other content */
 }
 
 .footer {
@@ -116,4 +114,67 @@ html {
 
 .tui-pagination .tui-first, .tui-pagination .tui-prev, .tui-pagination .tui-next, .tui-pagination .tui-last, .tui-pagination .tui-prev-is-ellip, .tui-pagination .tui-next-is-ellip {
     border: none !important;
+}
+
+
+.user-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.user-menu {
+    position: absolute;
+    top: 88%;
+    right: 0px;
+    width: 130px;
+    background-color: rgb(247, 233, 233);
+    border-radius: 2px;
+    z-index: 1;
+    box-shadow: 0 2px 5px #cfcbcb;
+    display: none;
+}
+
+.user-menu::before {
+    content: "";
+    position: absolute;
+    right: 8px;
+    top: -30px;
+    border-width: 20px 26px;
+    border-style: solid;
+    border-color: transparent transparent rgb(247, 233, 233) transparent;
+    cursor: pointer;
+    z-index: -1;
+}
+
+.user-menu::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -22%;
+    width: 130px;
+    height: 30px;
+}
+
+.user-menu-item a {
+    display: block;
+    padding: 5px 10px;
+}
+
+.user-menu-item:hover a {
+    background-color: var(--dark-color-light);
+    color: #fff !important;
+}
+
+.nav-user:hover .user-menu {
+    display: block;
+}
+
+.nav-link {
+    visibility: unset !important;
+}
+
+.item-seperate {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
 }

@@ -1,0 +1,80 @@
+﻿@page
+@using ArtHubService.Utils;
+@model User.Pages.CreatorExploration.IndexModel
+@{
+    ViewData["Titel"] = "ArtHub's Creators";
+}
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .profile-card {
+            background-color: ghostwhite;
+            color: #FFFFFF;
+            height: 320px;
+            background-size: cover;
+            background-position: top center;
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+        }
+
+        .profile-card img {
+            height: 252px;
+            object-fit: cover;
+            object-position: center;
+        }
+        .banner {
+            background: linear-gradient(to right, #a18cd1 0%, #fbc2eb 100%);
+            text-align: center;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.2rem;
+        }
+    </style>
+</head>
+<div class="banner">
+    <h1 class="text-4xl font-semibold font-monospace text-center text-gray-800">Top Creators</h1>
+</div>
+<section class="container mx-auto px-6 py-8" style="width: 80%; padding-top: 20px;">
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        @foreach(var creator in Model.Creators)
+        {
+            <a asp-page="./Details" asp-route-id="@(Encryption.EncodeEmailToKey(creator.ArtistEmail))"
+                class="profile-card rounded-lg overflow-hidden"
+             style="background-image: url('@creator.ArtistAvatar')">
+                <div class="p-4" style="background: linear-gradient(to bottom, transparent, #6C63FF);">
+                    <h2 class="text-lg font-semibold">@creator.ArtistName</h2>
+                    <p class="text-sm">Digital Artist</p>
+                    <div class="text-sm text-dark-500 overflow-hidden w-80" style="font-size: 14px; text-overflow: ellipsis; white-space: nowrap; display: grid; grid-template-columns: repeat(3, 1fr); grid-column-gap: 6px;">
+                        @creator.ArtistTotalSubscribe subcribers | @creator.ArtistTotalView views | @creator.ArtistTotalReact loved
+                    </div>
+                    @if (@creator.IsSubscribed == true)
+                    {
+                        <button class="mt-3 w-full btn btn-light" style="background-color: rgba(255, 255, 255, 0.7);">Subscribed</button>
+                    }
+                    else
+                    {
+                        <button class="mt-3 w-full btn btn-dark">Subscribe</button>
+                    }
+                </div>
+            </a>
+        }
+    </div>
+</section>
+<partial name="Shared/_PagingPartial" model="@Model.PageInfo"/>
+
+<div class="mb-4"/>
+<script>
+    function getListByPaging(pageIndex){
+        window.location.href = '/CreatorExploration?pageIndex=' + pageIndex;
+    }
+</script>

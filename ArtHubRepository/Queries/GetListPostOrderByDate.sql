@@ -34,7 +34,7 @@ WITH ArtworkList AS (
       AND
         (@ArtworkName IS NULL OR artist.artist_name LIKE CONCAT('%', @ArtworkName, '%'))
       AND
-        (@Status IS NULL OR post.status = @Status)
+        (@Status IS NULL OR @Status = -1 OR post.status = @Status)
 )
 SELECT
     CEILING(CONVERT(decimal, art.TotalRecords) / @PageSize) AS TotalPages,

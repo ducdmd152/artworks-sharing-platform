@@ -118,13 +118,15 @@
 
         .likes,
         .comments {
+            margin: 0;
         display: flex;
         align-items: center;
         }
 
         .likes i,
         .comments i {
-        margin-right: 4px;
+                margin: 0;
+                margin-right: 4px;
         }
 
         .user-short-item {
@@ -187,6 +189,16 @@
             grid-template-columns: 1fr;
         }
         }
+
+        .gallery-item {
+            position: relative;
+        }
+
+        .scope-badge {
+            position: absolute;
+            top: 8px;
+            left: 10px;
+        }
     </style>
 </head>
 <body style="margin-top: 76px;">
@@ -208,34 +220,36 @@
     <div class="gallery container p-5 mb-2" style="margin-top: -60px;">
         @foreach (var item in Model.Posts)
         {
-            <div class="gallery-item">
+            <a class="gallery-item" asp-page="./Artworks/Details" asp-route-id="@item.PostId" style="color: black; text-decoration: none;">
                 <img src="@(item.Images.FirstOrDefault()?.ImageUrl ?? "https://placehold.co/300")"
                  class="gallery-image" />
                 <div class="gallery-item-title">@item.Title</div>
-            <div class="gallery-item-info d-flex justify-content-between">
-                <div class="user-short-item" style="flex: 2">
-                        <img src="@(item.Artist?.Account?.Avatar ?? "https://placehold.co/300")" class="artist-profile-pic" />
-                        <span class="artist-name">@item.Artist?.ArtistName</span>
+                <div class="gallery-item-info d-flex justify-content-between">
+                    <div class="user-short-item" style="flex: 2">
+                            <img src="@(item.Artist?.Account?.Avatar ?? "https://placehold.co/300")" class="artist-profile-pic" />
+                            <span class="artist-name">@item.Artist?.ArtistName</span>
+                    </div>
+                    <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
+                            <span class="likes"><i class="fa-solid fa-heart"></i> @item.TotalReact</span>
+                            <span class="comments"><i class="fa-solid fa-eye"></i> @item.TotalView</span>
+                    </div>
                 </div>
-                <div class="gallery-item-stats flex-1 ml-1" style="flex: 1">
-                        <span class="likes"><i class="far fa-heart"></i> @item.TotalReact</span>
-                        <span class="comments"><i class="far fa-bookmark"></i> @item.TotalBookmark</span>
+                <div class="scope-badge">
+                    @if (@item.Scope == 2)
+                    {
+                        <span class="badge bg-secondary" style="font-size: 11px;">Subscriber Only</span>
+                    }
+                    else if (@item.Scope == 3)
+                    {
+                        <span class="badge bg-dark">Private</span>
+                    }
+
                 </div>
-            </div>
-        </div>
+            </a>
         }
     </div>
     
-    <nav aria-label="Page navigation" style="display: flex; justify-content: center; width: 100%;">
-        <ul class="pagination">
-            @for (var i = 1; i <= @Model.SearchPayload.PageInfo.TotalPages; i++)
-            {
-                <li class="page-item @(Model.SearchPayload.PageInfo.PageNum == i ? "active" : "")">
-                    <a class="page-link" style="font-size: 20px; padding: 8px 16px;" href="?pageIndex=@i">@i</a>
-                </li>
-            }
-        </ul>
-    </nav>
+    <partial name="Shared/_PagingPartial" model="@Model.SearchPayload.PageInfo"/>
 </body>
 
 @section Scripts {
@@ -244,19 +258,36 @@
             var keyword = document.getElementById('searchInput').value.trim();
             var orderSelect = document.getElementById('order-select').value;
             console.log(orderSelect);
-            return '../Artworks?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect;
+            return '/Index?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect;
         }
         function handleOrderChange() {
             window.location.href = getURL();
         }
 
         function filterByCategory(category) {
-            console.log("Filter by category: " + category);
+            var keyword = document.getElementById('searchInput').value.trim();
+            var orderSelect = document.getElementById('order-select').value;
+            console.log(category);
+            window.location.href = '/Index?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect + "&category=" + category;
         }
 
         function performSearch() {
             event.preventDefault();
             window.location.href = getURL();
+        }
+        
+        function getListByPaging(pageIndex){
+            var keyword = document.getElementById('searchInput').value.trim();
+            var orderSelect = document.getElementById('order-select').value;
+            const urlParams = new URLSearchParams(window.location.search);
+            var category = urlParams.get('category');
+            console.log(category);
+            if (category){
+                window.location.href = '/Index?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect + "&pageIndex=" + pageIndex +"&category=" + category;
+            }else{        
+               window.location.href = '/Index?search=' + encodeURIComponent(keyword) + '&orderBy=' + orderSelect + "&pageIndex=" + pageIndex;
+            }
+            
         }
     </script>
 }

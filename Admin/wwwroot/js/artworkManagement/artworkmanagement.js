@@ -20,11 +20,11 @@ function updateSearchCondition(){
     filters[filter1Select.value === '1' ? 'ArtworkTitle' :
         filter1Select.value === '2' ? 'ArtworkID' :
             filter1Select.value === '3' ? 'Date' :
-                filter1Select.value === '4' ? 'ArtworkName' : null] = filter1Input.value;
+                filter1Select.value === '4' ? 'ArtworkName' : null] = filter1Input.value === '' ? null : filter1Input.value;
 
     // Get value from the second filter section
     var filter2Select = document.getElementById('search-status');
-    if(filter2Select.value !== 'null'){
+    if(filter2Select.value !== -1){
         filters.Status = filter2Select.value;
     }
 }
@@ -125,6 +125,17 @@ function showDetailArtwork(postId) {
                        // Handle other cases if needed
                        break;
                }
+
+               var buttonActionDiv = document.getElementById("buttonAction");
+               if (data.Status === modeUpdate.Approved || data.Status === modeUpdate.Reject) {
+                   // Hide the div with id "buttonAction"
+                   if (buttonActionDiv) {
+                       buttonActionDiv.style.display = "none";
+                   }
+               }else {
+                   buttonActionDiv.style.display = "block";
+               }
+
                $('#artworkDetailModal').modal('show');
            }else{
                updateModel.postId = null;

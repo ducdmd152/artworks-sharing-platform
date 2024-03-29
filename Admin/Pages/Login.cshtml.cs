@@ -1,8 +1,11 @@
 using Admin.Pages.Resources;
+using ArtHubBO.Entities;
 using ArtHubService.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using StackExchange.Redis;
+using System.Security.Principal;
 
 namespace Admin.Pages
 {
@@ -18,7 +21,30 @@ namespace Admin.Pages
 
         public LoginModel(IAccountService accountService)
         {
-            this.accountService = accountService;
+            this.accountService = accountService;        
+        }
+
+        public void OnGet()
+        {
+            if (HttpContext != null && HttpContext.Session != null)
+            {
+                var userString = HttpContext.Session.GetString("CREDENTIAL");
+                Console.WriteLine(userString);
+                var userConvert = userString != null ? JsonConvert.DeserializeObject<Account>(userString) : null;
+                if (userConvert != null)
+                {
+                    Console.WriteLine(userConvert.Role.RoleId + " " + userConvert.Role.RoleName);
+                    switch (userConvert.Role.RoleName)
+                    {
+                        case "Moderator":
+                            HttpContext.Response.Redirect("/Moderator/ArtWorksManagement");
+                            break;
+                        case "Admin":
+                            HttpContext.Response.Redirect("/Admins/Dashboard");
+                            break;
+                    }
+                }
+            }
         }
 
         public IActionResult OnPost()
@@ -42,11 +68,13 @@ namespace Admin.Pages
                 switch (role)
                 {                    
                     case "Moderator":
-                        HttpContext.Session.SetString("CREDENTIAL", accountJson);                        
+                        HttpContext.Session.SetString("CREDENTIAL", accountJson);
+                        HttpContext.Session.SetString("ACCOUNT_EMAIL", account.Email);
                         return RedirectToPage("/Moderator/ArtWorksManagement");
                     case "Admin":
                         HttpContext.Session.SetString("CREDENTIAL", accountJson);
-                        return RedirectToPage("/Moderator/ArtWorksManagement");
+                        HttpContext.Session.SetString("ACCOUNT_EMAIL", account.Email);
+                        return RedirectToPage("/Admins/Dashboard");
                     default:
                         ViewData["ErrorMessage"] = MessageResource.AccountNotHavePermission;
                         return Page();

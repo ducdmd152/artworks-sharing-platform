@@ -104,7 +104,20 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
 <script>
+    var failUploadImageMessage = '@TempData["FailUploadImage"]';
+    if (failUploadImageMessage) {
+        showOutOfStockToastDanger('Upload Image', failUploadImageMessage);
+    }
+
+    var failUpdatePostMessage = '@TempData["FailCreatePost"]';
+    if (failUpdatePostMessage) {
+        showOutOfStockToastDanger('Create', failUpdatePostMessage);
+    }
+
     document.querySelector('#uploadButton').addEventListener('click', function () {        
         document.querySelector('#errorMessageCategories').textContent = '';
         document.querySelector('#errorMessageFileUpload').textContent = '';

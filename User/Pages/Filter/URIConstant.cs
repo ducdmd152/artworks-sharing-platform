@@ -2,23 +2,30 @@
 
 public static class URIConstant
 {    
-    public static readonly string[] WhiteListUris = {         
-        "/",
+    public static readonly string[] WhiteListUris = {        
+        "/Error",
+        "/Index",
         "/Authenticate/Login",
         "/Authenticate/Logout",
         "/Authenticate/Register",
-        "/Artworks/"
+        "/Authenticate/ForgotPassword",
+        "/Artworks/",
+        "/CreatorExploration/"
     };
 
     public static readonly string[] CreatorListUris = {
-        "/Creator/Profile",
+        "/Error",
         "/Creator/ArtworkList",
+        "/Creator/AudienceSubscriberStatistic",
+        "/Creator/EditPost",
+        "/Creator/EditProfile",
+        "/Creator/Profile",
         "/Creator/UploadNewArtwork",
-        "/Creator/AudienceSubscriberStatistic"
     };
 
     public static readonly string[] AudienceListUris = {
-        "/Artworks/"
+        "/Error",
+        "/Audience/"
     };
 
     public static readonly string HomePage = "../Index";

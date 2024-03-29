@@ -1,0 +1,130 @@
+﻿@page
+@model TopCreatorModel
+@{
+	Layout = "Shared/_LayoutAdmin";
+}
+<header>
+	<style>
+		/* Custom CSS for table */
+		.table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+			.table th,
+			.table td {
+				border: 1px solid #ddd;
+				padding: 8px;
+			}
+
+			.table th {
+				background-color: #f2f2f2;
+				font-weight: bold;
+				text-align: left;
+			}
+
+			.table tr:nth-child(even) {
+				background-color: #f2f2f2;
+			}
+
+			.table tr:hover {
+				background-color: #ddd;
+			}
+
+		#searchInput {
+			width: 100%;
+			padding: 8px;
+			font-size: 16px;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+			box-sizing: border-box;
+		}
+
+		.btn-primary {
+			background-color: #007bff;
+			color: #fff;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+
+			/* Hover effect for search button */
+			.btn-primary:hover {
+				background-color: #0056b3;
+			}
+
+	</style>
+
+</header>
+
+<form method="post" id="myForm">
+	<h1>TOP CREATOR</h1>
+	<div class="row mb-3">
+		<div class="col-md-6">
+			<input type="text" class="form-control" id="searchInput" asp-for="@Model.SearchTopCreator.Email" placeholder="Enter search keyword...">
+		</div>
+		<div class="col-md-6">
+			<button type="submit" class="btn btn-primary" asp-page-handler="Search">Search</button>
+		</div>
+	</div>
+
+
+
+
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Email</th>
+				<th>Creator Name</th>
+				<th>Revenue</th>
+				<th>Total Subscribe</th>
+				<th>Fee</th>
+				<th>Total Love</th>
+				
+			</tr>
+		</thead>
+		<tbody>
+			@if (Model.PageResult != null && Model.PageResult.PageData != null && Model.PageResult.PageData.Any())
+			{
+				@foreach (var account in Model.PageResult.PageData)
+				{
+					<tr>
+						<td>@account.CreatorEmail</td>
+						<td>@account.CreatorName</td>
+						<td>@account.Revenue</td>
+						<td>@account.TotalSubscribe</td>
+						<td>@account.Fee</td>
+						<td>@account.TotalLove</td>
+						
+					</tr>
+				}
+			}
+
+
+			else
+			{
+				<p>No accounts available</p>
+			}
+		</tbody>
+	</table>
+	@if (Model.PageResult != null && Model.PageResult.PageInfo != null)
+	{
+		<div id="pagingPartial">
+			<partial name="Shared/_PagingPartial" model="@Model.PageResult.PageInfo" />
+		</div>
+	}
+
+	<input type="hidden" name="SearchTopCreator.PageNumber" /> @* check chỗ name *@
+</form>
+<script>
+	function getListByPaging(pageNumber) {
+		const form = document.getElementById('myForm');
+		form.action = 'TopCreator?handler=Paging';
+		form.querySelector('input[name="SearchTopCreator.PageNumber"]').value = pageNumber;
+		form.method = 'post';
+		form.submit();
+	}
+</script>

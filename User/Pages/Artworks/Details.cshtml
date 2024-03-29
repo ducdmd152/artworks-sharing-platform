@@ -1,4 +1,5 @@
 ﻿@page
+@using ArtHubService.Utils;
 @model User.Pages.Artworks.DetailsModel
 @{
     ViewData["Title"] = "ArtHub | Artwork Details";
@@ -60,6 +61,8 @@
             height: 36px;
             border-radius: 50%;
             margin-right: 10px;
+            object-fit: cover;
+            object-position: center;
         }
 
         .artist-name {
@@ -254,13 +257,13 @@
       <div class="artwork-details">
         
         <div class="d-flex justify-content-between align-items-center">
-            <div class="artist-info">
+                <a class="artist-info" href="/CreatorExploration/Details?id=@(Encryption.EncodeEmailToKey(Model.Post?.Artist?.Email))" style="color: black; text-decoration: none;">
                   <img src="@(Model.Post?.Artist?.Account?.Avatar ?? "https://placehold.co/50")" alt="Artist Profile Picture" class="artist-profile-pic">
                   <span class="artist-name">@Model.Post?.Artist?.ArtistName</span>
-            </div>
-            <div class="loves-saveds">                    
-                <span class="loves"><i class="fas fa-heart"></i> @Model.Post?.TotalReact</span>
-                <span class="saveds"><i class="fas fa-bookmark"></i> @Model.Post?.TotalBookmark</span>
+            </a>
+            <div class="loves-saveds">
+                    <span class="loves"><i class="fas fa-heart"></i><span id="noLoves">@Model.Post?.TotalReact</span> </span>
+                    <span class="saveds"><i class="fa-solid fa-eye"></i> @Model.Post?.TotalView</span>
                     <button id="report" class="btn-outline-dark" onclick="showReport()" style="border-radius: 4px; color: black;">Report</button>
             </div>
         </div>
@@ -270,12 +273,19 @@
       </div>
       <hr/>
       <div class="more-artwork mt-4">
-        <h2 class="m-3 text-center">More from Martin Deavin</h2>
+            <h2 class="m-3 text-center">More from @Model.Post?.Artist?.ArtistName</h2>
         <div class="thumbnails">
           @foreach (var item in Model.ArtistSuggestion)
           {
-            <a class="thumbnail" asp-page="./Details" asp-route-id="@item.PostId" style="color: black; text-decoration: none;">
+            <a class="gallery-item thumbnail" asp-page="./Details" asp-route-id="@item.PostId" style="color: black; text-decoration: none;">
                 <img src="@(item?.Images?.FirstOrDefault()?.ImageUrl ?? "https://placehold.co/300")" alt="Artwork Thumbnail" class="thumbnail-image">
+                <div class="gallery-item-title mt-4">@item.Title</div>
+                <div class="d-flex justify-content-end" style="position:absolute; bottom:8px; right: 8px;">
+                    <div class="gallery-item-stats ml-1" style="flex: 1; background: rgba(255, 255, 255, 0.2); padding: 3px 4px; border-radius: 2px;">
+                        <span class="likes"><i class="far fa-heart"></i> @item.TotalReact</span>
+                        <span class="comments"><i class="far fa-bookmark"></i> @item.TotalBookmark</span>
+                    </div>
+                </div>
             </a>
           }                       
         </div>
@@ -346,41 +356,98 @@
         $("#love").click(function () {
             var isReacted = !$(this).hasClass("did");
             var postId = @Model.Post.PostId;
-            $(this).toggleClass("did");
-            $.ajax({
-                url: '/Artworks/Details?handler=ReactAsync&postId=' + postId,
-                type: 'POST',
-                success: function (result) {
-                    console.log("Update successful");
-                },
-                error: function (xhr, status, error) {
-                    if (xhr.status === 401) {
-                        window.location.href = '/Login';
-                    } else {
-                        console.error("Error updating post reaction:", error);
-                        $("#love").toggleClass("did");
-                    }
-                }
-            });
-        });
-        $("#bookmark").click(function () {
-            var isReacted = !$(this).hasClass("did");
+            var loves = parseInt($("#noLoves").text(), 0);
             $(this).toggleClass("did");
 
-            // Gửi yêu cầu AJAX đến máy chủ để cập nhật cơ sở dữ liệu
-            //$.ajax({
-            //    url: '/UpdatePostReaction',
-            //    type: 'POST',
-            //    contentType: 'application/json',
-            //    data: JSON.stringify({ postId: postId, isReacted: isReacted }),
-            //    success: function (result) {
-            //        console.log("Update successful");
-            //    },
-            //    error: function (xhr, status, error) {
-            //        console.error("Error updating post reaction:", error);
-            //        $("#" + reactionType).toggleClass("did");
-            //    }
-            //});
+            if (isReacted) {
+                $.ajax({
+                    url: '/Artworks/Details?handler=React&postId=' + postId,
+                    type: 'POST',
+                    headers: {
+                        RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (result) {                     
+                        console.log("Update successful");
+                        $("#noLoves").text("" + (loves + 1));
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.status === 401) {
+                            window.location.href = '/Authenticate/Login';
+                        } else {
+                            console.error("Error updating post reaction:", error);
+                            //$("#love").toggleClass("did");
+                        }
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    url: '/Artworks/Details?handler=UnReact&postId=' + postId,
+                    type: 'POST',
+                    headers: {
+                        RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (result) {
+                        console.log("Update successful");
+                        $("#noLoves").text("" + (loves - 1));
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.status === 401) {
+                            window.location.href = '/Authenticate/Login';
+                        } else {
+                            console.error("Error updating post reaction:", error);
+                            //$("#love").toggleClass("did");
+                        }
+                    }
+                });
+            }
+            
+        });
+        $("#bookmark").click(function () {
+            var isBookmarked = !$(this).hasClass("did");
+            var postId = @Model.Post.PostId;
+            $(this).toggleClass("did");
+
+            if (isBookmarked) {
+                $.ajax({
+                    url: '/Artworks/Details?handler=Bookmark&postId=' + postId,
+                    type: 'POST',
+                    headers: {
+                        RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (result) {
+                        console.log("Update successful");
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.status === 401) {
+                            window.location.href = '/Authenticate/Login';
+                        } else {
+                            console.error("Error updating post reaction:", error);
+                            //$("#bookmark").toggleClass("did");
+                        }
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    url: '/Artworks/Details?handler=UnBookmark&postId=' + postId,
+                    type: 'POST',
+                    headers: {
+                        RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (result) {
+                        console.log("Update successful");
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.status === 401) {
+                            window.location.href = '/Authenticate/Login';
+                        } else {
+                            console.error("Error updating post reaction:", error);
+                            //$("#bookmark").toggleClass("did");
+                        }
+                    }
+                });
+            }
         });
     });
     

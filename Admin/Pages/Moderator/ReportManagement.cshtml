@@ -22,7 +22,7 @@
 
 @await Component.InvokeAsync("Header")
 
-<!-- Header -->
+@* <!-- Header --> *@
 <div class="container m-4 text-center m-auto">
     <h1 class="">Report Management</h1>
 </div>
@@ -36,10 +36,7 @@
     <div class="d-flex ">
         <div class="d-flex mb-3 me-2 col-4">
             <select id="search-key" class="form-select" style="width: fit-content; border-right: none;" aria-label="Default select example">
-                <option selected value="1">Title</option>
-                <option value="2">Artwork ID</option>
-                <option value="3">Date</option>
-                <option value="4">Creator</option>
+                <option value="1">Report ID</option>
             </select>
             <div class=" d-flex align-items-center">
                 <input type="text" class="form-control" placeholder="Search" aria-label="Search">
@@ -52,11 +49,9 @@
         <div class="">
             <!-- Dropdown for Status -->
             <select id="search-status" class="form-select" aria-label="Default select example" onchange="getListBySearch(2)">
-                <option value="null" selected>Status</option>
+                <option value="-1" selected>Status</option>
                 <option value="1">Pending</option>
-                <option value="2">Approved</option>
-                <option value="3">Rejected</option>
-                <option value="4">Re-pending</option>
+                <option value="2">Reviewed</option>>
                 <!-- ...other statuses... -->
             </select>
         </div>
@@ -119,7 +114,7 @@
                     <p class="card-text ms-2" id="modalDescription"></p>
                     
                     <!-- Buttons -->
-                    <div class="text-center mt-3">
+                    <div class="text-center mt-3" id="buttonAction">
                         <button type="button" class="btn btn-success me-2" onclick="skipReport()">Skip</button>
                         <button type="button" class="btn btn-success me-2" onclick="banThePost()">Ban Post</button>
                         <button type="button" class="btn btn-danger" onclick="banTheArtist()">Ban artist</button>

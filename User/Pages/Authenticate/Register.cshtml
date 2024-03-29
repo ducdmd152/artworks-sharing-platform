@@ -4,46 +4,90 @@
 }
 <link rel="stylesheet" href="~/css/login-register.css" asp-append-version="true" />
 <section class=" text-center text-lg-start">
+    <partial name="Shared/Partial/_toastyAnnouncePartial" />
     <div class="card" style="border:none;">
         <div class="row g-0 d-flex align-items-center" style="background-color:var(--yellow-color-dark); max-height: calc(100vh - 75px); overflow: hidden;">
             <div class="image col-lg-4 d-none d-lg-flex">
                 <img src="../images/Login.png"
                      class="w-100 rounded-t-5 rounded-tr-lg-0 rounded-bl-lg-5" />
             </div>
-            <div class="d-flex align-items-stretch form col-lg-8">
-                <div class="card-body m-auto py-5 px-md-5">
-                    <div class=" text-center">
+            <div class="d-flex align-items-center form col-lg-8">
+                <div class="card-body m-auto px-md-5" style="margin: 0 !important; padding-top:0; padding-bottom:5%;">
+                    <div class=" text-center mb-3">
                         <span class="title">Create Account</span>
-                    </div>
-                    <form>                        
+                    </div>                                        
+                    <form method="post">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="d-flex align-items-center" style="width:45%;">
+                                <div class="me-2">
+                                    <label class="label-primary form-label m-0" for="form2Example1">Audience</label>
+                                </div>
+                                <div class="me-2">
+                                    <label class="switch">
+                                        <input asp-for="@Model.AccountRegisterDto.IsRegisterCreator" type="checkbox" id="modeToggle" checked="@Model.AccountRegisterDto.IsRegisterCreator">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="label-primary form-label m-0" for="form2Example1">Creator</label>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-end mb-2" style="width:45%;">
+                                <div class="me-3" style="margin-bottom:1px;">
+                                    <label class="label-primary form-label m-0" for="form2Example1">Gender:</label>                                    
+                                </div>
+                                <div class="form-group form-check me-3 mb-0">
+                                    <input type="radio" class="form-check-input" id="male" name="Gender" value="Male" checked>
+                                    <label class="form-check-label" for="male">Male</label>
+                                </div>
+                                <div class="form-group form-check  mb-0">
+                                    <input type="radio" class="form-check-input" id="female" name="Gender" value="Female">
+                                    <label class="form-check-label" for="female">Female</label>
+                                </div>                                
+                            </div>
+                        </div>
                         <div class="d-flex justify-content-between form-outline mb-4">
                             <!-- First Name input -->
                             <div style="width:45%;">
                                 <label class="label-primary form-label" for="form2Example1">First Name</label>
-                                <input type="text" placeholder="Type here" class="form-control" />
+                                <input asp-for="@Model.AccountRegisterDto.FirstName" type="text" placeholder="Type here" class="form-control" />
+                                <span asp-validation-for="@Model.AccountRegisterDto.FirstName" class="text-danger"></span>
+                                <span class="text-danger">@ViewData["ErrorMessageFirstNameFirstLetter"]</span>
                             </div>
                             <!-- Last Name input -->
                             <div style="width:45%;">
                                 <label class="label-primary form-label" for="form2Example1">Last Name</label>
-                                <input type="text" placeholder="Type here" class="form-control" />
+                                <input asp-for="@Model.AccountRegisterDto.LastName" type="text" placeholder="Type here" class="form-control" />
+                                <span asp-validation-for="@Model.AccountRegisterDto.LastName" class="text-danger"></span>
+                                <span class="text-danger">@ViewData["ErrorMessageLastNameFirstLetter"]</span>
                             </div>
                         </div>
 
-                        <!-- Email input -->
-                        <div class="form-outline mb-4">
-                            <label class="label-primary form-label" for="form2Example1">Email address</label>
-                            <input type="email" placeholder="Type here" class="form-control" />
+                        <div class="d-flex justify-content-between form-outline mb-4">
+                            <div id="userFields" style="width:100%;">
+                                <label class="label-primary form-label" for="form2Example1">Email address</label>
+                                <input asp-for="@Model.AccountRegisterDto.Email" type="email" placeholder="Type here" class="form-control" />
+                                <span asp-validation-for="@Model.AccountRegisterDto.Email" class="text-danger"></span>
+                            </div>
+                            <div style="width:45%; display:none;" id="creatorFields">
+                                <label class="label-primary form-label" for="form2Example1">Artist name</label>
+                                <input asp-for="@Model.AccountRegisterDto.ArtistName" type="text" placeholder="Type here" class="form-control" />
+                                <span asp-validation-for="@Model.AccountRegisterDto.ArtistName" class="text-danger"></span>
+                                <span class="text-danger">@ViewData["ErrorMessageArtistNameFirstLetter"]</span>
+                            </div>
                         </div>
 
                         <!-- Password input -->
                         <div class="form-outline mb-2">
                             <label class="label-primary form-label" for="form2Example2">Password</label>
-                            <input type="password" placeholder="Type here" class="form-control" />
+                            <input asp-for="@Model.AccountRegisterDto.Password" type="password" placeholder="Type here" class="form-control" />
+                            <span asp-validation-for="@Model.AccountRegisterDto.Password" class="text-danger"></span>
                         </div>
 
                         <div class="form-outline mb-2">
                             <label class="label-primary form-label" for="form2Example2">Confirm Password</label>
-                            <input type="password" placeholder="Type here" class="form-control" />
+                            <input asp-for="@Model.AccountRegisterDto.ConfirmPassword" type="password" placeholder="Type here" class="form-control" />
+                            <span asp-validation-for="@Model.AccountRegisterDto.ConfirmPassword" class="text-danger"></span>
                         </div>
 
                         <div class="label-primary row mb-4">
@@ -54,11 +98,62 @@
                         </div>
 
                         <!-- Submit button -->
-                        <button type="button" class="button mb-4">Sign up</button>
-
+                        <button type="submit" class="button mb-4">Sign up</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script>
+    // Function to handle initial visibility of creatorFields
+    function handleCreatorFieldVisibility() {
+        var isRegisterCreator = @Html.Raw(Json.Serialize(Model.AccountRegisterDto.IsRegisterCreator));
+        var userFields = document.getElementById("userFields");
+        var creatorFields = document.getElementById("creatorFields");
+
+        if (isRegisterCreator) {
+            // If IsRegisterCreator is true, show creatorFields
+            userFields.style.width = "45%";
+            creatorFields.style.display = "block";
+        } else {
+            // If IsRegisterCreator is false, hide creatorFields
+            userFields.style.width = "100%";
+            creatorFields.style.display = "none";
+        }
+    }
+
+    // Call the function when the page loads
+    document.addEventListener("DOMContentLoaded", function () {
+        handleCreatorFieldVisibility();
+    });
+
+    // JavaScript to handle the toggle switch
+    document.getElementById("modeToggle").addEventListener("change", function () {
+        var userFields = document.getElementById("userFields");
+        var creatorFields = document.getElementById("creatorFields");
+        if (this.checked) {
+            // Toggle is checked, show Creator form
+            userFields.style.width = "45%";
+            creatorFields.style.display = "block";
+        } else {
+            // Toggle is not checked, show User form
+            userFields.style.width = "100%";
+            creatorFields.style.display = "none";
+        }
+    });
+    
+    var failMessage = '@TempData["FailMessageRegister"]';
+    if (failMessage) {
+        showOutOfStockToastDanger('Register Fail', failMessage);
+    }
+</script>

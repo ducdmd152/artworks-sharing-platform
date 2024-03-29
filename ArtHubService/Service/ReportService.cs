@@ -15,16 +15,20 @@ public class ReportService : IReportService
     private readonly IDapperQueryService dapperQueryService;
     private readonly IReportRepository reportRepository;
     private readonly IAccountRepository accountRepository;
+    private readonly IPostRepository postRepository;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<ReportService> logger;
+    private readonly IEmailService emailService;
 
-    public ReportService(IDapperQueryService dapperQueryService, IReportRepository reportRepository, IUnitOfWork unitOfWork, IAccountRepository accountRepository, ILogger<ReportService> logger)
+    public ReportService(IDapperQueryService dapperQueryService, IReportRepository reportRepository, IUnitOfWork unitOfWork, IAccountRepository accountRepository, ILogger<ReportService> logger, IEmailService emailService, IPostRepository postRepository)
     {
         this.dapperQueryService = dapperQueryService;
         this.reportRepository = reportRepository;
         this.unitOfWork = unitOfWork;
         this.accountRepository = accountRepository;
         this.logger = logger;
+        this.emailService = emailService;
+        this.postRepository = postRepository;
     }
 
 
@@ -54,7 +58,7 @@ public class ReportService : IReportService
         return new PageResult<ReportManagementItem>();
     }
 
-    public async Task<Result> SkipOrBanPostAsync(int reportModeReportId, int reportModeMode)
+    public async Task<Result> SkipOrBanPostAsync(int reportModeReportId, int reportModeMode, string reportModeReason)
     {
         try
         {
@@ -69,8 +73,33 @@ public class ReportService : IReportService
                 {
                     report.Status = (int)ReportStatus.Reviewed;
                     report.Post.Status = (int)PostStatus.Repending;
+                    report.Post.Note = reportModeReason;
                 }else if (reportModeMode == -2)
                 {
+                    // send email
+                    var post = this.postRepository.GetById(report.PostId);
+                    var email = new SendEmailDto
+                    {
+                        Subject = "Your ArtHub account ban",
+                        ToEmail = report.Post.ArtistEmail,
+                        Body = @"
+                                <html>
+                                    <body style='font-family: Arial, sans-serif; color: #333;'>
+                                        <div style='margin-bottom: 20px;'>
+                                            <img src='https://d28yx6l5j59h9f.cloudfront.net/Artwork/01732ec7-756b-4621-94c1-2da9a8647be0.png' alt='ArtHub Logo' style='display: block; margin: 0 auto;' />
+                                        </div>
+                                        <p>Hello,</p>
+                                        <p>You got banned from our platform. The reason is as follows:</p>
+                                        <p>"+reportModeReason+ @"</p>
+                                        <p>The post that led to your ban has the following details:</p>
+                                        <p>Post ID: "+post.PostId+@"</p>
+                                        <p>Link to artwork: "+post.Images.First().ImageUrl +@"</p>
+                                        <p>Description: "+post.Description+@"</p>
+                                        <p>Please contact this email if you have any questions.</p>
+                                    </body>
+                                </html>",
+                    };
+                    this.emailService.SendEmail(email);
                     var account = this.accountRepository.GetAccount(report.Post.ArtistEmail);
                     if (account != default)
                     {
@@ -79,6 +108,7 @@ public class ReportService : IReportService
                     }
                     report.Status = (int)ReportStatus.Reviewed;
                     report.Post.Status = (int)PostStatus.Repending;
+                    report.Post.Note = reportModeReason;
                 }
             }
 
