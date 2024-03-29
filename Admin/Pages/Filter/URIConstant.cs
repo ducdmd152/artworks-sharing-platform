@@ -2,7 +2,7 @@
 
 public static class URIConstant
 {
-    public static readonly string[] WhiteListUris = {         
+    public static readonly string[] WhiteListUris = {
         "/Login",
         "/Logout",
         "/"
@@ -15,7 +15,12 @@ public static class URIConstant
     };
 
     public static readonly string[] AdminListUris = {
-        "/Moderator/ArtWorksManagement"
+        "/Admins/AccountDetailManagement",
+        "/Admins/AccountManagement",
+        "/Admins/Dashboard",
+        "/Admins/Setting",
+        "/Admins/TopArtWork",
+        "/Admins/TopCreator",
     };
 
     public static readonly string HomePage = "/";
