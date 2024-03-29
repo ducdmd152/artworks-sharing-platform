@@ -39,7 +39,7 @@ FROM (
         acc.avatar AS ArtistAvatar,
         COUNT(a.email) OVER () AS TotalItems,
         CEILING(COUNT(a.email) OVER () * 1.0 / @PageSize) AS TotalPages,
-        ROW_NUMBER() OVER (ORDER BY a.total_subscribe DESC, SUM(p.total_react) DESC) AS RowNum
+        ROW_NUMBER() OVER (ORDER BY a.total_subscribe DESC, SUM(p.total_react) DESC, SUM(p.total_view) DESC) AS RowNum
     FROM artist a
     INNER JOIN account acc ON a.email = acc.email
     LEFT JOIN post p ON a.email = p.artist_email
