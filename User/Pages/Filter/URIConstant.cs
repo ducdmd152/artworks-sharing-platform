@@ -2,7 +2,8 @@
 
 public static class URIConstant
 {    
-    public static readonly string[] WhiteListUris = {         
+    public static readonly string[] WhiteListUris = {        
+        "/Error",
         "/Index",
         "/Authenticate/Login",
         "/Authenticate/Logout",
@@ -13,6 +14,7 @@ public static class URIConstant
     };
 
     public static readonly string[] CreatorListUris = {
+        "/Error",
         "/Creator/ArtworkList",
         "/Creator/AudienceSubscriberStatistic",
         "/Creator/EditPost",
@@ -22,6 +24,7 @@ public static class URIConstant
     };
 
     public static readonly string[] AudienceListUris = {
+        "/Error",
         "/Audience/"
     };
 

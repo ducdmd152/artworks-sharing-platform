@@ -3,16 +3,19 @@
 public static class URIConstant
 {
     public static readonly string[] WhiteListUris = {
+        "/Error",
         "/Login",
         "/Logout",
         "/NotFound"
     };
 
     public static readonly string[] ModeratorListUris = {
+        "/Error",
         "/Moderator/"
     };
 
     public static readonly string[] AdminListUris = {
+        "/Error",
         "/Admins/AccountDetailManagement",
         "/Admins/AccountManagement",
         "/Admins/Dashboard",
