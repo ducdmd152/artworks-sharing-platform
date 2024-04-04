@@ -2,7 +2,8 @@
 
 namespace ArtHubRepository.Interface
 {
-    public interface IReactionRepository : IBaseRepository<Reaction> 
+    public interface IReactionRepository : IBaseRepository<Reaction>
     {
+        Reaction GetByCompositeKey(string email, int postId);
     }
 }

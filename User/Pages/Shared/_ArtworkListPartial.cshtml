@@ -4,14 +4,28 @@
 }
 <div class="artwork-grid">
     @for (var i = 0; i < Model.PageData.Count; i++)
-    {
+    {        
         var post = Model.PageData[i];
-        <div class="artwork-item">
-            <img src="@post.Images.First().ImageUrl" alt="Artwork" class="img-fluid">
-            <div class="d-flex justify-content-between ms-2 me-2">
+        <div class="artwork-item d-flex flex-column justify-content-between">
+            <img src="@(post.Images.First().ImageUrl ?? "https://placehold.co/300")" alt="Artwork" class="img-fluid" style="width: 100%; ">
+            <div class="artwork-scope-badge" style="position: absolute; top: 150px; left: 10px; background-color: #FFFFFF; color: #333; padding: 5px; border-radius: 5px; font-weight: 700;">
+                @if (@post.Scope == 1)
+                {
+                    <span style="color: #1B6B93;">Public</span>
+                }
+                @if (@post.Scope == 2)
+                {
+                    <span style="color: burlywood;">Subscriber</span>
+                }
+                @if (@post.Scope == 3)
+                {
+                    <span style="color: brown;">Private</span>
+                }
+            </div>
+            <div class="d-flex justify-content-between ms-2 me-2 mb-3">
                 <div class="d-flex align-items-center">
                     <div class="artwork-item-creator-img me-3">
-                        <img src="@post.Artist.Account.Avatar" alt="Profile Picture">
+                        <img class="m-0" src="@(post.Artist.Account.Avatar ?? "https://placehold.it/60x60")" alt="Profile Picture">
                     </div>
                     <span style="color: white;">@post.Artist.ArtistName</span>
                 </div>
@@ -31,14 +45,15 @@
 
         <input type="hidden" id="artwork@(i)Id" value="@post.PostId" />
         <input type="hidden" id="artwork@(i)Title" value="@post.Title" />
-        <input type="hidden" id="artwork@(i)ImageUrl" value="@post.Images.First().ImageUrl" />
+        <input type="hidden" id="artwork@(i)ImageUrl" value="@(post.Images.First().ImageUrl ?? "https://placehold.co/300")" />
         <input type="hidden" id="artwork@(i)Description" value="@post.Description" />
-        <input type="hidden" id="artwork@(i)ArtistProfile" value="@post.Artist.Account.Avatar" />
+        <input type="hidden" id="artwork@(i)ArtistProfile" value="@(post.Artist.Account.Avatar ?? "https://placehold.it/60x60")" />
         <input type="hidden" id="artwork@(i)ArtistName" value="@post.Artist.ArtistName" />
         <input type="hidden" id="artwork@(i)Like" value="@post.TotalReact" />
         <input type="hidden" id="artwork@(i)Bookmark" value="@post.TotalBookmark" />
         <input type="hidden" id="artwork@(i)Scope" value="@post.Scope" />
         <input type="hidden" id="artwork@(i)Status" value="@post.Status" />
+        <input type="hidden" id="artwork@(i)Note" value="@post.Note" />
     }
 </div>
 <partial name="Shared/_PagingPartial" model="Model.PageInfo" />

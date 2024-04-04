@@ -1,0 +1,92 @@
+﻿
+@page
+@model AccountDetailManagementModel
+@{
+    Layout = "Shared/_LayoutAdmin";
+}
+
+<style>
+    /* Style for the account details section */
+    .account-details {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .account-details h4 {
+        color: #007bff;
+        margin-bottom: 10px;
+    }
+
+    .account-details p {
+        margin-bottom: 5px;
+    }
+
+    /* Style for the back to list link */
+    .back-to-list {
+        display: inline-block;
+        margin-top: 20px;
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .back-to-list:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<h1>ACCOUNT DETAIL</h1>
+
+@if (Model.Account != null)
+{
+    <div class="account-details">
+        <h4>Email: @Model.Account.Email</h4>
+        <p>Full Name: @Model.Account.FirstName @Model.Account.LastName</p>
+        <p>Gender: @Model.Account.Gender</p>
+        <p>Status: @GetStatusText(Model.Account.Status)</p>
+        <p>Enabled: @GetEnableText(Model.Account.Enabled)</p>
+        <!-- Add additional account information here if needed -->
+    </div>
+}
+else
+{
+    <p>Account not found!</p>
+}
+
+<a class="back-to-list" asp-page="/Admins/AccountManagement">Back to List</a>
+
+
+
+
+@functions {
+	// Hàm để ánh xạ giá trị số sang trạng thái chữ
+	public string GetStatusText(int status)
+	{
+		switch (status)
+		{
+			case 1:
+				return "Normal";
+			case 2:
+				return "Ban";
+
+			default:
+				return "Unknown";
+		}
+	}
+
+
+	public string GetEnableText(bool status)
+	{
+		switch (status)
+		{
+			case false:
+				return "Deleted";
+			case true:
+				return "Enable";
+
+			default:
+				return "Unknown";
+		}
+	}
+}

@@ -12,5 +12,8 @@ namespace ArtHubService.Interface
         public bool CheckIsBookmarkedForPost(string email, int postId);
         public Task<bool> ReactForPost(string email, int postId);
         public Task<bool> BookmarkForPost(string email, int postId);
+        public Task<bool> UnReactForPost(string email, int postId);
+        public Task<bool> UnBookmarkForPost(string email, int postId);
+        Task<bool> OneMoreView(int postId);
     }
 }

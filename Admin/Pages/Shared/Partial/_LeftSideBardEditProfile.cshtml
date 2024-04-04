@@ -1,0 +1,25 @@
+﻿@model ArtHubBO.DTO.AccountUpdateTypeDto
+@{
+    Layout = null;
+}
+<div class="profile-sidebar" style="width:30%;">
+    <form method="post" id="left-form">
+        <div class="d-flex align-items-centerm mb-3">
+            <div class="profile-img">
+                <img src="@(Model.Avatar ?? "https://placehold.it/60x60")" alt="Profile Image">
+            </div>
+            <div class="d-flex align-items-center">
+                <h3 class="m-0 me-1 mb-1 fs-5">@Model.Name /</h3>
+                <small class="fs-6">@Model.NameTypeUpdate</small>
+                <input type="hidden" name="AccountUpdateType.Name" value="@Model.Name"/>
+                <input type="hidden" name="AccountUpdateType.NameTypeUpdate" value="@Model.NameTypeUpdate"/>
+                <input type="hidden" name="AccountUpdateType.Avatar" value="@Model.Avatar"/>
+            </div>
+        </div>
+        <div class="nav flex-column">
+            <a onclick="changeMainScreenView(1)" class="nav-link ps-0" style="cursor: pointer">Edit profile</a>
+            <a onclick="changeMainScreenView(2)" class="nav-link ps-0" style="cursor: pointer">Password</a>
+            <input type="hidden" name="AccountUpdateType.TypeUpdate"/>
+        </div>
+    </form>
+</div>

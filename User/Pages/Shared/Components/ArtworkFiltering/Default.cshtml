@@ -6,6 +6,10 @@
         flex-wrap: wrap;
     }
 
+    .active {
+        background: linear-gradient(to right, #a18cd1 0%, #fbc2eb 100%) !important;
+    }
+
     .category-button {
         background-color: #f0f0f0;
         color: #333;
@@ -74,8 +78,8 @@
 <div id="category-list">
     @foreach (var category in Model.Categories)
     {
-        <button class="category-button"
-            onclick="filterByCategory('@category.Name')">
+        <button class="category-button @(category.IsSelected ? "active" : "")"
+            onclick="filterByCategory(@category.Id)">
             @category.Name
         </button>
     }

@@ -3,22 +3,21 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Caching.Distributed;
 using User.Pages.Filter;
 
-namespace User.Pages.Authenticate
+namespace User.Pages.Authenticate;
+
+public class LogoutModel : PageModel
 {
-    public class LogoutModel : PageModel
+    private readonly IDistributedCache _cache;
+
+    public LogoutModel(IDistributedCache cache)
     {
-        private readonly IDistributedCache _cache;
+        _cache = cache;
+    }
 
-        public LogoutModel(IDistributedCache cache)
-        {
-            _cache = cache;
-        }
-
-        public IActionResult OnGet()
-        {            
-            // Clear session
-            HttpContext.Session.Clear();
-            return RedirectToPage(URIConstant.HomePage);
-        }
+    public IActionResult OnGet()
+    {            
+        // Clear session
+        HttpContext.Session.Clear();
+        return RedirectToPage(URIConstant.HomePage);
     }
 }

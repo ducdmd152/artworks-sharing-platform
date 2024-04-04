@@ -1,5 +1,6 @@
 ﻿@model ArtHubBO.Entities.Account
 <!-- Navbar -->
+<header class="header">
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
         <div class="container-fluid d-flex align-items-center">
             <div class="collapse d-sm-inline-flex col-4">
@@ -16,10 +17,10 @@
                 <img src="/images/ArtHub.png" alt=""
                      class="w-50 rounded-t-5 rounded-tr-lg-0 rounded-bl-lg-5" />
             </div>
-            <div class="form-inline my-2 my-lg-0 col-4">
+            <div class="form-inline my-2 my-lg-0 col-4 float-end">
                 @if (@Model == null)
                 {
-                    <div>
+                    <div class="float-end">
                         <a asp-page="/Login" type="button" class="btn position-relative mx-2">
                             <i class="fa-solid fa-user"></i>
                         </a>
@@ -29,36 +30,28 @@
                 {
                     switch(@Model.Role.RoleName)
                     {
-                        case "audience":
-                            <div class="me-3 nav-user">
-                                <img src="@ViewBag.Avatar" alt="" class="user-img m-2">
-                                <span class="user-name my-1">@ViewBag.FirstName</span>
+                        case "Moderator":
+                            <div class="me-3 nav-user float-end">
+                                <img src="@(Model.Avatar ?? "https://placehold.it/60x60")" alt="" class="user-img m-2">
+                                <span class="user-name my-1">@Model.FirstName</span>
                                 <ul class="user-menu list-unstyled me-3">
                                     <li class="user-menu-item">
-                                        <a asp-page="/AudienceProfile" class="text-decoration-none text-dark">My Profile</a>
+                                        <a asp-page="/Moderator/ModeratorEditProfile" class="text-decoration-none text-dark">Edit Profile</a>
                                     </li>
-                                    <li class="user-menu-item">
-                                        <a asp-page="/AudienceArtworkInteration" class="text-decoration-none text-dark">Interation</a>
-                                    </li>
-                                    
                                     <li class="user-menu-item item-seperate">
-                                        <form method="get">
-                                            <a asp-page="/Logout" class="text-decoration-none text-dark">Logout</a>
-                                        </form>                                                
+                                        <a asp-page="/Logout" class="text-decoration-none text-dark">Logout</a>
                                     </li>
                                 </ul>
                             </div>
                             break;
-                        case "creator":
-                            <div class="me-3 nav-user">
-                                <img src="@ViewBag.Avatar" alt="" class="user-img m-2">
-                                <span class="user-name my-1">@ViewBag.FirstName</span>
+                            
+                        case "Admin":
+                            <div class="me-3 nav-user float-end">
+                                <img src="@(Model.Avatar ?? "https://placehold.it/60x60")" alt="" class="user-img m-2">
+                                <span class="user-name my-1">@Model.FirstName</span>
                                 <ul class="user-menu list-unstyled me-3">
                                     <li class="user-menu-item">
-                                        <a asp-page="/CreatorProfile" class="text-decoration-none text-dark">My Profile</a>
-                                    </li>
-                                    <li class="user-menu-item">
-                                        <a asp-page="/CreatorArtworkList" class="text-decoration-none text-dark">My Artwork</a>
+                                        <a asp-page="/CreatorProfile" class="text-decoration-none text-dark">Edit Profile</a>
                                     </li>
                                     <li class="user-menu-item item-seperate">
                                         <a asp-page="/Logout" class="text-decoration-none text-dark">Logout</a>
@@ -67,7 +60,7 @@
                             </div>
                             break;
                         default:
-                            <div>
+                            <div class="float-end">
                                 <a asp-page="/Login" type="button" class="btn position-relative mx-2">
                                     <i class="fa-solid fa-user"></i>
                                 </a>
@@ -78,3 +71,4 @@
             </div>
         </div>
     </nav>
+</header>
